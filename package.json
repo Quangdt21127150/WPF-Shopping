@@ -1,0 +1,38 @@
+{
+  "name": "web-dev-complete-guide",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start1": "nodemon app.js",
+    "start2": "nodemon payment.js",
+    "start": "concurrently \"npm run start1\" \"npm run start2\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "concurrently": "^8.2.2",
+    "connect-mongodb-session": "^3.0.0",
+    "cors": "^2.8.5",
+    "csurf": "^1.11.0",
+    "dotenv": "^16.3.1",
+    "ejs": "^3.1.6",
+    "events": "^3.3.0",
+    "express": "^4.17.1",
+    "express-session": "^1.17.3",
+    "fs": "^0.0.1-security",
+    "https": "^1.0.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb": "^4.1.0",
+    "multer": "^1.4.3",
+    "passport": "^0.7.0",
+    "passport-facebook": "^3.0.0",
+    "passport-google-oauth": "^2.0.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}

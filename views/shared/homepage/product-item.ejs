@@ -1,0 +1,26 @@
+<article class="product-item">
+  <% if (locals.isAdmin) { %>
+  <img src="<%= product.imageUrl %>" alt="<%= product.title %>" />
+  <div class="product-item-content">
+    <h2 class="text-truncate"><%= product.title %></h2>
+    <div class="product-item-actions">
+      <a class="btn btn-alt" href="/admin/products/<%= product.id %>">
+        <i class="fa-solid fa-pen-to-square"></i>
+      </a>
+      <form action="/admin/products/delete/<%= product.id %>" method="POST">
+        <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>" />
+        <button class="btn btn-alt">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      </form>
+    </div>
+  </div>
+  <% } else { %>
+  <a href="/products/<%= product.id %>">
+    <img src="<%= product.imageUrl %>" alt="<%= product.title %>" />
+    <div class="product-item-content">
+      <h2 class="text-truncate"><%= product.title %></h2>
+    </div>
+  </a>
+  <% } %>
+</article>

@@ -1,0 +1,56 @@
+<%- include('../../shared/homepage/head', { pageTitle: 'Login' }) %>
+  <link rel="stylesheet" href="/styles/forms.css">
+  <link rel="stylesheet" href="/styles/auth.css">
+</head>
+<body>
+  <%- include('../../shared/homepage/header') %>
+  <main>
+    <h1>Login</h1>
+    <% if (inputData.errorMessage) { %>
+      <section class="alert">
+        <h2>Invalid Credentials</h2>
+        <p><%= inputData.errorMessage %></p>
+      </section>
+    <% } %>
+    <form action="/login" method="POST" class="form">
+      <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
+
+      <p>
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" value="<%= inputData.username %>"  required />
+      </p>
+
+      <p>
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" value="<%= inputData.password %>" required>
+      </p>
+
+      <button class="btn btn-solid">Login</button>
+
+      <p id="switch-form" class="mt-3"><a href="/signup">Create a new user</a></p>
+
+      <p class="d-grid my-3 px-4">
+        <a
+          href="/gg"
+          id="btn-google"
+          class="btn text-uppercase fw-bold"
+        >
+          <i class="fab fa-google me-2"></i>
+          Sign in with Google
+        </a>
+      </p>
+
+      <p class="d-grid my-3 px-4">
+        <a
+          href="/fb"
+          id="btn-facebook"
+          class="btn text-uppercase fw-bold"
+        >
+          <i class="fab fa-facebook me-2"></i>
+          Sign in with Facebook
+        </a>
+      </p>
+    </form>
+  </form>
+  </main>
+<%- include('../../shared/homepage/footer') %>

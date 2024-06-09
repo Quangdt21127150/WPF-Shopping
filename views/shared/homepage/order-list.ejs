@@ -1,0 +1,6 @@
+<ol>
+  <h1 class="mt-2 mb-4">Orders History</h1>
+  <% for (const order of orders) { %>
+  <li><%- include('order-item', { order: order }) %></li>
+  <% } %>
+</ol>
