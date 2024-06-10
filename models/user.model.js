@@ -4,15 +4,13 @@ const mongodb = require("mongodb");
 const db = require("../data/database");
 
 class User {
-  constructor(username, password, fullname, street, postal, city, image) {
+  constructor(username, password, fullname, address, phone, email, image) {
     this.username = username;
     this.password = password;
     this.name = fullname;
-    this.address = {
-      street: street,
-      postalCode: postal,
-      city: city,
-    };
+    this.address = address;
+    this.phone = phone;
+    this.email = email;
     this.image = image;
   }
 
@@ -53,6 +51,8 @@ class User {
       password: hashedPassword,
       name: this.name,
       address: this.address,
+      phone: this.phone,
+      email: this.email,
       isAdmin: isAdmin,
       image: this.image,
     });

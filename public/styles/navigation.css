@@ -23,6 +23,11 @@ main {
   display: none;
 }
 
+#switch-form a:hover,
+#switch-form a:active {
+  color: blue !important;
+}
+
 .nav-items {
   height: 100%;
   display: flex;
@@ -34,13 +39,68 @@ main {
   margin: var(--space-1) var(--space-2);
 }
 
+.nav-items a:hover {
+  color: white !important;
+}
+
+.nav-items a:hover .badge {
+  color: var(--color-gray-600);
+  background-color: white !important;
+}
+
 .nav-items button {
   cursor: pointer;
   font: inherit;
-  border: 1px solid var(--color-primary-100);
-  border-radius: var(--border-radius-small);
+  border: none;
   background-color: transparent;
   padding: var(--space-2) var(--space-4);
+  position: relative;
+}
+
+.nav-items button span {
+  position: absolute;
+  background-color: var(--color-primary-500);
+  display: block;
+  transition: all 0.25s linear;
+}
+
+.nav-items button span:nth-child(1) {
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  transition-delay: 0.25s;
+}
+
+.nav-items button span:nth-child(2) {
+  top: 0;
+  right: 0;
+  width: 2px;
+  height: 0;
+}
+
+.nav-items button span:nth-child(3) {
+  bottom: 0;
+  right: 0;
+  width: 0;
+  height: 2px;
+  transition-delay: 0.25s;
+}
+
+.nav-items button span:nth-child(4) {
+  bottom: 0;
+  left: 0;
+  width: 2px;
+  height: 0;
+}
+
+.nav-items button:hover span:nth-child(odd) {
+  width: 100%;
+}
+
+.nav-items button:hover span:nth-child(even) {
+  height: 100%;
+  transition-delay: 0.5s;
 }
 
 #mobile-menu-btn {

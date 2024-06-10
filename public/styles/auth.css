@@ -6,16 +6,25 @@ form {
   max-width: 25rem;
   margin: var(--space-8) auto;
   padding: var(--space-4);
-  background-color: var(--color-gray-600);
+  background-color: black;
   border-radius: var(--border-radius-medium);
   text-align: center;
+}
+
+::placeholder {
+  font-style: italic;
 }
 
 #switch-form a {
   color: var(--color-primary-200);
 }
 
-#switch-form a:hover,
-#switch-form a:active {
-  color: blue !important;
+#btn-google {
+  background-color: crimson;
+  border: 1px solid crimson;
+}
+
+#btn-facebook {
+  background-color: #0866ff;
+  border: 1px solid #0866ff;
 }

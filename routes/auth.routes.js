@@ -41,7 +41,7 @@ passport.use(
           profile.displayName,
           "?",
           "?",
-          "?",
+          profile.emails[0].value,
           ""
         );
         await user.signup(false);
@@ -72,7 +72,7 @@ passport.use(
           profile.displayName,
           "?",
           "?",
-          "?",
+          profile.emails[0].value,
           ""
         );
         await user.signup(false);

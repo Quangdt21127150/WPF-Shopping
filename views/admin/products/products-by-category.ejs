@@ -1,0 +1,59 @@
+<%- include('../../shared/homepage/head', { pageTitle: 'All Products' }) %>
+<link rel="stylesheet" href="/styles/products.css">
+<script src="/scripts/image-preview.js" defer></script>
+
+</head>
+<body>
+  <%- include('../../shared/homepage/header') %>
+  <main>
+    <h1 class="my-2">Product Management</h1>   
+    <p>
+      <button type="button" class="btn btn-solid mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <i class="fa-solid fa-circle-plus me-1"></i>
+        Add Product
+      </button>
+
+      <%- include('includes/product-form', { submitPath: '/admin/products', title: 'Add new product', i: '', product: {
+        title: '',
+        imageUrl: '',
+        summary: '',
+        price: '',
+        description: ''
+      }, imageRequired: true}) %>
+    </p>
+
+    <ul id="products-grid">
+      <% for (let i = start; i < end; ++i) { %>
+        <li>
+          <%- include('../../shared/homepage/product-item', { product: products[i], i: i, category: category }) %>
+        </li>
+      <% } %>
+    </ul>
+
+    <ul class="pagination mb-3">
+      <li class="page-item">
+        <a class="btn btn-alt rounded-0 rounded-start-2 page-link" href="/categories/<%= category.id %>?page=<%= page <= 1 ? 1 : page - 1 %>" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+
+      <% for (let i = 1; i <= total_page; ++i) { %>
+        <% if (i === page) { %>
+          <li class="page-item">
+            <a class="btn btn-solid rounded-0 page-link" href="/categories/<%= category.id %>?page=<%= i%>"><%= i%></a>
+          </li>
+        <% } else { %>
+          <li class="page-item">
+            <a class="btn btn-alt rounded-0 page-link" href="/categories/<%= category.id %>?page=<%= i%>"><%= i%></a>
+          </li>
+        <% } %>
+      <% } %>
+
+      <li class="page-item">
+        <a class="btn btn-alt rounded-0 rounded-end-2 page-link" href="/categories/<%= category.id %>?page=<%= page >= total_page ? total_page : page + 1 %>" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </main>
+<%- include('../../shared/homepage/footer') %>
