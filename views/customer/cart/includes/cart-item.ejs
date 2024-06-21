@@ -1,0 +1,20 @@
+<article class="cart-item">
+  <article class="cart-item-info">
+    <h2><%= item.product.title %></h2>
+    <p>
+      <span class="cart-item-price"><%= item.totalPrice %> VND </span>
+      <span class="cart-product-price"
+        >(Đơn giá: <%= item.product.price %> VND)</span
+      >
+    </p>
+  </article>
+
+  <form
+    class="cart-item-management"
+    style="height: fit-content"
+    data-productid="<%= item.product.id %>"
+    data-csrf="<%= locals.csrfToken %>"
+  >
+    <input type="number" value="<%= item.quantity %>" required />
+  </form>
+</article>

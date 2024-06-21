@@ -12,14 +12,14 @@
     aria-labelledby="exampleModalLabel"
     aria-hidden="true"
   >
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
           <h1 class="modal-title fs-5 text-black" id="exampleModalLabel">
             <%= title %>
           </h1>
           <button
-            type="button"
+            type="reset"
             class="btn-close"
             data-bs-dismiss="modal"
             aria-label="Close"
@@ -32,7 +32,7 @@
               type="text"
               id="title"
               name="title"
-              value="<%= product.title %>"
+              value=" <%= product.title %>"
               required
             />
           </p>
@@ -45,13 +45,11 @@
           />
           <p class="text-black">Category: <%= category.title %></p>
 
-          <section id="image-upload-control">
+          <section class="image-upload-control">
             <p>
               <label class="text-black" for="image">Image</label>
               <input
                 type="file"
-                id="image"
-                name="image"
                 accept="image/png,image/jpg"
                 class="text-black border-0"
                 <% if(imageRequired) { %> required <% } %>
@@ -67,7 +65,7 @@
               type="text"
               id="summary"
               name="summary"
-              value="<%= product.summary %>"
+              value=" <%= product.summary %>"
               required
               maxlength="250"
             />
@@ -80,8 +78,8 @@
               id="price"
               name="price"
               value="<%= product.price %>"
-              min="0.01"
-              step="0.01"
+              min="1000"
+              step="500"
               required
             />
           </p>

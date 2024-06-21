@@ -11,10 +11,6 @@ form {
   text-align: center;
 }
 
-::placeholder {
-  font-style: italic;
-}
-
 #switch-form a {
   color: var(--color-primary-200);
 }

@@ -1,0 +1,39 @@
+  <%- include('../../shared/homepage/head', { pageTitle: 'Your Cart' }) %>
+  <link rel="stylesheet" href="/styles/cart.css">
+  <script src="/scripts/cart-item-management.js" defer></script>
+</head>
+<body>
+  <%- include('../../shared/homepage/header') %>
+  <main>
+    <h1 class="my-2">Your Cart</h1>
+    <ul id="cart-items">
+      <% for (const cartItem of locals.cart.items) { %>
+        <li>
+          <%- include('includes/cart-item', { item: cartItem }) %>
+        </li>
+      <% } %>
+    </ul>
+    <section id="cart-total">
+      <p>Total: <span id="cart-total-price"><%= locals.cart.totalPrice %></span> VND</p>
+
+      <% if (locals.cart.totalPrice > 0) { %>
+        <button class="btn btn-solid" data-csrf="<%= locals.csrfToken %>"><i class="fa-solid fa-bag-shopping me-1"></i> Buy Products</button>
+      <% } %>
+    </section>
+    
+    <article class="toast-container">
+      <section id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-bs-autohide="false">
+        <section class="toast-header">
+          <img class="rounded me-2" style="width: 1.25rem;">
+          <strong class="me-auto"></strong>
+          <small></small>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </section>
+        <section class="toast-body">
+          <p></p>
+          <p></p>
+        </section>
+      </section>
+    </article>
+  </main>
+<%- include('../../shared/homepage/footer') %>

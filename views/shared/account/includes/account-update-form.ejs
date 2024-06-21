@@ -1,0 +1,104 @@
+<link rel="stylesheet" href="/styles/forms.css" />
+<script src="/scripts/address-data.js" defer></script>
+
+<form
+  action="<%= submitPath %>?_csrf=<%= locals.csrfToken %>"
+  method="POST"
+  enctype="multipart/form-data"
+>
+  <div
+    class="modal fade"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-black" id="exampleModalLabel">Update your account</h1>
+          <button
+            type="reset"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <p>
+            <label for="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              value="<%= account.username %>"
+              required
+            />
+          </p>
+          <p>
+            <label for="fullname">Fullname</label>
+            <input
+              type="text"
+              id="fullname"
+              name="fullname"
+              value="<%= account.fullname %>"
+              required
+            />
+          </p>
+
+          <section class="image-upload-control">
+            <p>
+              <label class="text-black" for="image">Image</label>
+              <input
+                type="file"
+                accept="image/png,image/jpg"
+                class="text-black border-0"
+              />
+            </p>
+            <img src="<%= account.imageUrl %>" alt="Selected image." />
+          </section>
+
+          <p>
+            <% const [street, ward, district, city] = account.address.split(", "); %>
+            <label for="street">Address</label>
+            <section class="combobox">             
+              <select name="city" id="city" class="rounded-2" required>
+                <option value="<%= city %>" selected><%= city %></option>
+              </select>
+        
+              <select name="district" id="district" class="rounded-2" required>
+                <option value="<%= district %>" selected><%= district %></option>
+              </select>
+        
+              <select name="ward" id="ward" class="rounded-2" required>
+                <option value="<%= ward %>" selected><%= ward %></option>
+              </select>
+        
+              <input type="text" id="street" name="street" value="<%= street %>" placeholder=" Apartment number + street" required>
+            </section>
+          </p>
+          <p>
+            <label for="phone">Phone Number</label>
+            <input type="tel" name="phone" id="phone" pattern="[0-9]{10}" placeholder=" Contain 10 digits" value="<%= account.phone %>" required />
+          </p>
+          <p>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" pattern="[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\.[a-zA-Z]{2,}$" placeholder=" Ex: abc@gmail.com" value="<%= account.email %>" required />
+          </p>          
+        </div>
+        <div class="modal-footer">
+          <button
+            type="reset"
+            class="btn btn-alt text-secondary border-secondary"
+          >
+            <i class="fa-solid fa-arrow-rotate-right"></i> Reset
+          </button>
+          <button class="btn bg-primary border-primary">
+            <i class="fa-solid fa-check"></i>
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

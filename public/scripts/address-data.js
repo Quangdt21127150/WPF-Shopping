@@ -1,45 +1,42 @@
-const cities = document.getElementById("city");
-const districts = document.getElementById("district");
-const wards = document.getElementById("ward");
-const address_data = {
-  url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json",
-  method: "GET",
-  responseType: "json",
-};
-const promise = axios(address_data);
-promise.then(function (result) {
-  renderCity(result.data);
+const cities = $("#city");
+const districts = $("#district");
+const wards = $("#ward");
+const addressDataUrl =
+  "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json";
+
+axios.get(addressDataUrl).then(function (response) {
+  const data = response.data;
+  renderData(data);
 });
 
-function renderCity(data) {
-  for (const x of data) {
-    cities.options[cities.options.length] = new Option(x.Name, x.Name);
-  }
-  cities.onchange = function () {
-    districts.length = 1;
-    wards.length = 1;
-    if (this.value != "") {
-      const result = data.filter((n) => n.Name === this.value);
+function renderData(data) {
+  data.forEach((city) => {
+    cities.append(new Option(city.Name, city.Name));
+  });
 
-      for (const k of result[0].Districts) {
-        districts.options[districts.options.length] = new Option(
-          k.Name,
-          k.Name
-        );
-      }
-    }
-  };
-  districts.onchange = function () {
-    wards.length = 1;
-    const dataCity = data.filter((n) => n.Name === cities.value);
-    if (this.value != "") {
-      const dataWards = dataCity[0].Districts.filter(
-        (n) => n.Name === this.value
-      )[0].Wards;
+  cities.on("change", function () {
+    districts.empty().append(new Option("District", ""));
+    wards.empty().append(new Option("Ward / Town", ""));
+    const selectedCity = data.find((city) => city.Name === cities.val());
 
-      for (const w of dataWards) {
-        wards.options[wards.options.length] = new Option(w.Name, w.Name);
-      }
+    if (selectedCity) {
+      selectedCity.Districts.forEach((district) => {
+        districts.append(new Option(district.Name, district.Name));
+      });
     }
-  };
+  });
+
+  districts.on("change", function () {
+    wards.empty().append(new Option("Ward / Town", ""));
+    const selectedCity = data.find((city) => city.Name === cities.val());
+    const selectedDistrict = selectedCity?.Districts.find(
+      (district) => district.Name === districts.val()
+    );
+
+    if (selectedDistrict) {
+      selectedDistrict.Wards.forEach((ward) => {
+        wards.append(new Option(ward.Name, ward.Name));
+      });
+    }
+  });
 }

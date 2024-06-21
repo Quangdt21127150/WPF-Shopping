@@ -1,6 +1,5 @@
 const User = require("../models/user.model");
 const authUtil = require("../util/authentication");
-const validation = require("../util/validation");
 const sessionFlash = require("../util/session-flash");
 const jwt = require("jsonwebtoken");
 
@@ -14,8 +13,14 @@ function getSignup(req, res) {
       confirmPassword: "",
       fullname: "",
       street: "",
-      postal: "",
-      city: "",
+      ward: "Ward / Town",
+      district: "District",
+      city: "City / Province",
+      wardID: "",
+      districtID: "",
+      cityID: "",
+      phone: "",
+      email: "",
     };
   }
 
@@ -24,34 +29,17 @@ function getSignup(req, res) {
 
 async function signup(req, res, next) {
   const enteredData = {
-    username: req.body.username,
-    password: req.body.password,
-    confirmPassword: req.body["confirm-password"],
-    fullname: req.body.fullname,
-    street: req.body.street,
-    postal: req.body.postal,
-    city: req.body.city,
+    ...req.body,
+    cityID: req.body.city,
+    districtID: req.body.district,
+    wardID: req.body.ward,
   };
 
-  if (
-    !validation.userDetailsAreValid(
-      req.body.username,
-      req.body.password,
-      req.body.fullname,
-      req.body.street,
-      req.body.postal,
-      req.body.city
-    ) ||
-    !validation.passwordIsConfirmed(
-      req.body.password,
-      req.body["confirm-password"]
-    )
-  ) {
+  if (enteredData.password !== enteredData.confirmPassword) {
     sessionFlash.flashDataToSession(
       req,
       {
-        errorMessage:
-          "Please check your input. Password must be at least 6 character slong, postal code must be 5 characters long.",
+        errorMessage: "Password confirmation failed",
         ...enteredData,
       },
       function () {
@@ -61,15 +49,11 @@ async function signup(req, res, next) {
     return;
   }
 
-  const user = new User(
-    req.body.username,
-    req.body.password,
-    req.body.fullname,
-    req.body.street,
-    req.body.postal,
-    req.body.city,
-    ""
-  );
+  const user = new User({
+    ...enteredData,
+    address: `${enteredData.street}, ${enteredData.ward}, ${enteredData.district}, ${enteredData.city}`,
+    image: "user.png",
+  });
 
   try {
     const existsAlready = await user.existsAlready();
@@ -78,7 +62,7 @@ async function signup(req, res, next) {
       sessionFlash.flashDataToSession(
         req,
         {
-          errorMessage: "User exists already! Try logging in instead!",
+          errorMessage: "This username already exists",
           ...enteredData,
         },
         function () {
@@ -88,15 +72,14 @@ async function signup(req, res, next) {
       return;
     }
 
-    const firstUser = await Account.findAll();
+    const firstUser = await User.findAll();
     if (firstUser.length !== 0) await user.signup(false);
     else await user.signup(true);
   } catch (error) {
-    next(error);
-    return;
+    return next(error);
   }
 
-  res.redirect(`https://localhost:5000/?username=${req.body.username}&login=2`);
+  //Đăng ký tài khoản thanh toán
 }
 
 function getLogin(req, res) {
@@ -153,7 +136,9 @@ async function login(req, res, next) {
 }
 
 async function successLogin(req, res) {
-  const user = new User(req.session.passport.user.emails[0].value);
+  const user = new User({
+    username: req.session.passport.user.emails[0].value,
+  });
   let existingUser;
   try {
     existingUser = await user.getUserWithSameUsername();
@@ -164,9 +149,7 @@ async function successLogin(req, res) {
 
   if (existingUser) {
     authUtil.createUserSession(req, existingUser, function () {
-      res.redirect(
-        `https://localhost:5000/?username=${req.session.passport.user.emails[0].value}&login=3`
-      );
+      //Đăng ký tài khoản thanh toán bằng GG hoặc FB
     });
   } else {
     return res.redirect("/login");

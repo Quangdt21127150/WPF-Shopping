@@ -1,12 +1,25 @@
 <ul class="nav-items">
-  <% if (locals.isAuth) { %>
+  <% if (!locals.isAuth) { %>
+  <li>
+    <a href="/signup" class="d-flex flex-column">
+      <i class="fa-solid fa-user-plus text-center"></i>
+      Signup
+    </a>
+  </li>
+  <li>
+    <a href="/login" class="d-flex flex-column">
+      <i class="fa-solid fa-right-to-bracket text-center"></i>
+      Login
+    </a>
+  </li>
+  <% } else { %>
   <li>
     <a href="/products" class="d-flex flex-column">
       <i class="fa-solid fa-shop text-center"></i>
       Shop
     </a>
   </li>
-  <% } %> <% if (locals.isAuth && !locals.isAdmin) { %>
+  <% if (!locals.isAdmin) { %>
   <li>
     <a href="/cart" class="d-flex flex-column">
       <i class="fa-solid fa-cart-shopping text-center"></i>
@@ -22,7 +35,7 @@
       Orders
     </a>
   </li>
-  <% } %> <% if (locals.isAdmin) { %>
+  <% } else { %>
   <li>
     <a href="/categories" class="d-flex flex-column">
       <i class="fa-solid fa-layer-group text-center"></i>
@@ -47,10 +60,7 @@
       Statistic
     </a>
   </li>
-  <% } %> <% if (!locals.isAuth) { %>
-  <li><a href="/signup">Signup</a></li>
-  <li><a href="/login">Login</a></li>
-  <% } %> <% if (locals.isAuth) { %>
+  <% } %>
   <li>
     <a href="/profile" class="d-flex flex-column">
       <i class="fa-solid fa-user text-center"></i>
@@ -60,7 +70,11 @@
   <li>
     <form action="/logout" method="POST">
       <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>" />
-      <button class="btn-alt d-flex">
+      <button class="d-flex">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
         <i class="fa-solid fa-door-open me-2" style="margin-top: 5%"></i>
         Logout
       </button>

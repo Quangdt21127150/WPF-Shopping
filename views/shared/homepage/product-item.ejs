@@ -4,9 +4,15 @@
   <div class="product-item-content">
     <h2 class="text-truncate"><%= product.title %></h2>
     <div class="product-item-actions">
-      <a class="btn btn-alt" href="/admin/products/<%= product.id %>">
+      <button
+        type="button"
+        class="btn btn-alt"
+        data-bs-toggle="modal"
+        data-bs-target="#exampleModal<%= i %>"
+      >
         <i class="fa-solid fa-pen-to-square"></i>
-      </a>
+      </button>
+
       <form action="/admin/products/delete/<%= product.id %>" method="POST">
         <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>" />
         <button class="btn btn-alt">
@@ -24,3 +30,7 @@
   </a>
   <% } %>
 </article>
+
+<% if(locals.isAdmin) { %> 
+  <%- include('../../admin/products/includes/product-form', { submitPath: '/admin/products/' + product.id, title: 'Update product', i: i, product: product, category: category, imageRequired: false }) %> 
+<% } %>

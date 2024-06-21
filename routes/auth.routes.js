@@ -35,15 +35,15 @@ passport.use(
 
       if (!user) {
         console.log("Adding new Google account");
-        const user = new User(
-          profile.emails[0].value,
-          "",
-          profile.displayName,
-          "?",
-          "?",
-          profile.emails[0].value,
-          ""
-        );
+        const user = new User({
+          username: profile.emails[0].value,
+          password: "",
+          fullname: profile.displayName,
+          address: "?",
+          phone: "?",
+          email: profile.emails[0].value,
+          image: "user.png",
+        });
         await user.signup(false);
       } else {
         console.log("Google User already exist in DB");
@@ -66,15 +66,15 @@ passport.use(
 
       if (!user) {
         console.log("Adding new facebook account");
-        const user = new User(
-          profile.emails[0].value,
-          "",
-          profile.displayName,
-          "?",
-          "?",
-          profile.emails[0].value,
-          ""
-        );
+        const user = new User({
+          username: profile.emails[0].value,
+          password: "",
+          fullname: profile.displayName,
+          address: "?",
+          phone: "?",
+          email: profile.emails[0].value,
+          image: "user.png",
+        });
         await user.signup(false);
       } else {
         console.log("Facebook User already exist in DB");

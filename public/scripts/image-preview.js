@@ -1,7 +1,13 @@
-const imagePickerElement = $("#image-upload-control input");
-const imagePreviewElement = $("#image-upload-control img");
+const imageUploadElements = $(".image-upload-control");
+let imageDefaultSrc = [];
+const productItemForm = $("form");
+const modalFade = $(".modal");
 
-function updateImagePreview() {
+imageUploadElements.find("img").each(function () {
+  imageDefaultSrc.push($(this).attr("src"));
+});
+
+function updateImagePreview(imagePickerElement, imagePreviewElement) {
   const files = imagePickerElement[0].files;
 
   if (!files || files.length === 0) {
@@ -14,4 +20,17 @@ function updateImagePreview() {
   imagePreviewElement.attr("src", URL.createObjectURL(pickedFile)).show();
 }
 
-imagePickerElement.change(updateImagePreview);
+imageUploadElements.each(function () {
+  const imagePickerElement = $(this).find("input");
+  const imagePreviewElement = $(this).find("img");
+
+  imagePickerElement.change(() => {
+    updateImagePreview(imagePickerElement, imagePreviewElement);
+  });
+});
+
+productItemForm.on("reset", function () {
+  imageUploadElements.find("img").each(function (index) {
+    $(this).attr("src", imageDefaultSrc[index]);
+  });
+});

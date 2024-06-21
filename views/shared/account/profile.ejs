@@ -1,0 +1,28 @@
+<%- include('../../shared/homepage/head', { pageTitle: account.username }) %>
+<link rel="stylesheet" href="/styles/forms.css">
+<script src="/scripts/image-preview.js" defer></script>
+
+</head>
+<body>
+  <%- include('../../shared/homepage/header') %>
+  <main>
+    <header>
+      <article class="d-flex">
+        <img class="rounded-circle img-thumbnail my-4 me-3" style="width: 6rem; height: 6rem;" src="<%= account.imageUrl %>" alt="<%= account.username %>" name="avatar" />
+        <h1 class="my-5">Hello <%= account.username %></h1>
+      </article>
+      
+      <p>Fullname: <%= account.fullname %></p>
+      <p>Address: <%= account.address %></p>
+      <p>Phone Number: <%= account.phone %></p>
+      <p>Email: <%= account.email %></p>
+
+      <button type="button" class="btn btn-solid" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <i class="fa-solid fa-pen-to-square me-1"></i> 
+        Update
+      </button>
+
+      <%- include('./includes/account-update-form', { submitPath: '/accounts/' + account._id, account: account }) %>
+    </header>
+  </main>
+<%- include('../../shared/homepage/footer') %>

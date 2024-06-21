@@ -9,12 +9,10 @@ router.get("/accounts", accountsController.getAllAccounts);
 
 router.get("/profile", accountsController.getAccount);
 
-router.get("/accounts/:id", accountsController.getUpdateAccount);
-
 router.post(
-    "/accounts/:id",
-    imageUploadMiddleware,
-    accountsController.updateAccount
-  );
+  "/accounts/:id",
+  imageUploadMiddleware,
+  accountsController.updateAccount
+);
 
 module.exports = router;

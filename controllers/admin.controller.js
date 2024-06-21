@@ -1,14 +1,9 @@
 const Category = require("../models/category.model");
 const Product = require("../models/product.model");
-const Account = require("../models/account.model");
 const User = require("../models/user.model");
 const Order = require("../models/order.model");
 
 //Categories Manage
-function getNewCategory(req, res) {
-  res.render("admin/categories/new-category");
-}
-
 async function createNewCategory(req, res, next) {
   const category = new Category({
     ...req.body,
@@ -66,11 +61,6 @@ async function deleteCategory(req, res, next) {
 }
 
 //Products Manage
-async function getNewProduct(req, res) {
-  const category = await Category.findById(req.params.cateId);
-  res.render("admin/products/new-product", { category: category });
-}
-
 async function createNewProduct(req, res, next) {
   const product = new Product({
     ...req.body,
@@ -80,8 +70,7 @@ async function createNewProduct(req, res, next) {
   try {
     await product.save();
   } catch (error) {
-    next(error);
-    return;
+    return next(error);
   }
 
   res.redirect(`/categories/${product.cateId}`);
@@ -100,8 +89,7 @@ async function updateProduct(req, res, next) {
   try {
     await product.save();
   } catch (error) {
-    next(error);
-    return;
+    return next(error);
   }
 
   res.redirect(`/categories/${product.cateId}`);
@@ -120,51 +108,66 @@ async function deleteProduct(req, res, next) {
 }
 
 //Accounts Manage
-function getNewAccount(req, res) {
-  res.render("admin/accounts/new-account");
-}
-
 async function createNewAccount(req, res, next) {
+  const enteredData = {
+    username: req.body.username,
+    password: req.body.password,
+    confirmPassword: req.body["confirm-password"],
+    fullname: req.body.fullname,
+    street: req.body.street,
+    ward: req.body.ward,
+    district: req.body.district,
+    city: req.body.city,
+    wardID: req.body.ward,
+    districtID: req.body.district,
+    cityID: req.body.city,
+    phone: req.body.phone,
+    email: req.body.email,
+  };
+
+  if (enteredData.password !== enteredData.confirmPassword) {
+    res.redirect("/accounts?errorMessage=Password confirmation failed");
+    return;
+  }
+
   const user = new User(
-    req.body.username,
-    req.body.password,
-    req.body.fullname,
-    req.body.street,
-    req.body.postal,
-    req.body.city,
+    enteredData.username,
+    enteredData.password,
+    enteredData.fullname,
+    `${enteredData.street}, ${enteredData.ward}, ${enteredData.district}, ${enteredData.city}`,
+    enteredData.phone,
+    enteredData.email,
     ""
   );
 
   try {
-    const users = await Account.findByUsername(req.body.username);
-    if (users.length === 0) await user.signup(false);
-    else {
-      res.redirect("/admin/accounts/new");
+    const existsAlready = await user.existsAlready();
+
+    if (existsAlready) {
+      res.redirect(
+        `/accounts?errorMessage=The account \"${enteredData.username}\" already exists`
+      );
       return;
     }
-  } catch (error) {
-    next(error);
-    return;
-  }
 
-  res.redirect(
-    `https://localhost:5000/?username=${req.body.username}&login=true`
-  );
-}
-
-async function deleteAccount(req, res, next) {
-  let account;
-  try {
-    account = await Account.findById(req.params.id);
-    await account.remove();
+    await user.signup(false);
   } catch (error) {
     return next(error);
   }
 
-  const username = account.username;
-  res.redirect(
-    `https://localhost:5000/pay_accounts/delete?username=${username}`
-  );
+  //Thêm tài khoản thanh toán
+}
+
+async function deleteAccount(req, res, next) {
+  const user = await User.findById(req.params.id);
+  try {
+    const account = new User();
+    await account.remove(user._id);
+  } catch (error) {
+    return next(error);
+  }
+
+  //Xóa tài khoản thanh toán
 }
 
 //Order Manage
@@ -313,18 +316,15 @@ async function postQuantity10Year(req, res, next) {
 }
 
 module.exports = {
-  getNewCategory: getNewCategory,
   createNewCategory: createNewCategory,
   getUpdateCategory: getUpdateCategory,
   updateCategory: updateCategory,
   deleteCategory: deleteCategory,
 
-  getNewProduct: getNewProduct,
   createNewProduct: createNewProduct,
   updateProduct: updateProduct,
   deleteProduct: deleteProduct,
 
-  getNewAccount: getNewAccount,
   createNewAccount: createNewAccount,
   deleteAccount: deleteAccount,
 
