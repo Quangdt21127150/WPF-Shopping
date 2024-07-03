@@ -27,12 +27,13 @@
         </div>
         <div class="modal-body">
           <p>
-            <label class="text-black" for="title">Title</label>
+            <label for="title">Title</label>
             <input
               type="text"
               id="title"
               name="title"
-              value=" <%= product.title %>"
+              value="<%= product.title %>"
+              class="form-control"
               required
             />
           </p>
@@ -43,14 +44,19 @@
             value="<%= category.id %>"
             class="d-none"
           />
-          <p class="text-black">Category: <%= category.title %></p>
+          <p class="fw-medium">
+            <span class="text-black">Category:</span> 
+            <span class="badge py-2 bg-success"><%= category.title %></span>
+          </p>
 
           <section class="image-upload-control">
             <p>
-              <label class="text-black" for="image">Image</label>
+              <label for="image">Image</label>
               <input
                 type="file"
                 accept="image/png,image/jpg"
+                id="image"
+                name="image"
                 class="text-black border-0"
                 <% if(imageRequired) { %> required <% } %>
               />
@@ -60,33 +66,35 @@
           </section>
 
           <p>
-            <label class="text-black" for="summary">Summary</label>
+            <label for="summary">Summary</label>
             <input
               type="text"
               id="summary"
               name="summary"
-              value=" <%= product.summary %>"
+              value="<%= product.summary %>"
+              class="form-control"
               required
               maxlength="250"
             />
           </p>
 
           <p>
-            <label class="text-black" for="price">Price</label>
+            <label for="price">Price</label>
             <input
               type="number"
               id="price"
               name="price"
               value="<%= product.price %>"
-              min="1000"
+              min="500"
               step="500"
+              class="form-control"
               required
             />
           </p>
 
           <p>
-            <label class="text-black" for="description">Description</label>
-            <textarea id="description" name="description" rows="5" required><%= product.description %></textarea>
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="5" class="form-control" required><%= product.description %></textarea>
           </p>
         </div>
         <div class="modal-footer">

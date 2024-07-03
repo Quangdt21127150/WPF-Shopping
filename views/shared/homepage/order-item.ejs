@@ -1,6 +1,6 @@
 <article class="order-item">
   <header class="order-summary">
-    <h2><span class="order-item-price"><%= order.productData.totalPrice %> VND </span> - <%= order.formattedDate %></h2>
+    <h2><span class="order-item-price"><%= order.productData.totalPrice.toLocaleString('vi-VN') %> VND </span> - <%= order.formattedDate %></h2>
     <p><span class="badge"><%= order.status.toUpperCase() %></span></p>
   </header>
 
@@ -12,7 +12,7 @@
     <% } %>
     <ul>
       <% for (const item of order.productData.items) { %>
-        <li><%= item.product.title %> - <%= item.totalPrice %> VND (<%= item.product.price %> VND x <%= item.quantity %>)</li>
+        <li><%= item.product.title %> - <%= item.totalPrice.toLocaleString('vi-VN') %> VND (<%= item.product.price.toLocaleString('vi-VN') %> VND x <%= item.quantity %>)</li>
       <% } %>
     </ul>
   </section>

@@ -28,20 +28,19 @@ html {
 
   --space-1: 0.25rem;
   --space-2: 0.5rem;
+  --space-3: 0.75rem;
   --space-4: 1rem;
   --space-5: 1.25rem;
   --space-8: 2rem;
 
   --border-radius-small: 4px;
-  --border-radius-medium: 6px;
+  --border-radius-medium: 20px;
   --border-radius-circle: 50%;
 
   --shadow-medium: 0 2px 8px rgba(0, 0, 0, 0.2);
 }
 
 body {
-  background-color: var(--color-gray-500);
-  color: var(--color-gray-100);
   margin: 0;
 }
 
@@ -80,7 +79,6 @@ a {
 
 .btn-alt {
   background-color: transparent;
-  color: var(--color-primary-500);
 }
 
 .btn-alt:hover,
@@ -109,6 +107,5 @@ a {
   margin-left: var(--space-1);
   padding: 0.15rem var(--space-4);
   border-radius: 10rem;
-  background-color: var(--color-primary-500);
   color: white;
 }

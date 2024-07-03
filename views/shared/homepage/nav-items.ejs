@@ -1,18 +1,5 @@
 <ul class="nav-items">
-  <% if (!locals.isAuth) { %>
-  <li>
-    <a href="/signup" class="d-flex flex-column">
-      <i class="fa-solid fa-user-plus text-center"></i>
-      Signup
-    </a>
-  </li>
-  <li>
-    <a href="/login" class="d-flex flex-column">
-      <i class="fa-solid fa-right-to-bracket text-center"></i>
-      Login
-    </a>
-  </li>
-  <% } else { %>
+  <% if (locals.isAuth) { %>
   <li>
     <a href="/products" class="d-flex flex-column">
       <i class="fa-solid fa-shop text-center"></i>
@@ -36,23 +23,56 @@
     </a>
   </li>
   <% } else { %>
-  <li>
-    <a href="/categories" class="d-flex flex-column">
-      <i class="fa-solid fa-layer-group text-center"></i>
-      Categories
-    </a>
+  <li class="dropdown">
+    <article role="button" data-toggle="dropdown" class="d-flex flex-column">
+      <i class="fa-solid fa-list-check text-center"></i>
+      Management
+    </article>
+    <ul class="dropdown-menu">
+      <li>
+        <a href="/categories" class="d-flex gap-2">
+          <i class="fa-solid fa-layer-group mt-1"></i>
+          Categories
+        </a>
+      </li>
+      <li>
+        <a href="/admin/orders" class="d-flex" style="gap: var(--space-3)">
+          <i
+            class="fa-solid fa-receipt mt-1"
+            style="margin-left: var(--space-1)"
+          ></i>
+          Orders
+        </a>
+      </li>
+      <li>
+        <a href="/accounts" class="d-flex gap-2">
+          <i class="fa-solid fa-user-group mt-1"></i>
+          Accounts
+        </a>
+      </li>
+    </ul>
   </li>
-  <li>
-    <a href="/admin/orders" class="d-flex flex-column">
-      <i class="fa-solid fa-receipt text-center"></i>
-      Orders
-    </a>
-  </li>
-  <li>
-    <a href="/accounts" class="d-flex flex-column">
-      <i class="fa-solid fa-user-group text-center"></i>
-      Accounts
-    </a>
+  <li class="manage">
+    <ul class="text-center">
+      <li>
+        <a href="/categories" class="d-flex flex-column">
+          <i class="fa-solid fa-layer-group"></i>
+          Categories
+        </a>
+      </li>
+      <li>
+        <a href="/admin/orders" class="d-flex flex-column">
+          <i class="fa-solid fa-receipt"></i>
+          Orders
+        </a>
+      </li>
+      <li>
+        <a href="/accounts" class="d-flex flex-column">
+          <i class="fa-solid fa-user-group"></i>
+          Accounts
+        </a>
+      </li>
+    </ul>
   </li>
   <li>
     <a href="/admin/statistic" class="d-flex flex-column">

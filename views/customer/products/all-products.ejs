@@ -1,106 +1,107 @@
 <%- include('../../shared/homepage/head', { pageTitle: 'All Products' }) %>
 <link rel="stylesheet" href="/styles/products.css">
 <script src="/scripts/image-preview.js" defer></script>
+<script src="/scripts/dropdown-change.js" defer></script>
 
 </head>
 <body>
   <%- include('../../shared/homepage/header') %>
   <main>
     <% if(!locals.isAdmin) { %>
-      <h1 class="my-2">Bestsellers</h1>
+      <section <% if(isFade) { %> class="animated" <% } %>>
+        <h1 class="my-2">Bestsellers</h1>
 
-      <div id="carouselExampleRide" class="carousel slide my-5" data-bs-ride="true">
-        <div class="carousel-inner text-center">
-          <% for(let i = 0; i < 5; ++i) { %>
-            <div class="carousel-item <% if(i === 0) { %> active <% } %>" data-bs-interval="3000">
-              <% if(bestseller[i].title) { %>
-                <a href="/products/<%= bestseller[i].id %>"><img src="<%= bestseller[i].imageUrl %>" class="rounded-2" style="width: 20rem; height: 20rem;" alt="Unavailable"></a>
-              <% } else { %>
-                <img src="/assets/images/unavailable.png" class="rounded-2" style="width: 20rem; height: 20rem;" alt="Unavailable">
-              <% } %>
-            </div>
-          <% } %>
+        <div id="carouselExampleRide" class="carousel slide my-5" data-bs-ride="true">
+          <div class="carousel-inner text-center">
+            <% for(let i = 0; i < 5; ++i) { %>
+              <div class="carousel-item <% if(i === 0) { %> active <% } %>" data-bs-interval="3000">
+                <% if(bestseller[i].title) { %>
+                  <a href="/products/<%= bestseller[i].id %>"><img src="<%= bestseller[i].imageUrl %>" class="rounded-2" style="width: 20rem; height: 20rem;" alt="Unavailable"></a>
+                <% } else { %>
+                  <img src="/assets/images/unavailable.png" class="rounded-2" style="width: 20rem; height: 20rem;" alt="Unavailable">
+                <% } %>
+              </div>
+            <% } %>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="visually-hidden">Next</span>
-        </button>
-      </div>
+      </section>
     <% } %>
 
-    <h1 class="my-2">All Products</h1>
+    <section <% if(!locals.isAdmin && isFade) { %> class="animated" <% } %>>
+      <h1 class="my-2">All Products</h1>
 
-    <form id="searchForm" action="/products" method="GET">
-      <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>" />
-      <div class="d-flex mt-3">
-        <input type="search" name="name" class="form-control rounded-end-0" placeholder="Search" value="<%= name %>"/>
-        <button type="submit" class="btn btn-solid rounded-0 rounded-end-1 p-2">
-          <i class="fas fa-search"></i>
-        </button>
-      </div>
+      <form id="searchForm" action="/products" method="GET">
+        <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>" />
+        <div class="d-flex mt-3">
+          <input type="search" name="name" class="form-control rounded-end-0" placeholder="Search" value="<%= name %>"/>
+          <button type="submit" class="btn btn-solid rounded-0 rounded-end-1 p-2">
+            <i class="fas fa-search"></i>
+          </button>
+        </div>
 
-      <div class="d-flex mt-3">
-        <span class="fs-3">Category</span>
-        <select id="categories" name="cateID" class="rounded-2 ms-2">
-          <option value="all">All</option>
-          <% for (const category of categories) { %>
-            <option value="<%= category.id %>" <%= cateID === category.id ? 'selected' : '' %>><%= category.title %></option>
-          <% } %>
-        </select>
-      </div>
+        <div class="d-flex mt-3" id="categoryDropdown">
+          <span class="fs-3">Category</span>
+          <select id="categories" name="cateID" class="rounded-2 ms-2">
+            <option value="all">All</option>
+            <% for (const category of categories) { %>
+              <option value="<%= category.id %>" <%= cateID === category.id ? 'selected' : '' %>><%= category.title %></option>
+            <% } %>
+          </select>
+        </div>
 
-      <div class="d-flex mt-3">
-        <span class="fs-3">Price</span>
-        <select name="price" id="price" class="mx-2 rounded-2">
-          <option value="all">All</option>
-          <option value="cheap" <%= price === 'cheap' ? 'selected' : '' %>>&lt; 100.000</option>
-          <option value="medium" <%= price === 'medium' ? 'selected' : '' %>>100.000 - 500.000</option>
-          <option value="expensive" <%= price === 'expensive' ? 'selected' : '' %>>&gt; 500.000</option>
-        </select>
-
-        <button type="submit" class="btn btn-solid p-2 ms-1">
-          <i class="fa-solid fa-filter"></i>
-        </button>
-      </div>
-    </form>
-  
-    <ul id="products-grid">
-      <% for (let i = start; i < end; ++i) { %>
-        <% const category = categories.find(category => category.id === products[i].cateId.toString()); %>
-        <li>
-          <%- include('../../shared/homepage/product-item', { product: products[i], i: i, category: category }) %>
-        </li>
-      <% } %>
-    </ul>
-
-    <ul class="pagination mb-3">
-      <li class="page-item">
-        <a class="btn btn-alt rounded-0 rounded-start-2 page-link" href="/products?page=<%= page <= 1 ? 1 : page - 1 %>&name=<%= name %>&cateID=<%= cateID %>&price=<%= price %>" aria-label="Previous">
-          <span aria-hidden="true">&laquo;</span>
-        </a>
-      </li>
-
-      <% for (let i = 1; i <= total_page; ++i) { %>
-        <% if (i === page) { %>
-          <li class="page-item">
-            <a class="btn btn-solid rounded-0 page-link" href="/products?page=<%= i %>&name=<%= name %>&cateID=<%= cateID %>&price=<%= price %>"><%= i %></a>
-          </li>
-        <% } else { %>
-          <li class="page-item">
-            <a class="btn btn-alt rounded-0 page-link" href="/products?page=<%= i %>&name=<%= name %>&cateID=<%= cateID %>&price=<%= price %>"><%= i %></a>
+        <div class="d-flex mt-3" id="priceDropdown">
+          <span class="fs-3">Price</span>
+          <select name="price" id="price" class="ms-2 rounded-2">
+            <option value="all">All</option>
+            <option value="cheap" <%= price === 'cheap' ? 'selected' : '' %>>&lt; 100.000</option>
+            <option value="medium" <%= price === 'medium' ? 'selected' : '' %>>100.000 - 500.000</option>
+            <option value="expensive" <%= price === 'expensive' ? 'selected' : '' %>>&gt; 500.000</option>
+          </select>
+        </div>
+      </form>
+    
+      <ul id="products-grid">
+        <% for (let i = start; i < end; ++i) { %>
+          <% const category = categories.find(category => category.id === products[i].cateId.toString()); %>
+          <li>
+            <%- include('../../shared/homepage/product-item', { product: products[i], i: i, category: category }) %>
           </li>
         <% } %>
-      <% } %>
+      </ul>
 
-      <li class="page-item">
-        <a class="btn btn-alt rounded-0 rounded-end-2 page-link" href="/products?page=<%= page >= total_page ? total_page : page + 1 %>&name=<%= name %>&cateID=<%= cateID %>&price=<%= price %>" aria-label="Next">
-          <span aria-hidden="true">&raquo;</span>
-        </a>
-      </li>
-    </ul>
+      <ul class="pagination mb-3">
+        <li class="page-item">
+          <a class="btn btn-alt rounded-0 rounded-start-2 page-link" href="/products?page=<%= page <= 1 ? 1 : page - 1 %>&name=<%= name %>&cateID=<%= cateID %>&price=<%= price %>" aria-label="Previous">
+            <span aria-hidden="true">&laquo;</span>
+          </a>
+        </li>
+
+        <% for (let i = 1; i <= total_page; ++i) { %>
+          <% if (i === page) { %>
+            <li class="page-item">
+              <a class="btn btn-solid rounded-0 page-link" href="/products?page=<%= i %>&name=<%= name %>&cateID=<%= cateID %>&price=<%= price %>"><%= i %></a>
+            </li>
+          <% } else { %>
+            <li class="page-item">
+              <a class="btn btn-alt rounded-0 page-link" href="/products?page=<%= i %>&name=<%= name %>&cateID=<%= cateID %>&price=<%= price %>"><%= i %></a>
+            </li>
+          <% } %>
+        <% } %>
+
+        <li class="page-item">
+          <a class="btn btn-alt rounded-0 rounded-end-2 page-link" href="/products?page=<%= page >= total_page ? total_page : page + 1 %>&name=<%= name %>&cateID=<%= cateID %>&price=<%= price %>" aria-label="Next">
+            <span aria-hidden="true">&raquo;</span>
+          </a>
+        </li>
+      </ul>
+    </section>
   </main>
 <%- include('../../shared/homepage/footer') %>

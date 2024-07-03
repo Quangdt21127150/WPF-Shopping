@@ -42,10 +42,12 @@ async function updateCartItem(form) {
     $(form)
       .closest(".cart-item")
       .find(".cart-item-price")
-      .text(updatedCartData.updatedItemPrice);
+      .text(updatedCartData.updatedItemPrice.toLocaleString("vi-VN"));
   }
 
-  cartTotalPriceElement.text(updatedCartData.newTotalPrice);
+  cartTotalPriceElement.text(
+    updatedCartData.newTotalPrice.toLocaleString("vi-VN")
+  );
   buyProductButton.toggle(updatedCartData.newTotalPrice !== 0);
 
   cartBadgeElements.text(updatedCartData.newTotalQuantity);

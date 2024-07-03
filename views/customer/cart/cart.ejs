@@ -14,7 +14,7 @@
       <% } %>
     </ul>
     <section id="cart-total">
-      <p>Total: <span id="cart-total-price"><%= locals.cart.totalPrice %></span> VND</p>
+      <p>Total: <span id="cart-total-price"><%= locals.cart.totalPrice.toLocaleString('vi-VN') %></span> VND</p>
 
       <% if (locals.cart.totalPrice > 0) { %>
         <button class="btn btn-solid" data-csrf="<%= locals.csrfToken %>"><i class="fa-solid fa-bag-shopping me-1"></i> Buy Products</button>

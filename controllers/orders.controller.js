@@ -1,5 +1,6 @@
 const Order = require("../models/order.model");
 const User = require("../models/user.model");
+const Pay_Account = require("../models/pay.model");
 
 async function getOrders(req, res) {
   try {
@@ -45,7 +46,9 @@ async function addOrder(req, res, next) {
         await newOrder.save();
       }
 
-      //Thanh toán
+      res.redirect(
+        `https://localhost:5000/transfer?username=${customer_username}&price=${price}`
+      );
 
       return;
     }

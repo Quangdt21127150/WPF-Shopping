@@ -1,7 +1,6 @@
 const switchButton = $("#switchCheck");
 const bodyTag = $("body");
 const mainHeader = $("#main-header");
-const badges = $(".badge");
 const borderButtons = $(".btn-alt");
 const solidButtons = $(".btn-solid");
 const productHeader = $("#product-details header");
@@ -9,9 +8,8 @@ const productDescription = $("#product-description");
 const productItems = $(".product-item-content");
 const orderItems = $(".order-item");
 const cartItems = $(".cart-item");
-const cartTotal = $("#cart-total");
+const cartTotal = $("#cart-total p");
 const form = $(".form");
-const labels = $("label");
 const mobileMenu = $("#mobile-menu");
 
 function setTheme() {
@@ -33,13 +31,13 @@ function setTheme() {
     .find("button, a")
     .css("color", isChecked ? "green" : "var(--color-primary-400)");
   mainHeader
-    .find("span")
+    .find("span, .badge")
     .css("backgroundColor", isChecked ? "green" : "var(--color-primary-400)");
-
-  badges.css(
-    "backgroundColor",
-    isChecked ? "green" : "var(--color-primary-400)"
-  );
+  mainHeader.find(".fa-sun").css("display", isChecked ? "inline" : "none");
+  mainHeader.find(".fa-moon").css("display", isChecked ? "none" : "inline");
+  mainHeader
+    .find(".dropdown-menu")
+    .css("backgroundColor", isChecked ? "white" : "var(--color-gray-500)");
 
   solidButtons.css({
     backgroundColor: isChecked ? "green" : "var(--color-primary-500)",
@@ -67,13 +65,14 @@ function setTheme() {
   orderItems
     .find(".order-item-price, a")
     .css("color", isChecked ? "green" : "var(--color-primary-500)");
+  orderItems
+    .find(".badge")
+    .css("backgroundColor", isChecked ? "green" : "var(--color-primary-400)");
 
   cartItems.css(
     "backgroundColor",
     isChecked ? "#E6E6E6" : "var(--color-gray-400)"
   );
-
-  labels.css("color", isChecked ? "black" : "var(--color-gray-100)");
 
   mobileMenu.css(
     "backgroundColor",
@@ -98,9 +97,7 @@ function setTheme() {
   }
 
   if (cartTotal) {
-    cartTotal
-      .find("p")
-      .css("color", isChecked ? "green" : "var(--color-primary-500)");
+    cartTotal.css("color", isChecked ? "green" : "var(--color-primary-500)");
   }
 
   if (form) {

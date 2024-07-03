@@ -2,9 +2,11 @@
   <article class="cart-item-info">
     <h2><%= item.product.title %></h2>
     <p>
-      <span class="cart-item-price"><%= item.totalPrice %> VND </span>
+      <span class="cart-item-price"
+        ><%= item.totalPrice.toLocaleString('vi-VN') %> VND
+      </span>
       <span class="cart-product-price"
-        >(Đơn giá: <%= item.product.price %> VND)</span
+        >(Đơn giá: <%= item.product.price.toLocaleString('vi-VN') %> VND)</span
       >
     </p>
   </article>
@@ -15,6 +17,6 @@
     data-productid="<%= item.product.id %>"
     data-csrf="<%= locals.csrfToken %>"
   >
-    <input type="number" value="<%= item.quantity %>" required />
+    <input type="number" min="0" value="<%= item.quantity %>" required />
   </form>
 </article>

@@ -2,6 +2,9 @@ const Category = require("../models/category.model");
 const Product = require("../models/product.model");
 const User = require("../models/user.model");
 const Order = require("../models/order.model");
+const sessionFlash = require("../util/session-flash");
+const fs = require("fs");
+const path = require("path");
 
 //Categories Manage
 async function createNewCategory(req, res, next) {
@@ -78,8 +81,8 @@ async function createNewProduct(req, res, next) {
 
 async function updateProduct(req, res, next) {
   const product = new Product({
-    ...req.body,
     _id: req.params.id,
+    ...req.body,
   });
 
   if (req.file) {
@@ -99,7 +102,15 @@ async function deleteProduct(req, res, next) {
   let product;
   try {
     product = await Product.findById(req.params.id);
+    const filePath = path.join(__dirname, product.image);
     await product.remove();
+    fs.unlink(filePath, (err) => {
+      if (err) {
+        console.log("File not found or other error");
+      } else {
+        console.log("File deleted successfully");
+      }
+    });
   } catch (error) {
     return next(error);
   }
@@ -110,42 +121,45 @@ async function deleteProduct(req, res, next) {
 //Accounts Manage
 async function createNewAccount(req, res, next) {
   const enteredData = {
-    username: req.body.username,
-    password: req.body.password,
-    confirmPassword: req.body["confirm-password"],
-    fullname: req.body.fullname,
-    street: req.body.street,
-    ward: req.body.ward,
-    district: req.body.district,
-    city: req.body.city,
-    wardID: req.body.ward,
-    districtID: req.body.district,
+    ...req.body,
     cityID: req.body.city,
-    phone: req.body.phone,
-    email: req.body.email,
+    districtID: req.body.district,
+    wardID: req.body.ward,
   };
 
   if (enteredData.password !== enteredData.confirmPassword) {
-    res.redirect("/accounts?errorMessage=Password confirmation failed");
+    sessionFlash.flashDataToSession(
+      req,
+      {
+        errorMessage: "Password confirmation failed",
+        ...enteredData,
+      },
+      function () {
+        res.redirect("/accounts");
+      }
+    );
     return;
   }
 
-  const user = new User(
-    enteredData.username,
-    enteredData.password,
-    enteredData.fullname,
-    `${enteredData.street}, ${enteredData.ward}, ${enteredData.district}, ${enteredData.city}`,
-    enteredData.phone,
-    enteredData.email,
-    ""
-  );
+  const user = new User({
+    ...enteredData,
+    address: `${enteredData.street}, ${enteredData.ward}, ${enteredData.district}, ${enteredData.city}`,
+    image: "user.png",
+  });
 
   try {
     const existsAlready = await user.existsAlready();
 
     if (existsAlready) {
-      res.redirect(
-        `/accounts?errorMessage=The account \"${enteredData.username}\" already exists`
+      sessionFlash.flashDataToSession(
+        req,
+        {
+          errorMessage: `The username "${enteredData.username}" already exists`,
+          ...enteredData,
+        },
+        function () {
+          res.redirect("/accounts");
+        }
       );
       return;
     }
@@ -155,19 +169,22 @@ async function createNewAccount(req, res, next) {
     return next(error);
   }
 
-  //Thêm tài khoản thanh toán
+  res.redirect(
+    `https://localhost:5000/?username=${enteredData.username}&login=1`
+  );
 }
 
 async function deleteAccount(req, res, next) {
   const user = await User.findById(req.params.id);
   try {
-    const account = new User();
-    await account.remove(user._id);
+    await user.remove();
   } catch (error) {
     return next(error);
   }
 
-  //Xóa tài khoản thanh toán
+  res.redirect(
+    `https://localhost:5000/pay_accounts/delete?username=${user.username}`
+  );
 }
 
 //Order Manage

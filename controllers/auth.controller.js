@@ -1,7 +1,6 @@
 const User = require("../models/user.model");
 const authUtil = require("../util/authentication");
 const sessionFlash = require("../util/session-flash");
-const jwt = require("jsonwebtoken");
 
 function getSignup(req, res) {
   let sessionData = sessionFlash.getSessionData(req);
@@ -62,7 +61,7 @@ async function signup(req, res, next) {
       sessionFlash.flashDataToSession(
         req,
         {
-          errorMessage: "This username already exists",
+          errorMessage: `The username "${enteredData.username}" already exists`,
           ...enteredData,
         },
         function () {
@@ -79,7 +78,7 @@ async function signup(req, res, next) {
     return next(error);
   }
 
-  //Đăng ký tài khoản thanh toán
+  res.redirect(`https://localhost:5000/?username=${req.body.username}&login=2`);
 }
 
 function getLogin(req, res) {
@@ -96,8 +95,12 @@ function getLogin(req, res) {
 }
 
 async function login(req, res, next) {
-  const user = new User(req.body.username, req.body.password);
+  const user = new User({
+    username: req.body.username,
+    password: req.body.password,
+  });
   let existingUser;
+
   try {
     existingUser = await user.getUserWithSameUsername();
   } catch (error) {
@@ -131,7 +134,7 @@ async function login(req, res, next) {
   }
 
   authUtil.createUserSession(req, existingUser, function () {
-    res.redirect("/products");
+    res.redirect("/products?isFade=1");
   });
 }
 
@@ -149,7 +152,7 @@ async function successLogin(req, res) {
 
   if (existingUser) {
     authUtil.createUserSession(req, existingUser, function () {
-      //Đăng ký tài khoản thanh toán bằng GG hoặc FB
+      res.redirect(`https://localhost:5000/?username=${user.username}&login=3`);
     });
   } else {
     return res.redirect("/login");

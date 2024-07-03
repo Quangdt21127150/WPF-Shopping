@@ -1,5 +1,4 @@
 require("dotenv").config();
-const path = require("path");
 
 const express = require("express");
 const csrf = require("csurf");
@@ -7,6 +6,7 @@ const expressSession = require("express-session");
 const https = require("https");
 const cors = require("cors");
 const fs = require("fs");
+const path = require("path");
 
 const opts = {
   requestCert: true,

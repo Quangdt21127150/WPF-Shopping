@@ -1,28 +1,32 @@
 const User = require("../models/user.model");
+const sessionFlash = require("../util/session-flash");
 
 async function getAllAccounts(req, res, next) {
-  const initilizeData = {
-    username: "",
-    password: "",
-    confirmPassword: "",
-    fullname: "",
-    street: "",
-    ward: "Ward / Town",
-    district: "District",
-    city: "City / Province",
-    wardID: "",
-    districtID: "",
-    cityID: "",
-    phone: "",
-    email: "",
-  };
+  let sessionData = sessionFlash.getSessionData(req);
+
+  if (!sessionData) {
+    sessionData = {
+      username: "",
+      password: "",
+      confirmPassword: "",
+      fullname: "",
+      street: "",
+      ward: "Ward / Town",
+      district: "District",
+      city: "City / Province",
+      wardID: "",
+      districtID: "",
+      cityID: "",
+      phone: "",
+      email: "",
+    };
+  }
 
   try {
     const accounts = await User.findAll();
     res.render("admin/accounts/all-accounts", {
       accounts: accounts,
-      errorMessage: req.query.errorMessage,
-      inputData: initilizeData,
+      inputData: sessionData,
     });
   } catch (error) {
     next(error);
@@ -42,49 +46,29 @@ async function getAccount(req, res, next) {
 
 async function updateAccount(req, res, next) {
   const enteredData = {
-    username: req.body.username,
-    fullname: req.body.fullname,
-    street: req.body.street,
-    ward: req.body.ward,
-    district: req.body.district,
-    city: req.body.city,
-    phone: req.body.phone,
-    email: req.body.email,
-    image: req.body.imageUrl,
+    ...req.body,
   };
 
-  console.log(req.params.id);
-  const staticAcc = await User.findById(req.params.id);
-
-  const account = new User(
-    enteredData.username,
-    staticAcc.password,
-    enteredData.fullname,
-    `${enteredData.street}, ${enteredData.ward}, ${enteredData.district}, ${enteredData.city}`,
-    enteredData.phone,
-    enteredData.email,
-    enteredData.image
-  );
+  const account = new User({
+    _id: req.params.id,
+    ...enteredData,
+    address: `${enteredData.street}, ${enteredData.ward}, ${enteredData.district}, ${enteredData.city}`,
+  });
 
   if (req.file) {
     account.replaceImage(req.file.filename);
   }
 
   try {
-    const existsAlready = await account.existsAlready();
-
-    if (existsAlready) {
-      res.redirect(`/profile`);
-      return;
-    }
-
-    await account.save(req.params.id);
+    await account.save();
   } catch (error) {
     next(error);
     return;
   }
 
-  //Cập nhật tài khoản thanh toán
+  res.redirect(
+    `https://localhost:5000/pay_accounts/update?username=${account.username}&new=${enteredData.username}`
+  );
 }
 
 module.exports = {

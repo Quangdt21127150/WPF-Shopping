@@ -84,7 +84,7 @@ class User {
     this.imageUrl = `/assets/images/${this.image}`;
   }
 
-  async save(userID) {
+  async save() {
     const userData = {
       username: this.username,
       fullname: this.fullname,
@@ -94,7 +94,7 @@ class User {
       image: this.image,
     };
 
-    const userId = new mongodb.ObjectId(userID);
+    const userId = new mongodb.ObjectId(this.id);
 
     if (!this.image) {
       delete userData.image;
@@ -113,8 +113,8 @@ class User {
     this.updateImageData();
   }
 
-  remove(userID) {
-    const userId = new mongodb.ObjectId(userID);
+  remove() {
+    const userId = new mongodb.ObjectId(this.id);
     return db.getDb().collection("users").deleteOne({ _id: userId });
   }
 }

@@ -84,6 +84,7 @@ async function getProducts(req, res, next) {
       start: start,
       end: end,
       total_page: total_page,
+      isFade: req.query.isFade,
     });
   } catch (error) {
     next(error);

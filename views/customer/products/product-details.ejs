@@ -9,7 +9,7 @@
       <img src="<%= product.imageUrl %>" alt="<%= product.title %>" id="picture">
       <article id="product-info">
         <h1><%= product.title %></h1>
-        <p><strong class="text-danger"><i><%= product.price %> VND</i></strong></p>
+        <p><strong class="text-danger"><i><%= product.price.toLocaleString('vi-VN') %> VND</i></strong></p>
         <button class="btn btn-solid" data-productid="<%= product.id %>" data-csrf="<%= locals.csrfToken %>"><i class="fa-solid fa-cart-plus me-1"></i> Add to Cart</button>
       </article>
     </header>

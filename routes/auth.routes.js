@@ -5,10 +5,7 @@ const passport = require("passport");
 const googleStrategy = require("passport-google-oauth").OAuth2Strategy;
 const facebookStrategy = require("passport-facebook").Strategy;
 const User = require("../models/user.model");
-const { EventEmitter } = require("events");
 const jwt = require("jsonwebtoken");
-
-const myEmitter = new EventEmitter();
 
 const router = express.Router();
 require("dotenv").config();

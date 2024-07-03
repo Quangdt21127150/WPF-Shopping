@@ -34,7 +34,7 @@
 #cart-total p {
   font-size: 1.5rem;
   font-weight: bold;
-  color: var(--color-primary-500);
+  color: green;
 }
 
 #cart-total #cart-total-fallback {
