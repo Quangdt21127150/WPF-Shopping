@@ -24,56 +24,57 @@
   </li>
   <% } else { %>
   <li class="dropdown">
-    <article role="button" data-toggle="dropdown" class="d-flex flex-column">
-      <i class="fa-solid fa-list-check text-center"></i>
-      Management
+    <article role="button" data-toggle="dropdown" class="d-flex">
+      <article class="d-flex flex-column">
+        <i class="fa-solid fa-list-check text-center"></i>
+        Management
+      </article>
+      <i class="fa-solid fa-caret-down my-auto"></i>
     </article>
     <ul class="dropdown-menu">
       <li>
         <a href="/categories" class="d-flex gap-2">
-          <i class="fa-solid fa-layer-group mt-1"></i>
+          <i class="fa-solid fa-layer-group my-auto"></i>
           Categories
         </a>
       </li>
       <li>
         <a href="/admin/orders" class="d-flex" style="gap: var(--space-3)">
           <i
-            class="fa-solid fa-receipt mt-1"
-            style="margin-left: var(--space-1)"
+            class="fa-solid fa-receipt my-auto"
+            style="margin-left: 0.2rem"
           ></i>
           Orders
         </a>
       </li>
       <li>
         <a href="/accounts" class="d-flex gap-2">
-          <i class="fa-solid fa-user-group mt-1"></i>
+          <i class="fa-solid fa-user-group my-auto"></i>
           Accounts
         </a>
       </li>
     </ul>
+  </li>
+
+  <li class="manage">
+    <a href="/categories" class="d-flex flex-column">
+      <i class="fa-solid fa-layer-group text-center"></i>
+      Categories
+    </a>
   </li>
   <li class="manage">
-    <ul class="text-center">
-      <li>
-        <a href="/categories" class="d-flex flex-column">
-          <i class="fa-solid fa-layer-group"></i>
-          Categories
-        </a>
-      </li>
-      <li>
-        <a href="/admin/orders" class="d-flex flex-column">
-          <i class="fa-solid fa-receipt"></i>
-          Orders
-        </a>
-      </li>
-      <li>
-        <a href="/accounts" class="d-flex flex-column">
-          <i class="fa-solid fa-user-group"></i>
-          Accounts
-        </a>
-      </li>
-    </ul>
+    <a href="/admin/orders" class="d-flex flex-column">
+      <i class="fa-solid fa-receipt text-center"></i>
+      Orders
+    </a>
   </li>
+  <li class="manage">
+    <a href="/accounts" class="d-flex flex-column">
+      <i class="fa-solid fa-user-group text-center"></i>
+      Accounts
+    </a>
+  </li>
+
   <li>
     <a href="/admin/statistic" class="d-flex flex-column">
       <i class="fa-solid fa-chart-column text-center"></i>
@@ -95,7 +96,7 @@
         <span></span>
         <span></span>
         <span></span>
-        <i class="fa-solid fa-door-open me-2" style="margin-top: 5%"></i>
+        <i class="fa-solid fa-door-open me-2 my-auto"></i>
         Logout
       </button>
     </form>

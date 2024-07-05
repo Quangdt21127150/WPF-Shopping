@@ -68,6 +68,7 @@ async function createNewProduct(req, res, next) {
   const product = new Product({
     ...req.body,
     image: req.file.filename,
+    date: new Date(),
   });
 
   try {
@@ -104,13 +105,6 @@ async function deleteProduct(req, res, next) {
     product = await Product.findById(req.params.id);
     const filePath = path.join(__dirname, product.image);
     await product.remove();
-    fs.unlink(filePath, (err) => {
-      if (err) {
-        console.log("File not found or other error");
-      } else {
-        console.log("File deleted successfully");
-      }
-    });
   } catch (error) {
     return next(error);
   }
@@ -176,6 +170,7 @@ async function createNewAccount(req, res, next) {
 
 async function deleteAccount(req, res, next) {
   const user = await User.findById(req.params.id);
+
   try {
     await user.remove();
   } catch (error) {
@@ -188,29 +183,12 @@ async function deleteAccount(req, res, next) {
 }
 
 //Order Manage
-async function getOrders(req, res, next) {
+async function getAllOrders(req, res, next) {
   try {
     const orders = await Order.findAll();
     res.render("admin/orders/admin-orders", {
       orders: orders,
     });
-  } catch (error) {
-    next(error);
-  }
-}
-
-async function updateOrder(req, res, next) {
-  const orderId = req.params.id;
-  const newStatus = req.body.newStatus;
-
-  try {
-    const order = await Order.findById(orderId);
-
-    order.status = newStatus;
-
-    await order.save();
-
-    res.json({ message: "Order updated", newStatus: newStatus });
   } catch (error) {
     next(error);
   }
@@ -230,6 +208,7 @@ async function postRevenueByMonth(req, res, next) {
     const orderInYear = orders.filter(
       (order) => order.date.getFullYear() === currentYear
     );
+
     for (let order of orderInYear) {
       if (order.status === "fulfilled") {
         revenue[order.date.getMonth()] += order.productData.totalPrice;
@@ -253,6 +232,7 @@ async function postRevenue10Year(req, res, next) {
         order.date.getFullYear() >= currentYear - 9 &&
         order.date.getFullYear() <= currentYear
     );
+
     for (let order of orderByYear) {
       if (order.status === "fulfilled") {
         revenue[9 - (currentYear - order.date.getFullYear())] +=
@@ -275,6 +255,7 @@ async function postQuantityByMonth(req, res, next) {
     const orderInYear = orders.filter(
       (order) => order.date.getFullYear() === currentYear
     );
+
     for (let order of orderInYear) {
       if (order.status === "fulfilled") {
         for (let item of order.productData.items) {
@@ -289,6 +270,7 @@ async function postQuantityByMonth(req, res, next) {
         }
       }
     }
+
     const quantity = Array.from(products.entries()).sort((a, b) => {
       return a[0].localeCompare(b[0]);
     });
@@ -310,6 +292,7 @@ async function postQuantity10Year(req, res, next) {
         order.date.getFullYear() >= currentYear - 9 &&
         order.date.getFullYear() <= currentYear
     );
+
     for (let order of orderInYear) {
       if (order.status === "fulfilled") {
         for (let item of order.productData.items) {
@@ -322,6 +305,7 @@ async function postQuantity10Year(req, res, next) {
         }
       }
     }
+
     const quantity = Array.from(products.entries()).sort((a, b) => {
       return a[0].localeCompare(b[0]);
     });
@@ -345,8 +329,7 @@ module.exports = {
   createNewAccount: createNewAccount,
   deleteAccount: deleteAccount,
 
-  getOrders: getOrders,
-  updateOrder: updateOrder,
+  getAllOrders: getAllOrders,
 
   getStatistic: getStatistic,
   postRevenueByMonth: postRevenueByMonth,

@@ -18,6 +18,7 @@ function getSignup(req, res) {
       wardID: "",
       districtID: "",
       cityID: "",
+      birthday: new Date().toISOString().split("T")[0],
       phone: "",
       email: "",
     };
@@ -110,7 +111,7 @@ async function login(req, res, next) {
 
   const sessionErrorData = {
     errorMessage:
-      "Invalid credentials - please double-check your username and password!",
+      "Invalid credentials! Please double-check your username and password!",
     username: user.username,
     password: user.password,
   };

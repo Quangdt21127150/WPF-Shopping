@@ -14,6 +14,15 @@ class Product {
     if (productData._id) {
       this.id = productData._id.toString();
     }
+    this.date = new Date(productData.date);
+    if (this.date) {
+      this.formattedDate = this.date.toLocaleDateString("en-US", {
+        weekday: "short",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+    }
   }
 
   static async findById(productId) {
@@ -107,6 +116,7 @@ class Product {
       price: this.price,
       description: this.description,
       image: this.image,
+      date: this.date,
     };
 
     if (this.id) {

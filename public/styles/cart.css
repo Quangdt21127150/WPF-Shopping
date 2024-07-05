@@ -19,6 +19,10 @@
   border: none;
 }
 
+.cart-item p {
+  margin: 0;
+}
+
 .cart-product-price {
   font-style: italic;
   color: var(--color-gray-300);
@@ -34,7 +38,7 @@
 #cart-total p {
   font-size: 1.5rem;
   font-weight: bold;
-  color: green;
+  margin: 0;
 }
 
 #cart-total #cart-total-fallback {

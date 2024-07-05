@@ -18,11 +18,19 @@
 
     <p class="fw-bold">RELATED PRODUCTS</p>
 
-    <div id="carouselExample" class="carousel slide">
-      <div class="carousel-inner">
+    <ul id="related-products" class="products-grid">
+      <% for (let i = 0; i < number_product; ++i) { %>
+        <li>
+          <%- include('../../shared/homepage/product-item', { product: related_products[i] }) %>
+        </li>
+      <% } %>
+    </ul>
+
+    <section id="carouselRelatedProducts" class="carousel slide">
+      <section class="carousel-inner">
         <% for (let i = 0; i < number_product; i += 3) { %>
-          <div class="carousel-item <% if(i == 0) { %> active <% } %>">
-            <ul id="products-grid">
+          <section class="carousel-item <% if(i == 0) { %> active <% } %>">
+            <ul class="products-grid">
               <% for (let j = 0; j < 3; ++j) { %>
                 <%  if (i + j < number_product) { %>
                   <li>
@@ -31,18 +39,18 @@
                 <% } %>
               <% } %>
             </ul>
-          </div>
+          </section>
         <% } %>
-      </div>
+      </section>
 
-      <button class="carousel-control-prev" id="arrow-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+      <button class="carousel-control-prev" id="arrow-prev" type="button" data-bs-target="#carouselRelatedProducts" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
       </button>
-      <button class="carousel-control-next" id="arrow-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+      <button class="carousel-control-next" id="arrow-next" type="button" data-bs-target="#carouselRelatedProducts" data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
       </button>
-    </div>
+    </section>
   </main>
 <%- include('../../shared/homepage/footer') %>

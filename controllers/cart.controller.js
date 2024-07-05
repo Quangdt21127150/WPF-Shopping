@@ -1,7 +1,19 @@
 const Product = require("../models/product.model");
+const sessionFlash = require("../util/session-flash");
 
 async function getCart(req, res) {
-  res.render("customer/cart/cart");
+  let sessionData = sessionFlash.getSessionData(req);
+
+  if (!sessionData) {
+    sessionData = {
+      message: null,
+      isError: false,
+    };
+  }
+
+  res.render("customer/cart/cart", {
+    inputData: sessionData,
+  });
 }
 
 async function addCartItem(req, res, next) {

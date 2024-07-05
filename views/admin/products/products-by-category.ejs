@@ -22,7 +22,7 @@
       }, imageRequired: true}) %>
     </p>
 
-    <ul id="products-grid">
+    <ul class="products-grid">
       <% for (let i = start; i < end; ++i) { %>
         <li>
           <%- include('../../shared/homepage/product-item', { product: products[i], i: i, category: category }) %>

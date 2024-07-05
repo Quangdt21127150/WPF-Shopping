@@ -1,33 +1,39 @@
 const addressDataUrl =
   "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json";
+let addressData;
+
+function fetchData() {
+  return axios.get(addressDataUrl).then((response) => {
+    addressData = response.data;
+  });
+}
 
 function renderData(cities, districts, wards) {
-  axios.get(addressDataUrl).then(function (response) {
-    const data = response.data;
-
-    data.forEach((city) => {
-      if (city.Name !== cities.val())
-        cities.append(new Option(city.Name, city.Name));
-    });
-
-    const selectedCity = data.find((city) => city.Name === cities.val());
-    if (selectedCity) {
-      selectedCity.Districts.forEach((district) => {
-        if (district.Name !== districts.val())
-          districts.append(new Option(district.Name, district.Name));
-      });
-    }
-
-    const selectedDistrict = selectedCity?.Districts.find(
-      (district) => district.Name === districts.val()
-    );
-    if (selectedDistrict) {
-      selectedDistrict.Wards.forEach((ward) => {
-        if (ward.Name !== wards.val())
-          wards.append(new Option(ward.Name, ward.Name));
-      });
+  addressData.forEach((city) => {
+    if (city.Name !== cities.val()) {
+      cities.append(new Option(city.Name, city.Name));
     }
   });
+
+  const selectedCity = addressData.find((city) => city.Name === cities.val());
+  if (selectedCity) {
+    selectedCity.Districts.forEach((district) => {
+      if (district.Name !== districts.val()) {
+        districts.append(new Option(district.Name, district.Name));
+      }
+    });
+  }
+
+  const selectedDistrict = selectedCity?.Districts.find(
+    (district) => district.Name === districts.val()
+  );
+  if (selectedDistrict) {
+    selectedDistrict.Wards.forEach((ward) => {
+      if (ward.Name !== wards.val()) {
+        wards.append(new Option(ward.Name, ward.Name));
+      }
+    });
+  }
 }
 
 $(function () {
@@ -53,20 +59,22 @@ $(function () {
     renderData(cities, districts, wards);
   }
 
-  initializeData();
+  fetchData().then(() => {
+    initializeData();
 
-  form.on("reset", function () {
-    setTimeout(initializeData, 0);
-  });
+    form.on("reset", function () {
+      setTimeout(initializeData, 0);
+    });
 
-  cities.change(function () {
-    districts.empty().append(new Option("District", ""));
-    wards.empty().append(new Option("Ward / Town", ""));
-    renderData(cities, districts, wards);
-  });
+    cities.change(function () {
+      districts.empty().append(new Option("District", ""));
+      wards.empty().append(new Option("Ward / Town", ""));
+      renderData(cities, districts, wards);
+    });
 
-  districts.change(function () {
-    wards.empty().append(new Option("Ward / Town", ""));
-    renderData(cities, districts, wards);
+    districts.change(function () {
+      wards.empty().append(new Option("Ward / Town", ""));
+      renderData(cities, districts, wards);
+    });
   });
 });

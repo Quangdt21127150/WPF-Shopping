@@ -1,8 +1,12 @@
-* {
+*,
+*::after,
+*::before {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-html {
+:root {
   font-family: "Montserrat", "sans-serif";
 
   --color-gray-50: rgb(243, 236, 230);
@@ -30,7 +34,6 @@ html {
   --space-2: 0.5rem;
   --space-3: 0.75rem;
   --space-4: 1rem;
-  --space-5: 1.25rem;
   --space-8: 2rem;
 
   --border-radius-small: 4px;
@@ -38,10 +41,6 @@ html {
   --border-radius-circle: 50%;
 
   --shadow-medium: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-body {
-  margin: 0;
 }
 
 main {
@@ -61,10 +60,15 @@ a {
   text-decoration: none;
 }
 
-.btn {
+button,
+select,
+input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
+}
+
+.btn {
   font: inherit;
-  padding: var(--space-2) var(--space-5);
+  padding: var(--space-2) var(--space-4);
   background-color: var(--color-primary-500);
   color: white;
   border: 1px solid var(--color-primary-500);
@@ -108,4 +112,12 @@ a {
   padding: 0.15rem var(--space-4);
   border-radius: 10rem;
   color: white;
+}
+
+select {
+  padding: 0 var(--space-1);
+}
+
+::placeholder {
+  font-style: italic;
 }

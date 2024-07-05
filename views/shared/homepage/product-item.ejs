@@ -3,7 +3,7 @@
   <img src="<%= product.imageUrl %>" alt="<%= product.title %>" />
   <div class="product-item-content">
     <h2 class="text-truncate"><%= product.title %></h2>
-    <div class="product-item-actions">
+    <section class="product-item-actions">
       <button
         type="button"
         class="btn btn-alt"
@@ -13,13 +13,15 @@
         <i class="fa-solid fa-pen-to-square"></i>
       </button>
 
-      <form action="/admin/products/delete/<%= product.id %>" method="POST">
-        <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>" />
-        <button class="btn btn-alt">
-          <i class="fa-solid fa-trash"></i>
-        </button>
-      </form>
-    </div>
+      <button
+        type="button"
+        class="btn btn-alt"
+        data-bs-toggle="modal"
+        data-bs-target="#YesNoModal<%= i %>"
+      >
+        <i class="fa-solid fa-trash"></i>
+      </button>
+    </section>
   </div>
   <% } else { %>
   <a href="/products/<%= product.id %>">
@@ -31,6 +33,10 @@
   <% } %>
 </article>
 
-<% if(locals.isAdmin) { %> 
-  <%- include('../../admin/products/includes/product-form', { submitPath: '/admin/products/' + product.id, title: 'Update product', i: i, product: product, category: category, imageRequired: false }) %> 
-<% } %>
+<% if(locals.isAdmin) { %> <%-
+include('../../admin/products/includes/product-form', { submitPath:
+'/admin/products/' + product.id, title: 'Update product', i: i, product:
+product, category: category, imageRequired: false }) %> <%-
+include('../../admin/popup/includes/yes-no-popup', {submitPath:
+'/admin/products/delete/' + product.id, message: 'delete this product?', i: i })
+%> <% } %>

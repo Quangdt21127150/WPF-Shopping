@@ -28,11 +28,11 @@
         </thead>
         <tbody class="table-group-divider">
           <% for (const category of categories) { %>
+            <% const i = categories.indexOf(category) %>
             <tr>
               <td><%= category.title %></td>
               <td>
                 <section class="d-inline-flex">
-                  <% const i = categories.indexOf(category) %>
                   <button
                     type="button"
                     class="btn btn-alt"
@@ -42,12 +42,14 @@
                     <i class="fa-solid fa-pen-to-square"></i>
                   </button>
   
-                  <form action="/admin/categories/delete/<%= category.id %>" method="POST">
-                    <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>" />
-                    <button class="btn btn-alt mx-2" type="submit">
-                      <i class="fa-solid fa-trash"></i>
-                    </button>
-                  </form>
+                  <button 
+                    type="button"
+                    class="btn btn-alt mx-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#YesNoModal<%= i %>"
+                  >
+                    <i class="fa-solid fa-trash"></i>
+                  </button>
   
                   <a class="btn btn-alt" href="/categories/<%= category.id %>">
                     <i class="fa-solid fa-list"></i>
@@ -55,6 +57,7 @@
                 </section>
               </td>
             </tr>
+            <%- include('../../admin/popup/includes/yes-no-popup', { submitPath: '/admin/categories/delete/' + category.id, message: 'delete this category?', i: i }) %>
             <%- include('includes/category-form', { submitPath: '/admin/categories/' + category.id, title: 'Update category', i: i, category: category }) %>
           <% } %>
         </tbody>

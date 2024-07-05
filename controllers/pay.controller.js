@@ -1,4 +1,5 @@
 const Pay_Account = require("../models/pay.model");
+const sessionFlash = require("../util/session-flash");
 
 async function initSystem(req, res, next) {
   try {
@@ -93,6 +94,7 @@ async function transfer(req, res, next) {
   const customer = await Pay_Account.findByUsername(req.query.username);
   const admin_surplus = admin.surplus + parseInt(req.query.price);
   const customer_surplus = customer.surplus - parseInt(req.query.price);
+  const isAddOrder = req.query.isAddOrder === "true";
 
   let account = new Pay_Account({
     username: admin.username,
@@ -110,8 +112,17 @@ async function transfer(req, res, next) {
 
   await account.save(customer.username);
 
-  res.redirect(
-    `https://localhost:3000/cart?isPaid=0&customer=${customer.username}&surplus=${customer_surplus}`
+  sessionFlash.flashDataToSession(
+    req,
+    {
+      message: `Your current account balance is ${customer_surplus}`,
+      isError: false,
+    },
+    function () {
+      isAddOrder
+        ? res.redirect("https://localhost:3000/cart")
+        : res.redirect("https://localhost:3000/orders");
+    }
   );
 }
 

@@ -12,8 +12,10 @@
         <h1 class="my-5">Hello <%= account.username %></h1>
       </article>
       
+      <% const date = account.birthday.split('-') %>
       <p>Fullname: <%= account.fullname %></p>
       <p>Address: <%= account.address %></p>
+      <p>Birthday: <%= `${date[2]}/${date[1]}/${date[0]}` %></p>
       <p>Phone Number: <%= account.phone %></p>
       <p>Email: <%= account.email %></p>
 

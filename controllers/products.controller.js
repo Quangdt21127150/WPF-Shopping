@@ -8,6 +8,7 @@ async function getProducts(req, res, next) {
     const name = req.query.name || "";
     const cateID = req.query.cateID || "all";
     const price = req.query.price || "all";
+    let products;
 
     /* Get bestseller */
     let quantityOfProducts = new Map();
@@ -31,7 +32,7 @@ async function getProducts(req, res, next) {
     for (let i = quantityOfProducts.length; i < 5; ++i) {
       quantityOfProducts.push(["-1", 0]);
     }
-    const bestseller = [
+    const bestsellers = [
       await Product.findByName(quantityOfProducts[0][0]),
       await Product.findByName(quantityOfProducts[1][0]),
       await Product.findByName(quantityOfProducts[2][0]),
@@ -39,8 +40,13 @@ async function getProducts(req, res, next) {
       await Product.findByName(quantityOfProducts[4][0]),
     ];
 
+    /*Get new products*/
+    products = await Product.findAll();
+    const newProducts = products
+      .sort((a, b) => new Date(b.date) - new Date(a.date))
+      .slice(0, 5);
+
     /*Search and filter*/
-    let products;
     if (cateID !== "all") {
       products = await Product.findByCateId(cateID);
     } else {
@@ -54,11 +60,9 @@ async function getProducts(req, res, next) {
     }
 
     if (price === "cheap") {
-      products = products.filter((product) => product.price < 100000);
+      products = products.filter((product) => product.price <= 100000);
     } else if (price === "medium") {
-      products = products.filter(
-        (product) => product.price >= 100000 && product.price <= 500000
-      );
+      products = products.filter((product) => product.price <= 500000);
     } else if (price === "expensive") {
       products = products.filter((product) => product.price > 500000);
     }
@@ -74,7 +78,8 @@ async function getProducts(req, res, next) {
     }
 
     res.render("customer/products/all-products", {
-      bestseller: bestseller,
+      bestsellers: bestsellers,
+      newProducts: newProducts,
       categories: categories,
       products: products,
       page: page,

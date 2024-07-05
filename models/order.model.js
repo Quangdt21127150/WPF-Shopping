@@ -46,12 +46,10 @@ class Order {
   }
 
   static async findAllForUser(userId) {
-    const uid = new mongodb.ObjectId(userId);
-
     const orders = await db
       .getDb()
       .collection("orders")
-      .find({ "userData._id": uid })
+      .find({ "userData.id": userId })
       .sort({ _id: -1 })
       .toArray();
 
@@ -59,17 +57,31 @@ class Order {
   }
 
   static async findByPendingStatus(userId) {
-    const uid = new mongodb.ObjectId(userId);
-
     const order = await db
       .getDb()
       .collection("orders")
-      .findOne({ $and: [{ "userData._id": uid }, { status: "pending" }] });
+      .findOne({ $and: [{ "userData.id": userId }, { status: "pending" }] });
 
     if (order) {
       return this.transformOrderDocument(order);
     } else {
       return null;
+    }
+  }
+
+  static async findByCancelledStatus(userId) {
+    const orders = await db
+      .getDb()
+      .collection("orders")
+      .find({ $and: [{ "userData.id": userId }, { status: "cancelled" }] })
+      .sort({ _id: -1 })
+      .toArray();
+
+    console.log(orders);
+    if (orders) {
+      return this.transformOrderDocuments(orders);
+    } else {
+      return [];
     }
   }
 
@@ -99,6 +111,11 @@ class Order {
 
       return db.getDb().collection("orders").insertOne(orderDocument);
     }
+  }
+
+  remove() {
+    const orderId = new mongodb.ObjectId(this.id);
+    return db.getDb().collection("orders").deleteOne({ _id: orderId });
   }
 }
 

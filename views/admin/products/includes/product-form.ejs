@@ -27,7 +27,7 @@
         </div>
         <div class="modal-body">
           <p>
-            <label for="title">Title</label>
+            <label for="title">Title (<span class="text-danger">*</span>)</label>
             <input
               type="text"
               id="title"
@@ -45,20 +45,20 @@
             class="d-none"
           />
           <p class="fw-medium">
-            <span class="text-black">Category:</span> 
+            <span class="text-black">Category:</span>
             <span class="badge py-2 bg-success"><%= category.title %></span>
           </p>
 
           <section class="image-upload-control">
             <p>
-              <label for="image">Image</label>
+              <label for="image">Image (<span class="text-danger">*</span>)</label>
               <input
                 type="file"
                 accept="image/png,image/jpg"
                 id="image"
                 name="image"
                 class="text-black border-0"
-                <% if(imageRequired) { %> required <% } %>
+                <% if(imageRequired) { %> required <% } %> 
               />
             </p>
 
@@ -66,7 +66,7 @@
           </section>
 
           <p>
-            <label for="summary">Summary</label>
+            <label for="summary">Summary (<span class="text-danger">*</span>)</label>
             <input
               type="text"
               id="summary"
@@ -79,7 +79,7 @@
           </p>
 
           <p>
-            <label for="price">Price</label>
+            <label for="price">Price (<span class="text-danger">*</span>)</label>
             <input
               type="number"
               id="price"
@@ -93,8 +93,16 @@
           </p>
 
           <p>
-            <label for="description">Description</label>
-            <textarea id="description" name="description" rows="5" class="form-control" required><%= product.description %></textarea>
+            <label for="description">Description (<span class="text-danger">*</span>)</label>
+            <textarea
+              id="description"
+              name="description"
+              rows="5"
+              class="form-control"
+              required
+            >
+<%= product.description %></textarea
+            >
           </p>
         </div>
         <div class="modal-footer">
@@ -105,7 +113,7 @@
             <i class="fa-solid fa-arrow-rotate-right"></i> Reset
           </button>
           <button class="btn bg-primary border-primary">
-            <i class="fa-solid fa-check"></i> 
+            <i class="fa-solid fa-check"></i>
             Save
           </button>
         </div>

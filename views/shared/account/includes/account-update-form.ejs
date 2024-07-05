@@ -26,22 +26,24 @@
         </div>
         <div class="modal-body">
           <p>
-            <label for="username">Username</label>
+            <label for="username">Username (<span class="text-danger">*</span>)</label>
             <input
               type="text"
               id="username"
               name="username"
+              maxlength="50"
               value="<%= account.username %>"
               class="form-control"
               required
             />
           </p>
           <p>
-            <label for="fullname">Fullname</label>
+            <label for="fullname">Fullname (<span class="text-danger">*</span>)</label>
             <input
               type="text"
               id="fullname"
               name="fullname"
+              maxlength="100"
               value="<%= account.fullname %>"
               class="form-control"
               required
@@ -50,7 +52,7 @@
 
           <section class="image-upload-control">
             <p>
-              <label class="text-black" for="image">Image</label>
+              <label class="text-black" for="image">Image (<span class="text-danger">*</span>)</label>
               <input
                 type="file"
                 id="image"
@@ -64,21 +66,25 @@
 
           <p>
             <input type="text" id="address" value="<%= account.address %>" class="d-none">
-            <label for="street">Address</label>
+            <label for="street">Address (<span class="text-danger">*</span>)</label>
             <section class="combobox">             
-              <select name="city" id="city" class="rounded-2" required></select>
-              <select name="district" id="district" class="rounded-2" required></select>
-              <select name="ward" id="ward" class="rounded-2" required></select>
-              <input type="text" id="street" name="street" value="" placeholder=" Apartment number + street" class="form-control" required>
+              <select id="city" name="city" class="rounded-2" required></select>
+              <select id="district" name="district" class="rounded-2" required></select>
+              <select id="ward" name="ward" class="rounded-2" required></select>
+              <input type="text" id="street" name="street" maxlength="50" value="" placeholder=" Apartment number + street" class="form-control" required>
             </section>
           </p>
           <p>
+            <label for="birthday">Birthday (<span class="text-danger">*</span>)</label>
+            <input type="date" id="birthday" name="birthday" max="<%= new Date().toISOString().split('T')[0] %>" value="<%= account.birthday %>" class="form-control" required />
+          </p>
+          <p>
             <label for="phone">Phone Number</label>
-            <input type="tel" name="phone" id="phone" pattern="[0-9]{10}" placeholder=" Contain 10 digits" value="<%= account.phone %>" class="form-control" required />
+            <input type="tel" name="phone" id="phone" pattern="[0-9]{10}" maxlength="10" placeholder=" Contain 10 digits" value="<%= account.phone %>" class="form-control" />
           </p>
           <p>
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$" placeholder=" Ex: abc@gmail.com" value="<%= account.email %>" class="form-control" required />
+            <input type="email" id="email" name="email" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$" maxlength="30" placeholder=" Ex: abc@gmail.com" value="<%= account.email %>" class="form-control" />
           </p>          
         </div>
         <div class="modal-footer">

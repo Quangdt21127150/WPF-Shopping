@@ -1,5 +1,5 @@
 <article class="cart-item">
-  <article class="cart-item-info">
+  <article>
     <h2><%= item.product.title %></h2>
     <p>
       <span class="cart-item-price"
@@ -13,7 +13,6 @@
 
   <form
     class="cart-item-management"
-    style="height: fit-content"
     data-productid="<%= item.product.id %>"
     data-csrf="<%= locals.csrfToken %>"
   >

@@ -13,8 +13,7 @@
         <p><%= inputData.errorMessage %></p>
       </section>
     <% } %>
-    <form action="/signup" method="POST" class="form">
-      <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
+    <form action="/signup?_csrf=<%= locals.csrfToken %>" method="POST" class="form">
       <%- include('../../shared/account/includes/account-add-form', { inputData: inputData }) %>
       <hr>
       <button class="btn btn-solid">Create Account</button>

@@ -3,31 +3,30 @@
 <header id="main-header">
   <section class="d-flex">
     <img src="/assets/icons/logo.png" alt="Logo" style="width: 3rem" />
-    <i class="fw-bold fs-3 mx-2">WPF Shop</i>
+    <i class="fw-bold fs-3 mx-2 my-auto">WPF Shop</i>
   </section>
 
   <nav><%- include('nav-items') %></nav>
 
   <section class="d-flex">
-    <section class="form-check form-switch mt-2 me-3">
+    <section class="form-check form-switch my-auto">
       <input
         class="form-check-input"
         type="checkbox"
         role="button"
         id="switchCheck"
       />
-      <i
-        class="fa-regular fa-moon fs-4"
-        style="color: var(--color-gray-100)"
-      ></i>
+      <i class="fa-regular fa-moon fs-4"></i>
       <i class="fa-regular fa-sun fs-4 text-black"></i>
     </section>
 
-    <button id="mobile-menu-btn">
+    <% if(locals.isAuth) { %>
+    <button id="mobile-menu-btn" class="ms-3">
       <span></span>
       <span></span>
       <span></span>
     </button>
+    <% } %>
   </section>
 </header>
 <aside id="mobile-menu">

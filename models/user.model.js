@@ -9,6 +9,7 @@ class User {
     this.password = userData.password;
     this.fullname = userData.fullname;
     this.address = userData.address;
+    this.birthday = userData.birthday;
     this.phone = userData.phone;
     this.email = userData.email;
     this.image = userData.image;
@@ -68,6 +69,7 @@ class User {
       password: hashedPassword,
       fullname: this.fullname,
       address: this.address,
+      birthday: this.birthday,
       phone: this.phone,
       email: this.email,
       image: this.image,
@@ -89,6 +91,7 @@ class User {
       username: this.username,
       fullname: this.fullname,
       address: this.address,
+      birthday: this.birthday,
       phone: this.phone,
       email: this.email,
       image: this.image,
