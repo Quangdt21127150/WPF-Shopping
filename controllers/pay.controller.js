@@ -3,11 +3,13 @@ const sessionFlash = require("../util/session-flash");
 
 async function initSystem(req, res, next) {
   try {
+    const GoogleOrFacebookUsername = req.query.GoogleOrFacebookUsername || "";
     const accounts = await Pay_Account.findAll();
     if (accounts.length === 0) {
       const account = new Pay_Account({
         username: req.query.username,
         surplus: 0,
+        GoogleOrFacebookUsername: GoogleOrFacebookUsername,
         isAdmin: true,
       });
 
@@ -18,12 +20,16 @@ async function initSystem(req, res, next) {
         return;
       }
 
-      res.redirect("https://localhost:3000/");
+      if (GoogleOrFacebookUsername !== "") {
+        res.redirect("https://localhost:3000/products?isFade=1");
+      } else {
+        res.redirect("https://localhost:3000/");
+      }
       return;
     }
 
     res.redirect(
-      `/pay_accounts?username=${req.query.username}&login=${req.query.login}`
+      `/create?username=${req.query.username}&GoogleOrFacebookUsername=${GoogleOrFacebookUsername}&login=${req.query.login}`
     );
   } catch (error) {
     next(error);
@@ -34,10 +40,11 @@ async function createNewPaymentAccount(req, res, next) {
   const account = new Pay_Account({
     username: req.query.username,
     surplus: 1000000,
+    GoogleOrFacebookUsername: req.query.GoogleOrFacebookUsername,
     isAdmin: false,
   });
 
-  const existsAccounts = await Pay_Account.findByUsername(req.query.username);
+  const existsAccounts = await account.existsAlready();
 
   try {
     if (!existsAccounts) await account.add();
@@ -46,22 +53,20 @@ async function createNewPaymentAccount(req, res, next) {
     return;
   }
 
-  if (req.query.login === "2") {
-    res.redirect("https://localhost:3000/");
-  } else if (req.query.login === "3") {
+  if (req.query.GoogleOrFacebookUsername !== "") {
     res.redirect("https://localhost:3000/products?isFade=1");
   } else {
-    res.redirect("https://localhost:3000/accounts");
+    if (req.query.login === "1") {
+      res.redirect("https://localhost:3000/");
+    } else {
+      res.redirect("https://localhost:3000/accounts");
+    }
   }
 }
 
 async function deletePaymentAccount(req, res, next) {
-  let account;
   try {
-    account = new Pay_Account(
-      await Pay_Account.findByUsername(req.query.username)
-    );
-
+    const account = await Pay_Account.findByUsername(req.query.username);
     await account.remove();
   } catch (error) {
     return next(error);
@@ -76,17 +81,26 @@ async function updatePaymentAccount(req, res, next) {
   const account = new Pay_Account({
     username: req.query.new,
     surplus: existsAlready.surplus,
+    GoogleOrFacebookUsername: existsAlready.GoogleOrFacebookUsername,
     isAdmin: existsAlready.isAdmin,
   });
 
   try {
-    await account.save(req.query.username);
+    await account.save(existsAlready.username);
   } catch (error) {
     next(error);
     return;
   }
 
-  res.redirect("https://localhost:3000/profile");
+  sessionFlash.flashDataToSession(
+    req,
+    {
+      errorMessage: null,
+    },
+    function () {
+      res.redirect("https://localhost:3000/profile");
+    }
+  );
 }
 
 async function transfer(req, res, next) {
@@ -99,6 +113,7 @@ async function transfer(req, res, next) {
   let account = new Pay_Account({
     username: admin.username,
     surplus: admin_surplus,
+    GoogleOrFacebookUsername: admin.username,
     isAdmin: true,
   });
 
@@ -107,6 +122,7 @@ async function transfer(req, res, next) {
   account = new Pay_Account({
     username: customer.username,
     surplus: customer_surplus,
+    GoogleOrFacebookUsername: customer.GoogleOrFacebookUsername,
     isAdmin: false,
   });
 

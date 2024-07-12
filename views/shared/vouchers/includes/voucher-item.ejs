@@ -1,0 +1,31 @@
+<% const type = voucher.value[0]
+const number = voucher.value.match(/\d+/)
+let promotion
+if(type === 'd'){
+    promotion = 'Discount ' + number + '% off entire bill'
+} else if(type === 'g') {
+    const hyphen = voucher.value.indexOf('-')
+    const product = voucher.value.slice(hyphen + 1)
+    promotion = 'Get free ' + number + ' ' + product
+} else {
+    promotion = 'Extra ' + number + 'point'
+} 
+
+//const date = voucher.expiration.split('-') 
+%>
+
+<article class="position-relative d-flex justify-content-center">
+  <img src="/assets/icons/voucher.png" alt="Voucher" class="my-3 img-fluid mx-auto" />
+  <section class="position-absolute text-white fs-4 bg-black w-50 z-1 pl-3">
+    <p><%= voucher.title %></p>
+    <p><%= promotion %></p>
+    <p class="d-flex justify-content-between">
+        <span>Point</span>
+        <span>Expiration</span>
+    </p>
+    <p class="d-flex justify-content-between">
+        <span><%= voucher.point %></span>
+        
+    </p>
+  </section>
+</article>

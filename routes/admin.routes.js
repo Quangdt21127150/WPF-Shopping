@@ -37,6 +37,21 @@ router.post("/accounts/delete/:id", adminController.deleteAccount);
 // admin/orders
 router.get("/orders", adminController.getAllOrders);
 
+// admin/vouchers
+router.post(
+  "/vouchers",
+  imageUploadMiddleware,
+  adminController.createNewVoucher
+);
+
+router.post(
+  "/vouchers/:id",
+  imageUploadMiddleware,
+  adminController.updateVoucher
+);
+
+router.post("/vouchers/delete/:id", adminController.deleteVoucher);
+
 // admin/statistic
 router.get("/statistic", adminController.getStatistic);
 

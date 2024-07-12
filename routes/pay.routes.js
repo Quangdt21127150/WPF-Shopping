@@ -6,11 +6,11 @@ const router = express.Router();
 
 router.get("/", payController.initSystem);
 
-router.get("/pay_accounts", payController.createNewPaymentAccount);
+router.get("/create", payController.createNewPaymentAccount);
 
-router.get("/pay_accounts/delete", payController.deletePaymentAccount);
+router.get("/delete", payController.deletePaymentAccount);
 
-router.get("/pay_accounts/update", payController.updatePaymentAccount);
+router.get("/update", payController.updatePaymentAccount);
 
 router.get("/transfer", payController.transfer);
 

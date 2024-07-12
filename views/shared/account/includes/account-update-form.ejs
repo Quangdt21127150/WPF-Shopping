@@ -1,5 +1,7 @@
 <link rel="stylesheet" href="/styles/forms.css" />
-<script src="/scripts/update-address.js" defer></script>
+<script src="/scripts/select-address.js" defer></script>
+<script src="/scripts/select-gender.js" defer></script>
+<script src="/scripts/show-toast.js" defer></script>
 
 <form
   action="<%= submitPath %>?_csrf=<%= locals.csrfToken %>"
@@ -31,9 +33,15 @@
               type="text"
               id="username"
               name="username"
+              pattern="^[a-zA-Z]([a-zA-Z0-9 ]*[a-zA-Z0-9])?$"
               maxlength="50"
               value="<%= account.username %>"
               class="form-control"
+              data-bs-container="body" 
+              data-bs-toggle="popover" 
+              data-bs-trigger="hover" 
+              data-bs-placement="right"
+              data-bs-content="Letters, numbers or spaces only; does not end with space; begins with a letter"
               required
             />
           </p>
@@ -68,10 +76,10 @@
             <input type="text" id="address" value="<%= account.address %>" class="d-none">
             <label for="street">Address (<span class="text-danger">*</span>)</label>
             <section class="combobox">             
-              <select id="city" name="city" class="rounded-2" required></select>
-              <select id="district" name="district" class="rounded-2" required></select>
-              <select id="ward" name="ward" class="rounded-2" required></select>
-              <input type="text" id="street" name="street" maxlength="50" value="" placeholder=" Apartment number + street" class="form-control" required>
+              <select id="city" name="city" class="form-control" required></select>
+              <select id="district" name="district" class="form-control" required></select>
+              <select id="ward" name="ward" class="form-control" required></select>
+              <input type="text" id="street" name="street" maxlength="50" value="" placeholder="Apartment number + street" class="form-control" required>
             </section>
           </p>
           <p>
@@ -79,12 +87,22 @@
             <input type="date" id="birthday" name="birthday" max="<%= new Date().toISOString().split('T')[0] %>" value="<%= account.birthday %>" class="form-control" required />
           </p>
           <p>
+            <label for="gender">Gender</label>
+            <select id="gender" name="gender" class="form-control" required>
+              <option value="<%= account.gender %>" selected><%= account.gender %></option>
+            </select>
+          </p>
+          <p>
             <label for="phone">Phone Number</label>
-            <input type="tel" name="phone" id="phone" pattern="[0-9]{10}" maxlength="10" placeholder=" Contain 10 digits" value="<%= account.phone %>" class="form-control" />
+            <input type="tel" name="phone" id="phone" pattern="(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b" maxlength="10" value="<%= account.phone !== '?' ? account.phone : '' %>" class="form-control" 
+              data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="right"
+              data-bs-content="Exist in Vietnam" />
           </p>
           <p>
             <label for="email">Email</label>
-            <input type="email" id="email" name="email" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$" maxlength="30" placeholder=" Ex: abc@gmail.com" value="<%= account.email %>" class="form-control" />
+            <input type="email" id="email" name="email" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$" maxlength="30" value="<%= account.email !== '?' ? account.email : '' %>" class="form-control"
+              data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="right"
+              data-bs-content="Ex: abc@gmail.com" />
           </p>          
         </div>
         <div class="modal-footer">
@@ -103,3 +121,5 @@
     </div>
   </div>
 </form>
+
+<%- include('../../../admin/popup/includes/notification', { message: errorMessage, isError: true }) %>

@@ -19,6 +19,7 @@ function getSignup(req, res) {
       districtID: "",
       cityID: "",
       birthday: new Date().toISOString().split("T")[0],
+      gender: "Male",
       phone: "",
       email: "",
     };
@@ -53,10 +54,11 @@ async function signup(req, res, next) {
     ...enteredData,
     address: `${enteredData.street}, ${enteredData.ward}, ${enteredData.district}, ${enteredData.city}`,
     image: "user.png",
+    GoogleOrFacebookUsername: "",
   });
 
   try {
-    const existsAlready = await user.existsAlready();
+    const existsAlready = await user.getWithSameUsername();
 
     if (existsAlready) {
       sessionFlash.flashDataToSession(
@@ -79,7 +81,7 @@ async function signup(req, res, next) {
     return next(error);
   }
 
-  res.redirect(`https://localhost:5000/?username=${req.body.username}&login=2`);
+  res.redirect(`https://localhost:5000/?username=${req.body.username}&login=1`);
 }
 
 function getLogin(req, res) {
@@ -100,14 +102,8 @@ async function login(req, res, next) {
     username: req.body.username,
     password: req.body.password,
   });
-  let existingUser;
 
-  try {
-    existingUser = await user.getUserWithSameUsername();
-  } catch (error) {
-    next(error);
-    return;
-  }
+  const existsAlready = await user.getWithSameUsername();
 
   const sessionErrorData = {
     errorMessage:
@@ -116,7 +112,7 @@ async function login(req, res, next) {
     password: user.password,
   };
 
-  if (!existingUser) {
+  if (!existsAlready) {
     sessionFlash.flashDataToSession(req, sessionErrorData, function () {
       res.redirect("/login");
     });
@@ -124,7 +120,7 @@ async function login(req, res, next) {
   }
 
   const passwordIsCorrect = await user.hasMatchingPassword(
-    existingUser.password
+    existsAlready.password
   );
 
   if (!passwordIsCorrect) {
@@ -134,30 +130,31 @@ async function login(req, res, next) {
     return;
   }
 
-  authUtil.createUserSession(req, existingUser, function () {
-    res.redirect("/products?isFade=1");
+  authUtil.createUserSession(req, existsAlready, function () {
+    if (existsAlready.isAdmin) {
+      res.redirect("/categories");
+    } else {
+      res.redirect("/products?isFade=1");
+    }
   });
 }
 
 async function successLogin(req, res) {
   const user = new User({
-    username: req.session.passport.user.emails[0].value,
+    username: req.session.passport.user.displayName,
   });
-  let existingUser;
-  try {
-    existingUser = await user.getUserWithSameUsername();
-  } catch (error) {
-    next(error);
-    return;
-  }
 
-  if (existingUser) {
-    authUtil.createUserSession(req, existingUser, function () {
-      res.redirect(`https://localhost:5000/?username=${user.username}&login=3`);
-    });
-  } else {
+  const existsAlready = await user.getWithSameGoogleOrFacebookUsername();
+
+  if (!existsAlready) {
     return res.redirect("/login");
   }
+
+  authUtil.createUserSession(req, existsAlready, function () {
+    res.redirect(
+      `https://localhost:5000/?username=${user.username}&GoogleOrFacebookUsername=${user.username}&login=1`
+    );
+  });
 }
 
 function logout(req, res) {

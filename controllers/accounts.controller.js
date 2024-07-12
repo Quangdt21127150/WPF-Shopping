@@ -17,6 +17,8 @@ async function getAllAccounts(req, res, next) {
       wardID: "",
       districtID: "",
       cityID: "",
+      birthday: new Date().toISOString().split("T")[0],
+      gender: "Male",
       phone: "",
       email: "",
     };
@@ -34,10 +36,19 @@ async function getAllAccounts(req, res, next) {
 }
 
 async function getAccount(req, res, next) {
+  let sessionData = sessionFlash.getSessionData(req);
+
+  if (!sessionData) {
+    sessionData = {
+      errorMessage: null,
+    };
+  }
+
   try {
     const account = await User.findById(req.session.uid);
     res.render("shared/account/profile", {
       account: account,
+      errorMessage: sessionData.errorMessage,
     });
   } catch (error) {
     next(error);
@@ -45,29 +56,45 @@ async function getAccount(req, res, next) {
 }
 
 async function updateAccount(req, res, next) {
+  const oldAccount = await User.findById(req.session.uid);
+
   const enteredData = {
     ...req.body,
   };
 
-  const account = new User({
+  const newAccount = new User({
     _id: req.params.id,
     ...enteredData,
     address: `${enteredData.street}, ${enteredData.ward}, ${enteredData.district}, ${enteredData.city}`,
+    GoogleOrFacebookUsername: oldAccount.GoogleOrFacebookUsername,
   });
 
   if (req.file) {
-    account.replaceImage(req.file.filename);
+    newAccount.replaceImage(req.file.filename);
   }
 
   try {
-    await account.save();
+    const existsAlready = await newAccount.getWithSameUsername();
+    if (newAccount.username !== oldAccount.username && existsAlready) {
+      sessionFlash.flashDataToSession(
+        req,
+        {
+          errorMessage: `The username "${enteredData.username}" already exists`,
+        },
+        function () {
+          res.redirect("/profile");
+        }
+      );
+      return;
+    }
+    await newAccount.save();
   } catch (error) {
     next(error);
     return;
   }
 
   res.redirect(
-    `https://localhost:5000/pay_accounts/update?username=${account.username}&new=${enteredData.username}`
+    `https://localhost:5000/update?username=${oldAccount.username}&new=${newAccount.username}`
   );
 }
 

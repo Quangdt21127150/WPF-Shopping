@@ -2,17 +2,15 @@
 <link rel="stylesheet" href="/styles/products.css">
 <script src="/scripts/image-preview.js" defer></script>
 <script src="/scripts/dropdown-change.js" defer></script>
-
 </head>
+
 <body>
   <%- include('../../shared/homepage/header') %>
   <main>
-    <% if(!locals.isAdmin) { %>
-      <%- include('includes/products-carousel', { title: 'Bestsellers', products: bestsellers, i: 1 }) %>
-      <%- include('includes/products-carousel', { title: 'New Products', products: newProducts, i: 2 }) %>
-    <% } %>
+    <%- include('includes/products-carousel', { title: 'Bestsellers', products: bestsellers, i: 1 }) %>
+    <%- include('includes/products-carousel', { title: 'New Products', products: newProducts, i: 2 }) %>
 
-    <section <% if(!locals.isAdmin && isFade) { %> class="animated" <% } %>>
+    <section <% if(isFade) { %> class="animated" <% } %>>
       <h1 class="my-2">All Products</h1>
 
       <form id="searchForm" action="/products" method="GET">

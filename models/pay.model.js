@@ -6,6 +6,7 @@ class Pay_Account {
   constructor(pay_accountData) {
     this.username = pay_accountData.username;
     this.surplus = pay_accountData.surplus;
+    this.GoogleOrFacebookUsername = pay_accountData.GoogleOrFacebookUsername;
     this.isAdmin = pay_accountData.isAdmin;
     if (pay_accountData._id) {
       this.id = pay_accountData._id.toString();
@@ -13,10 +14,24 @@ class Pay_Account {
   }
 
   static async findByUsername(username) {
-    return await db
+    const payer = await db
       .getDb()
       .collection("payers")
       .findOne({ username: username });
+
+    return new Pay_Account(payer);
+  }
+
+  async existsAlready() {
+    return await db
+      .getDb()
+      .collection("payers")
+      .findOne({
+        $or: [
+          { username: this.username },
+          { GoogleOrFacebookUsername: this.GoogleOrFacebookUsername },
+        ],
+      });
   }
 
   static async findAdmin() {
@@ -35,6 +50,7 @@ class Pay_Account {
     const pay_accountData = {
       username: this.username,
       surplus: this.surplus,
+      GoogleOrFacebookUsername: this.GoogleOrFacebookUsername,
       isAdmin: this.isAdmin,
     };
 
@@ -45,6 +61,7 @@ class Pay_Account {
     const pay_accountData = {
       username: this.username,
       surplus: this.surplus,
+      GoogleOrFacebookUsername: this.GoogleOrFacebookUsername,
       isAdmin: this.isAdmin,
     };
 

@@ -2,6 +2,7 @@ const Category = require("../models/category.model");
 const Product = require("../models/product.model");
 const User = require("../models/user.model");
 const Order = require("../models/order.model");
+const Voucher = require("../models/voucher.model");
 const sessionFlash = require("../util/session-flash");
 const fs = require("fs");
 const path = require("path");
@@ -65,51 +66,50 @@ async function deleteCategory(req, res, next) {
 
 //Products Manage
 async function createNewProduct(req, res, next) {
-  const product = new Product({
-    ...req.body,
-    image: req.file.filename,
-    date: new Date(),
-  });
-
   try {
+    const product = new Product({
+      ...req.body,
+      image: req.file.filename,
+      date: new Date(),
+    });
+
     await product.save();
+
+    res.redirect(`/categories/${product.cateId}`);
   } catch (error) {
     return next(error);
   }
-
-  res.redirect(`/categories/${product.cateId}`);
 }
 
 async function updateProduct(req, res, next) {
-  const product = new Product({
-    _id: req.params.id,
-    ...req.body,
-  });
-
-  if (req.file) {
-    product.replaceImage(req.file.filename);
-  }
-
   try {
+    const product = new Product({
+      _id: req.params.id,
+      ...req.body,
+      date: new Date(),
+    });
+
+    if (req.file) {
+      product.replaceImage(req.file.filename);
+    }
     await product.save();
+
+    res.redirect(`/categories/${product.cateId}`);
   } catch (error) {
     return next(error);
   }
-
-  res.redirect(`/categories/${product.cateId}`);
 }
 
 async function deleteProduct(req, res, next) {
-  let product;
   try {
-    product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id);
     const filePath = path.join(__dirname, product.image);
     await product.remove();
+
+    res.redirect(`/categories/${product.cateId}`);
   } catch (error) {
     return next(error);
   }
-
-  res.redirect(`/categories/${product.cateId}`);
 }
 
 //Accounts Manage
@@ -139,10 +139,11 @@ async function createNewAccount(req, res, next) {
     ...enteredData,
     address: `${enteredData.street}, ${enteredData.ward}, ${enteredData.district}, ${enteredData.city}`,
     image: "user.png",
+    GoogleOrFacebookUsername: "",
   });
 
   try {
-    const existsAlready = await user.existsAlready();
+    const existsAlready = await user.getWithSameUsername();
 
     if (existsAlready) {
       sessionFlash.flashDataToSession(
@@ -164,7 +165,7 @@ async function createNewAccount(req, res, next) {
   }
 
   res.redirect(
-    `https://localhost:5000/?username=${enteredData.username}&login=1`
+    `https://localhost:5000/?username=${enteredData.username}&login=2`
   );
 }
 
@@ -177,21 +178,68 @@ async function deleteAccount(req, res, next) {
     return next(error);
   }
 
-  res.redirect(
-    `https://localhost:5000/pay_accounts/delete?username=${user.username}`
-  );
+  res.redirect(`https://localhost:5000/delete?username=${user.username}`);
 }
 
-//Order Manage
+//Orders Manage
 async function getAllOrders(req, res, next) {
   try {
     const orders = await Order.findAll();
-    res.render("admin/orders/admin-orders", {
+    res.render("shared/orders/order-list", {
       orders: orders,
     });
   } catch (error) {
     next(error);
   }
+}
+
+//Vouchers Manage
+async function createNewVoucher(req, res, next) {
+  const radioValue = req.body.radioButton;
+  console.log(req.body);
+  const voucher = new Voucher({
+    ...req.body,
+    image: req.file.filename,
+  });
+
+  try {
+    await voucher.save();
+  } catch (error) {
+    return next(error);
+  }
+
+  res.redirect("/vouchers");
+}
+
+async function updateVoucher(req, res, next) {
+  const voucher = new Voucher({
+    _id: req.params.id,
+    ...req.body,
+  });
+
+  if (req.file) {
+    voucher.replaceImage(req.file.filename);
+  }
+
+  try {
+    await voucher.save();
+  } catch (error) {
+    return next(error);
+  }
+
+  res.redirect("/vouchers");
+}
+
+async function deleteVoucher(req, res, next) {
+  try {
+    const voucher = await Voucher.findById(req.params.id);
+    const filePath = path.join(__dirname, voucher.image);
+    await voucher.remove();
+  } catch (error) {
+    return next(error);
+  }
+
+  res.redirect("/vouchers");
 }
 
 //Statistic
@@ -330,6 +378,10 @@ module.exports = {
   deleteAccount: deleteAccount,
 
   getAllOrders: getAllOrders,
+
+  createNewVoucher: createNewVoucher,
+  updateVoucher: updateVoucher,
+  deleteVoucher: deleteVoucher,
 
   getStatistic: getStatistic,
   postRevenueByMonth: postRevenueByMonth,

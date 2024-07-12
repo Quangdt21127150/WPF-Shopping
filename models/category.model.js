@@ -48,22 +48,6 @@ class Category {
     });
   }
 
-  static async findMultiple(ids) {
-    const categoryIds = ids.map(function (id) {
-      return new mongodb.ObjectId(id);
-    });
-
-    const categories = await db
-      .getDb()
-      .collection("categories")
-      .find({ _id: { $in: categoryIds } })
-      .toArray();
-
-    return categories.map(function (categoryDocument) {
-      return new Category(categoryDocument);
-    });
-  }
-
   async save() {
     const categoryData = {
       title: this.title,

@@ -1,5 +1,4 @@
 const passwordFrame = $("#password-frame");
-const passwordFrame2 = $("#password-frame2");
 
 function ShowOrHidePassword(event) {
   event.preventDefault();
@@ -16,4 +15,3 @@ function ShowOrHidePassword(event) {
 }
 
 passwordFrame.find("a").click(ShowOrHidePassword);
-passwordFrame2.find("a").click(ShowOrHidePassword);

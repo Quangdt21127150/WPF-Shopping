@@ -10,6 +10,7 @@ class User {
     this.fullname = userData.fullname;
     this.address = userData.address;
     this.birthday = userData.birthday;
+    this.gender = userData.gender;
     this.phone = userData.phone;
     this.email = userData.email;
     this.image = userData.image;
@@ -17,6 +18,7 @@ class User {
     if (userData._id) {
       this.id = userData._id.toString();
     }
+    this.GoogleOrFacebookUsername = userData.GoogleOrFacebookUsername;
   }
 
   static async findById(userId) {
@@ -45,20 +47,15 @@ class User {
     return db.getDb().collection("users").find().toArray();
   }
 
-  static findByUsername(username) {
-    return db.getDb().collection("users").findOne({ username: username });
+  async getWithSameGoogleOrFacebookUsername() {
+    return db
+      .getDb()
+      .collection("users")
+      .findOne({ GoogleOrFacebookUsername: this.username });
   }
 
-  getUserWithSameUsername() {
+  async getWithSameUsername() {
     return db.getDb().collection("users").findOne({ username: this.username });
-  }
-
-  async existsAlready() {
-    const existingUser = await this.getUserWithSameUsername();
-    if (existingUser) {
-      return true;
-    }
-    return false;
   }
 
   async signup(isAdmin) {
@@ -70,9 +67,11 @@ class User {
       fullname: this.fullname,
       address: this.address,
       birthday: this.birthday,
+      gender: this.gender,
       phone: this.phone,
       email: this.email,
       image: this.image,
+      GoogleOrFacebookUsername: this.GoogleOrFacebookUsername,
       isAdmin: isAdmin,
     });
   }
@@ -92,9 +91,11 @@ class User {
       fullname: this.fullname,
       address: this.address,
       birthday: this.birthday,
+      gender: this.gender,
       phone: this.phone,
       email: this.email,
       image: this.image,
+      GoogleOrFacebookUsername: this.GoogleOrFacebookUsername,
     };
 
     const userId = new mongodb.ObjectId(this.id);

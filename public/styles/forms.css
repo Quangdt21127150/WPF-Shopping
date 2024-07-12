@@ -16,15 +16,10 @@ label {
   color: black;
 }
 
-input,
-textarea,
-select {
-  font: inherit;
-  border: 1px solid var(--color-gray-100) !important;
-}
-
-select {
-  padding: 0.375rem 0;
+select.form-control {
+  appearance: auto;
+  -webkit-appearance: auto;
+  -moz-appearance: auto;
 }
 
 .combobox {

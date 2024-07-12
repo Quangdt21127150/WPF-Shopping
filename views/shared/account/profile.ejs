@@ -15,16 +15,17 @@
       <% const date = account.birthday.split('-') %>
       <p>Fullname: <%= account.fullname %></p>
       <p>Address: <%= account.address %></p>
-      <p>Birthday: <%= `${date[2]}/${date[1]}/${date[0]}` %></p>
-      <p>Phone Number: <%= account.phone %></p>
-      <p>Email: <%= account.email %></p>
+      <p>Birthday: <%= date.length === 3 ? `${date[2]}/${date[1]}/${date[0]}` : date %></p>
+      <p>Gender: <%= account.gender %></p>
+      <p>Phone Number: <%= account.phone ? account.phone : '?' %></p>
+      <p>Email: <%= account.email ? account.email : '?' %></p>
 
       <button type="button" class="btn btn-solid" data-bs-toggle="modal" data-bs-target="#exampleModal">
         <i class="fa-solid fa-pen-to-square me-1"></i> 
         Update
       </button>
 
-      <%- include('./includes/account-update-form', { submitPath: '/accounts/' + account.id, account: account }) %>
+      <%- include('./includes/account-update-form', { submitPath: '/accounts/' + account.id, account: account, errorMessage: errorMessage }) %>
     </header>
   </main>
 <%- include('../../shared/homepage/footer') %>

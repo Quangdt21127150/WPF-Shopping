@@ -1,6 +1,6 @@
 const imageUploadElements = $(".image-upload-control");
 let imageDefaultSrc = [];
-const productItemForm = $("form");
+const itemForm = $("form");
 const modalFade = $(".modal");
 
 imageUploadElements.find("img").each(function () {
@@ -29,7 +29,7 @@ imageUploadElements.each(function () {
   });
 });
 
-productItemForm.on("reset", function () {
+itemForm.on("reset", function () {
   imageUploadElements.find("img").each(function (index) {
     $(this).attr("src", imageDefaultSrc[index]);
   });

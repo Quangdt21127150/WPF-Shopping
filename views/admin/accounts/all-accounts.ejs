@@ -7,7 +7,7 @@
     <h1 class="my-2">Account Management</h1>
     <section>
       <p>
-        <button type="button" class="btn btn-solid mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button type="button" class="btn btn-solid mt-3" data-bs-toggle="modal" data-bs-target="#addAccountModal">
           <i class="fa-solid fa-user-plus me-1"></i>
           Add Account
         </button>
@@ -15,15 +15,15 @@
         <form action="/admin/accounts?_csrf=<%= locals.csrfToken %>" method="POST">
           <div
             class="modal fade"
-            id="exampleModal"
+            id="addAccountModal"
             tabindex="-1"
-            aria-labelledby="exampleModalLabel"
+            aria-labelledby="addAccountModalLabel"
             aria-hidden="true"
           >
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h1 class="modal-title fs-5 text-black" id="exampleModalLabel">Add new account</h1>
+                  <h1 class="modal-title fs-5 text-black" id="addAccountModalLabel">Add new account</h1>
                   <button
                     type="reset"
                     class="btn-close"
@@ -50,9 +50,9 @@
               </div>
             </div>
           </div>
-
-          <%- include('../../admin/popup/includes/notification', { message: inputData.errorMessage, isError: true }) %>
         </form>
+
+        <%- include('../../admin/popup/includes/notification', { message: inputData.errorMessage, isError: true }) %>
       </p>
     </section>
     <section class="table-responsive">

@@ -1,28 +1,23 @@
 <link rel="stylesheet" href="/styles/forms.css" />
-<script src="/scripts/update-address.js" defer></script>
-<script src="/scripts/show-hide-password.js" defer></script>
+<script src="/scripts/select-address.js" defer></script>
+<script src="/scripts/select-gender.js" defer></script>
+<script src="/scripts/show-toast.js" defer></script>
 
 <p>
   <label for="username">Username (<span class="text-danger">*</span>)</label>
-  <input type="text" id="username" name="username" maxlength="50" value="<%= inputData.username %>" class="form-control" required>
+  <input type="text" id="username" name="username" pattern="^[a-zA-Z]([a-zA-Z0-9 ]*[a-zA-Z0-9])?$" maxlength="50" value="" class="form-control"
+    data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="right"
+    data-bs-content="Letters, numbers or spaces only; does not end with space; begins with a letter" required />
 </p>
 <p>
   <label for="password">Password (<span class="text-danger">*</span>)</label>
-  <section class="input-group" id="password-frame">
-    <input type="password" id="password" name="password" pattern="^\S+$" minlength="6" maxlength="20" placeholder="At least 6 characters long, no whitespace" value="<%= inputData.password %>" class="form-control" required>
-    <section class="input-group-text">
-      <a href="" class="text-black"><i class="fa fa-eye-slash"></i></a>
-    </section>
-  </section>
+  <input type="password" id="password" name="password" pattern="^\S+$" minlength="6" maxlength="20" value="<%= inputData.password %>" class="form-control"
+    data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="right"
+    data-bs-content="At least 6 characters long, no spaces" required />
 </p>
 <p>
   <label for="confirmPassword">Confirm password (<span class="text-danger">*</span>)</label>
-  <section class="input-group" id="password-frame2">
-    <input type="password" id="confirmPassword" name="confirmPassword" maxlength="20" value="<%= inputData.confirmPassword %>" class="form-control" required />
-    <section class="input-group-text">
-      <a href="" class="text-black"><i class="fa fa-eye-slash"></i></a>
-    </section>
-  </section>
+  <input type="password" id="confirmPassword" name="confirmPassword" maxlength="20" value="<%= inputData.confirmPassword %>" class="form-control" required />
 </p>
 <p>
   <label for="fullname">Fullname (<span class="text-danger">*</span>)</label>
@@ -31,19 +26,19 @@
 <p>
   <label for="street">Address (<span class="text-danger">*</span>)</label>
   <section class="combobox">             
-    <select id="city" name="city" class="rounded-2" required>
+    <select id="city" name="city" class="form-control" required>
       <option value="<%= inputData.cityID %>" selected><%= inputData.city %></option>
     </select>
 
-    <select id="district" name="district" class="rounded-2" required>
+    <select id="district" name="district" class="form-control" required>
       <option value="<%= inputData.districtID %>" selected><%= inputData.district %></option>
     </select>
 
-    <select id="ward" name="ward" class="rounded-2" required>
+    <select id="ward" name="ward" class="form-control" required>
       <option value="<%= inputData.wardID %>" selected><%= inputData.ward %></option>
     </select>
 
-    <input type="text" id="street" name="street" maxlength="50" value="<%= inputData.street %>" placeholder="Apartment number + street" class="form-control" required>
+    <input type="text" id="street" name="street" maxlength="50" placeholder="Apartment number + street" value="<%= inputData.street %>" class="form-control" required />
   </section>
 </p>
 <p>
@@ -51,12 +46,22 @@
   <input type="date" id="birthday" name="birthday" max="<%= new Date().toISOString().split('T')[0] %>" value="<%= inputData.birthday %>" class="form-control" required />
 </p>
 <p>
+  <label for="gender">Gender</label>
+  <select id="gender" name="gender" class="form-control">
+    <option value="<%= inputData.gender %>" selected><%= inputData.gender %></option>
+  </select>
+</p>
+<p>
   <label for="phone">Phone Number</label>
-  <input type="tel" id="phone" name="phone" pattern="[0-9]{10}" maxlength="10" placeholder="Contain 10 digits" value="<%= inputData.phone %>" class="form-control" />
+  <input type="tel" id="phone" name="phone" pattern="(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b" maxlength="10" value="<%= inputData.phone %>" class="form-control"
+    data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="right"
+    data-bs-content="Exist in Vietnam" />
 </p>
 <p>
   <label for="email">Email</label>
-  <input type="email" id="email" name="email" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$" maxlength="30" placeholder="Ex: abc@gmail.com" value="<%= inputData.email %>" class="form-control" />
+  <input type="email" id="email" name="email" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$" maxlength="30" value="<%= inputData.email %>" class="form-control"
+    data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="right"
+    data-bs-content="Ex: abc@gmail.com" />
 </p>
 
         

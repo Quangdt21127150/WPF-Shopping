@@ -5,7 +5,7 @@ const db = require("../data/database");
 class Voucher {
   constructor(voucherData) {
     this.title = voucherData.title;
-    this.owners = voucherData.owners;
+    this.value = voucherData.value;
     this.point = voucherData.point;
     this.expiration = new Date(voucherData.expiration);
     this.image = voucherData.image; // the name of the image file
@@ -57,7 +57,7 @@ class Voucher {
   async save() {
     const voucherData = {
       title: this.title,
-      owners: this.owners,
+      value: this.value,
       point: this.point,
       expiration: this.expiration,
       image: this.image,

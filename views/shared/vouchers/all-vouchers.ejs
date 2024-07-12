@@ -1,0 +1,37 @@
+<%- include('../../shared/homepage/head', { pageTitle: 'Avaiable Vouchers' }) %>
+<link rel="stylesheet" href="/styles/vouchers.css">
+<script src="/scripts/image-preview.js" defer></script>
+</head>
+
+<body>
+  <%- include('../../shared/homepage/header') %>
+  <main>
+    <h1 class="my-2">Avaiable Vouchers</h1>
+    <section>
+      <p>
+        <button type="button" class="btn btn-solid mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
+          <i class="fa-solid fa-circle-plus me-1"></i>
+          Add Voucher
+        </button>
+      </p>
+
+      <% const today = new Date();
+        const tomorrow = new Date(today);
+        tomorrow.setDate(today.getDate() + 1); %>
+      <%- include('../../admin/vouchers/includes/voucher-form', { submitPath: '/admin/vouchers', title: 'Add new voucher', i: '', voucher: {
+        title: '',
+        imageUrl: '',
+        value: '',
+        point: 10,
+        expiration: tomorrow.toISOString().split('T')[0]
+      }, imageRequired: true }) %>
+    </section>
+
+    <ol>
+      <% for (const voucher of vouchers) { %>
+        <li><%- include('includes/voucher-item', { voucher: voucher }) %></li>
+      <% } %>
+    </ol>
+  </main>
+  <%- include('../../shared/homepage/footer') %>
+</body>

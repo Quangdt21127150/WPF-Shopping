@@ -26,7 +26,7 @@ async function getOrders(req, res, next) {
       }
     }
 
-    res.render("customer/orders/all-orders", {
+    res.render("shared/orders/order-list", {
       orders: orders,
       inputData: sessionData,
     });

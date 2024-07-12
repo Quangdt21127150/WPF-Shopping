@@ -1,12 +1,11 @@
 <ul class="nav-items">
-  <% if (locals.isAuth) { %>
+  <% if (locals.isAuth) { %> <% if (!locals.isAdmin) { %>
   <li>
     <a href="/products" class="d-flex flex-column">
       <i class="fa-solid fa-shop text-center"></i>
       Shop
     </a>
   </li>
-  <% if (!locals.isAdmin) { %>
   <li>
     <a href="/cart" class="d-flex flex-column">
       <i class="fa-solid fa-cart-shopping text-center"></i>
@@ -39,18 +38,15 @@
         </a>
       </li>
       <li>
-        <a href="/admin/orders" class="d-flex" style="gap: var(--space-3)">
-          <i
-            class="fa-solid fa-receipt my-auto"
-            style="margin-left: 0.2rem"
-          ></i>
-          Orders
-        </a>
-      </li>
-      <li>
         <a href="/accounts" class="d-flex gap-2">
           <i class="fa-solid fa-user-group my-auto"></i>
           Accounts
+        </a>
+      </li>
+      <li>
+        <a href="/vouchers" class="d-flex gap-2">
+          <i class="fa-solid fa-ticket my-auto me-1"></i>
+          Vouchers
         </a>
       </li>
     </ul>
@@ -62,16 +58,25 @@
       Categories
     </a>
   </li>
-  <li class="manage">
-    <a href="/admin/orders" class="d-flex flex-column">
-      <i class="fa-solid fa-receipt text-center"></i>
-      Orders
-    </a>
-  </li>
+
   <li class="manage">
     <a href="/accounts" class="d-flex flex-column">
       <i class="fa-solid fa-user-group text-center"></i>
       Accounts
+    </a>
+  </li>
+
+  <li class="manage">
+    <a href="/vouchers" class="d-flex flex-column">
+      <i class="fa-solid fa-ticket text-center"></i>
+      Vouchers
+    </a>
+  </li>
+
+  <li>
+    <a href="/admin/orders" class="d-flex flex-column">
+      <i class="fa-solid fa-receipt text-center"></i>
+      Orders
     </a>
   </li>
 

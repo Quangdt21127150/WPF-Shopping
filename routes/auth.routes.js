@@ -28,18 +28,23 @@ passport.use(
       callbackURL: process.env.GOOGLE_CALLBACK_URL,
     },
     async function (accessToken, refreshToken, profile, done) {
-      const user = await User.findByUsername(profile.emails[0].value);
+      const existingUser = new User({ username: profile.displayName });
+      const existsAlready =
+        await existingUser.getWithSameGoogleOrFacebookUsername();
 
-      if (!user) {
+      if (!existsAlready) {
         console.log("Adding new Google account");
         const user = new User({
-          username: profile.emails[0].value,
+          username: profile.displayName,
           password: "",
-          fullname: profile.displayName,
+          fullname: "?",
           address: "?",
+          birthday: "?",
+          gender: "?",
           phone: "?",
           email: profile.emails[0].value,
           image: "user.png",
+          GoogleOrFacebookUsername: profile.displayName,
         });
         await user.signup(false);
       } else {
@@ -59,18 +64,23 @@ passport.use(
       profileFields: ["id", "displayName", "emails"],
     },
     async function (accesToken, refreshToken, profile, done) {
-      const user = await User.findByUsername(profile.emails[0].value);
+      const existingUser = new User({ username: profile.displayName });
+      const existsAlready =
+        await existingUser.getWithSameGoogleOrFacebookUsername();
 
-      if (!user) {
+      if (!existsAlready) {
         console.log("Adding new facebook account");
         const user = new User({
-          username: profile.emails[0].value,
+          username: profile.displayName,
           password: "",
-          fullname: profile.displayName,
+          fullname: "?",
           address: "?",
+          birthday: "?",
+          gender: "?",
           phone: "?",
           email: profile.emails[0].value,
           image: "user.png",
+          GoogleOrFacebookUsername: profile.displayName,
         });
         await user.signup(false);
       } else {

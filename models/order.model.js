@@ -77,7 +77,6 @@ class Order {
       .sort({ _id: -1 })
       .toArray();
 
-    console.log(orders);
     if (orders) {
       return this.transformOrderDocuments(orders);
     } else {

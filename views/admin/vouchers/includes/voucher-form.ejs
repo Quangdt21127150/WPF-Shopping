@@ -1,0 +1,197 @@
+<link rel="stylesheet" href="/styles/forms.css" />
+<script src="/scripts/show-toast.js" defer></script>
+<script src="/scripts/switch-radio.js" defer></script>
+
+<form
+  action="<%= submitPath %>?_csrf=<%= locals.csrfToken %>"
+  method="POST"
+  enctype="multipart/form-data"
+>
+  <div
+    class="modal fade"
+    id="exampleModal<%= i %>"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5 text-black" id="exampleModalLabel">
+            <%= title %>
+          </h1>
+          <button
+            type="reset"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <p>
+            <label for="title"
+              >Title (<span class="text-danger">*</span>)</label
+            >
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value="<%= voucher.title %>"
+              class="form-control"
+              required
+            />
+          </p>
+
+          <section class="image-upload-control">
+            <p>
+              <label for="image">Icon (<span class="text-danger">*</span>)</label>
+              <input
+                type="file"
+                accept="image/png,image/jpg"
+                id="image"
+                name="image"
+                class="text-black border-0"
+                <% if(imageRequired) { %> required <% } %> 
+              />
+            </p>
+
+            <img src="<%= voucher.imageUrl %>" alt="Selected image." />
+          </section>
+
+          <p>
+            <input type="text" id="value" name="value" class="d-none">
+            <article class="fw-medium">Value (<span class="text-danger">*</span>)</article>
+            <article class="d-flex gap-1">
+              <input type="radio" name="radioButton" id="radioButton1" checked>
+              <label role="button" class="fw-normal m-0" for="radioButton1">
+                Discount
+              </label>
+              <input
+                type="number"
+                id="discount"
+                name="discount"
+                value="<%= voucher.value ? voucher.value.match(/\d+/) : '' %>"
+                min="1"
+                max="99"
+                class="discount"
+                style="width: 2.5rem"
+                data-bs-container="body" 
+                data-bs-toggle="popover" 
+                data-bs-trigger="hover" 
+                data-bs-placement="top"
+                data-bs-content="Percentage (an integer from 1 to 99)"
+                required
+              /> 
+              <article class="discount">
+                % off entire bill
+              </article>
+            </article>
+            <article class="d-flex gap-1 my-2">
+              <input type="radio" name="radioButton" id="radioButton2">
+              <label role="button" class="fw-normal m-0" for="radioButton2">
+                Get free
+              </label>
+              <input
+                type="number"
+                id="quantity"
+                name="quantity"
+                value="<%= voucher.value ? voucher.value.match(/\d+/) : '' %>"
+                min="1"
+                max="999"
+                class="free d-none"
+                style="width: 3rem"
+                data-bs-container="body" 
+                data-bs-toggle="popover" 
+                data-bs-trigger="hover" 
+                data-bs-placement="top"
+                data-bs-content="Quantity (an integer from 1 to 999)"
+              />
+              <% const hyphen = voucher.value.indexOf('-') %>
+              <input
+                type="text"
+                id="product"
+                name="product"
+                value="<%= voucher.value.slice(hyphen + 1) %>"
+                class="free d-none"
+                data-bs-container="body" 
+                data-bs-toggle="popover" 
+                data-bs-trigger="hover" 
+                data-bs-placement="top"
+                data-bs-content="Name of product"
+              />
+            </article>
+            <article class="d-flex gap-1">
+              <input type="radio" name="radioButton" id="radioButton3">
+              <label role="button" class="fw-normal m-0" for="radioButton3">
+                Extra
+              </label>
+              <input
+                type="number"
+                id="extraPoint"
+                name="extraPoint"
+                value="<%= voucher.value ? voucher.value.match(/\d+/) : '' %>"
+                min="1"
+                max="99999"
+                class="extra d-none"
+                style="width: 4.25rem"
+                data-bs-container="body" 
+                data-bs-toggle="popover" 
+                data-bs-trigger="hover" 
+                data-bs-placement="top"
+                data-bs-content="Points (an integer from 1 to 99999)"
+              />
+              <article class="extra d-none">
+                points
+              </article>
+            </article>
+          </p>
+
+          <p>
+            <label for="point"
+              >Point (<span class="text-danger">*</span>)</label
+            >
+            <input
+              type="number"
+              id="point"
+              name="point"
+              value="<%= voucher.point %>"
+              min="1"
+              class="form-control"
+              required
+            />
+          </p>
+
+          <p>
+            <label for="expiration"
+              >Expiration (<span class="text-danger">*</span>)</label
+            >
+            <% const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(today.getDate() + 1); %>
+            <input
+              type="date"
+              id="expiration"
+              name="expiration"
+              min="<%= tomorrow.toISOString().split('T')[0] %>"
+              value="<%= voucher.expiration %>"
+              class="form-control"
+              required
+            />
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="reset"
+            class="btn btn-alt text-secondary border-secondary"
+          >
+            <i class="fa-solid fa-arrow-rotate-right"></i> Reset
+          </button>
+          <button class="btn bg-primary border-primary">
+            <i class="fa-solid fa-check"></i>
+            Save
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
