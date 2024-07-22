@@ -1,4 +1,4 @@
 const popoverTriggerList = $('[data-bs-toggle="popover"]');
-const popoverList = [...popoverTriggerList].map(
+[...popoverTriggerList].map(
   (popoverTriggerEl) => new bootstrap.Popover(popoverTriggerEl)
 );

@@ -1,5 +1,6 @@
 const Pay_Account = require("../models/pay.model");
 const sessionFlash = require("../util/session-flash");
+const mongodb = require("mongodb");
 
 async function initSystem(req, res, next) {
   try {
@@ -9,6 +10,8 @@ async function initSystem(req, res, next) {
       const account = new Pay_Account({
         username: req.query.username,
         surplus: 0,
+        point: 0,
+        vouchers: [],
         GoogleOrFacebookUsername: GoogleOrFacebookUsername,
         isAdmin: true,
       });
@@ -40,6 +43,8 @@ async function createNewPaymentAccount(req, res, next) {
   const account = new Pay_Account({
     username: req.query.username,
     surplus: 1000000,
+    point: 0,
+    vouchers: [],
     GoogleOrFacebookUsername: req.query.GoogleOrFacebookUsername,
     isAdmin: false,
   });
@@ -76,20 +81,21 @@ async function deletePaymentAccount(req, res, next) {
 }
 
 async function updatePaymentAccount(req, res, next) {
-  const existsAlready = await Pay_Account.findByUsername(req.query.username);
-
-  const account = new Pay_Account({
-    username: req.query.new,
-    surplus: existsAlready.surplus,
-    GoogleOrFacebookUsername: existsAlready.GoogleOrFacebookUsername,
-    isAdmin: existsAlready.isAdmin,
-  });
-
   try {
+    const existsAlready = await Pay_Account.findByUsername(req.query.username);
+
+    const account = new Pay_Account({
+      username: req.query.new,
+      surplus: existsAlready.surplus,
+      point: existsAlready.point,
+      vouchers: existsAlready.vouchers,
+      GoogleOrFacebookUsername: existsAlready.GoogleOrFacebookUsername,
+      isAdmin: existsAlready.isAdmin,
+    });
+
     await account.save(existsAlready.username);
   } catch (error) {
-    next(error);
-    return;
+    return next(error);
   }
 
   sessionFlash.flashDataToSession(
@@ -103,43 +109,66 @@ async function updatePaymentAccount(req, res, next) {
   );
 }
 
+async function addVoucher(req, res, next) {
+  try {
+    const customer = await Pay_Account.findByUsername(req.query.username);
+    customer.vouchers.push(new mongodb.ObjectId(req.query.voucherId));
+    customer.save(customer.username);
+  } catch (error) {
+    return next(error);
+  }
+
+  res.redirect("https://localhost:3000/vouchers/available");
+}
+
 async function transfer(req, res, next) {
-  const admin = await Pay_Account.findAdmin();
-  const customer = await Pay_Account.findByUsername(req.query.username);
-  const admin_surplus = admin.surplus + parseInt(req.query.price);
-  const customer_surplus = customer.surplus - parseInt(req.query.price);
-  const isAddOrder = req.query.isAddOrder === "true";
+  try {
+    const admin = await Pay_Account.findAdmin();
+    const customer = await Pay_Account.findByUsername(req.query.username);
+    const admin_surplus = admin.surplus + parseInt(req.query.price);
+    const customer_surplus = customer.surplus - parseInt(req.query.price);
+    const customer_point = customer.point + parseInt(req.query.price) / 1000;
+    const isAddOrder = req.query.isAddOrder === "true";
 
-  let account = new Pay_Account({
-    username: admin.username,
-    surplus: admin_surplus,
-    GoogleOrFacebookUsername: admin.username,
-    isAdmin: true,
-  });
+    let account = new Pay_Account({
+      username: admin.username,
+      surplus: admin_surplus,
+      point: 0,
+      vouchers: [],
+      GoogleOrFacebookUsername: admin.username,
+      isAdmin: true,
+    });
 
-  await account.save(admin.username);
+    await account.save(admin.username);
 
-  account = new Pay_Account({
-    username: customer.username,
-    surplus: customer_surplus,
-    GoogleOrFacebookUsername: customer.GoogleOrFacebookUsername,
-    isAdmin: false,
-  });
+    account = new Pay_Account({
+      username: customer.username,
+      surplus: customer_surplus,
+      point: customer_point,
+      vouchers: customer.vouchers,
+      GoogleOrFacebookUsername: customer.GoogleOrFacebookUsername,
+      isAdmin: false,
+    });
 
-  await account.save(customer.username);
+    await account.save(customer.username);
 
-  sessionFlash.flashDataToSession(
-    req,
-    {
-      message: `Your current account balance is ${customer_surplus}`,
-      isError: false,
-    },
-    function () {
-      isAddOrder
-        ? res.redirect("https://localhost:3000/cart")
-        : res.redirect("https://localhost:3000/orders");
-    }
-  );
+    sessionFlash.flashDataToSession(
+      req,
+      {
+        message: `Your current account balance is ${customer_surplus}. You get ${
+          parseInt(req.query.price) / 1000
+        } points in your account`,
+        isError: false,
+      },
+      function () {
+        isAddOrder
+          ? res.redirect("https://localhost:3000/cart")
+          : res.redirect("https://localhost:3000/orders");
+      }
+    );
+  } catch (error) {
+    return next(error);
+  }
 }
 
 module.exports = {
@@ -147,5 +176,6 @@ module.exports = {
   createNewPaymentAccount: createNewPaymentAccount,
   updatePaymentAccount: updatePaymentAccount,
   deletePaymentAccount: deletePaymentAccount,
+  addVoucher: addVoucher,
   transfer: transfer,
 };

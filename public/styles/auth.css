@@ -1,18 +1,8 @@
-h1 {
-  text-align: center;
-}
-
 form {
   max-width: 25rem;
-  margin: var(--space-8) auto;
+  margin: 0 auto var(--space-8);
   padding: var(--space-4);
-  background-color: black;
   border-radius: var(--border-radius-medium);
-  text-align: center;
-}
-
-#switch-form a {
-  color: var(--color-primary-200);
 }
 
 #btn-google {

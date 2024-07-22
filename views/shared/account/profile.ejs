@@ -1,10 +1,10 @@
-<%- include('../../shared/homepage/head', { pageTitle: account.username }) %>
+<%- include('../../shared/page/head', { pageTitle: account.username }) %>
 <link rel="stylesheet" href="/styles/forms.css">
 <script src="/scripts/image-preview.js" defer></script>
 
 </head>
 <body>
-  <%- include('../../shared/homepage/header') %>
+  <%- include('../../shared/page/header') %>
   <main>
     <header>
       <article class="d-flex">
@@ -13,14 +13,14 @@
       </article>
       
       <% const date = account.birthday.split('-') %>
-      <p>Fullname: <%= account.fullname %></p>
-      <p>Address: <%= account.address %></p>
-      <p>Birthday: <%= date.length === 3 ? `${date[2]}/${date[1]}/${date[0]}` : date %></p>
-      <p>Gender: <%= account.gender %></p>
-      <p>Phone Number: <%= account.phone ? account.phone : '?' %></p>
-      <p>Email: <%= account.email ? account.email : '?' %></p>
+      <p><strong>Fullname:</strong> <%= account.fullname ? account.fullname : '?' %></p>
+      <p><strong>Address:</strong> <%= account.address ? account.address : '?' %></p>
+      <p><strong>Birthday:</strong> <%= date.length === 3 ? `${date[2]}/${date[1]}/${date[0]}` : '?' %></p>
+      <p><strong>Gender:</strong> <%= account.gender %></p>
+      <p><strong>Phone Number:</strong> <%= account.phone ? account.phone : '?' %></p>
+      <p><strong>Email:</strong> <%= account.email ? account.email : '?' %></p>
 
-      <button type="button" class="btn btn-solid" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      <button type="button" class="btn btn-solid" data-bs-toggle="modal" data-bs-target="#accountModal">
         <i class="fa-solid fa-pen-to-square me-1"></i> 
         Update
       </button>
@@ -28,4 +28,4 @@
       <%- include('./includes/account-update-form', { submitPath: '/accounts/' + account.id, account: account, errorMessage: errorMessage }) %>
     </header>
   </main>
-<%- include('../../shared/homepage/footer') %>
+<%- include('../../shared/page/footer') %>

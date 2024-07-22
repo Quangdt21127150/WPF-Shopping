@@ -1,13 +1,13 @@
-  <%- include('../../shared/homepage/head', { pageTitle: 'Your Cart' }) %>
+  <%- include('../../shared/page/head', { pageTitle: 'Your Cart' }) %>
   <link rel="stylesheet" href="/styles/cart.css">
   <link rel="stylesheet" href="/styles/forms.css">
   <script src="/scripts/cart-item-management.js" defer></script>
 </head>
 
 <body>
-  <%- include('../../shared/homepage/header') %>
+  <%- include('../../shared/page/header') %>
   <main>
-    <h1 class="my-2">Your Cart</h1>
+    <h1 class="my-2 customer-title">Your Cart</h1>
     <ul id="cart-items">
       <% for (const cartItem of locals.cart.items) { %>
         <li>
@@ -31,7 +31,7 @@
       <% } %>
     </section>
     
-    <%- include('../../admin/popup/includes/yes-no-popup', { submitPath: '/orders', message: 'pay for this order?', i: '' }) %>
-    <%- include('../../admin/popup/includes/notification', { message: inputData.message, isError: inputData.isError }) %>
+    <%- include('../../admin/popup/yes-no-popup', { submitPath: '/orders', message: 'pay for this order?', i: '' }) %>
+    <%- include('../../admin/popup/notification', { message: inputData.message, isError: inputData.isError }) %>
   </main>
-<%- include('../../shared/homepage/footer') %>
+<%- include('../../shared/page/footer') %>

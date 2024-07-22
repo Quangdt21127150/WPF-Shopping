@@ -1,8 +1,8 @@
 <script src="/scripts/carousel-switch.js" defer></script>
 
-<section <% if(isFade) { %>
-  class="animated" <% } %>>
-  <h1 class="my-2"><%= title %></h1>
+<section 
+  class="<%= isFade ? 'fadeDown' : '' %>">
+  <h1 class="my-2 customer-title"><%= title %></h1>
 
   <section
     id="carousel<%= i %>"
@@ -12,14 +12,14 @@
   >
     <section class="carousel-inner text-center">
       <% for(let i = 0; i < 5; ++i) { %>
-      <section class="carousel-item <% if(i === 0) { %> active <% } %>">
+      <section class="carousel-item <%= i === 0 ? 'active' : '' %>">
         <% if(products[i].title) { %>
         <a href="/products/<%= products[i].id %>"
           ><img
             src="<%= products[i].imageUrl %>"
             class="rounded-2"
             style="width: 20rem; height: 20rem"
-            alt="Unavailable"
+            alt="Product"
         /></a>
         <% } else { %>
         <img

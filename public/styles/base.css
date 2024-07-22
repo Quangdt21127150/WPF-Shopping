@@ -34,6 +34,7 @@
   --space-2: 0.5rem;
   --space-3: 0.75rem;
   --space-4: 1rem;
+  --space-5: 1.25rem;
   --space-8: 2rem;
 
   --border-radius-small: 4px;
@@ -75,12 +76,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   border-radius: var(--border-radius-small);
 }
 
-.btn:hover,
-.btn:active {
-  background-color: var(--color-primary-700);
-  border-color: var(--color-primary-700);
-}
-
 .btn-alt {
   background-color: transparent;
 }
@@ -111,7 +106,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   margin-left: var(--space-1);
   padding: 0.15rem var(--space-4);
   border-radius: 10rem;
-  color: white;
 }
 
 select {
@@ -120,4 +114,50 @@ select {
 
 ::placeholder {
   font-style: italic;
+}
+
+.customer-title {
+  background: linear-gradient(
+    90deg,
+    red 0%,
+    orange 14.28%,
+    yellow 28.56%,
+    green 42.84%,
+    blue 57.12%,
+    indigo 71.4%,
+    purple 85.68%
+  );
+  background-clip: text;
+  color: transparent;
+  display: inline-block;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeDown {
+  from {
+    opacity: 0;
+    transform: translateY(-100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fadeUp {
+  animation: fadeUp 0.5s ease-out;
+}
+
+.fadeDown {
+  animation: fadeDown 1s ease-out;
 }

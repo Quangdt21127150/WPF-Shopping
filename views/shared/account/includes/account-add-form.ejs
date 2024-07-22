@@ -5,15 +5,17 @@
 
 <p>
   <label for="username">Username (<span class="text-danger">*</span>)</label>
-  <input type="text" id="username" name="username" pattern="^[a-zA-Z]([a-zA-Z0-9 ]*[a-zA-Z0-9])?$" maxlength="50" value="" class="form-control"
+  <% const Vietnamese = "àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸ" %>
+  <input type="text" id="username" name="username" pattern="^[a-zA-Z<%= Vietnamese %>]([a-zA-Z<%= Vietnamese %>0-9 ]*[a-zA-Z<%= Vietnamese %>0-9])?$" maxlength="50" value="" class="form-control"
     data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="right"
     data-bs-content="Letters, numbers or spaces only; does not end with space; begins with a letter" required />
 </p>
 <p>
   <label for="password">Password (<span class="text-danger">*</span>)</label>
-  <input type="password" id="password" name="password" pattern="^\S+$" minlength="6" maxlength="20" value="<%= inputData.password %>" class="form-control"
+  <input type="password" id="password" name="password" pattern="^(?=.*\d)(?=.*[\W_])(?!.*\s)(?=.*[a-z]).{8,}$"
+    maxlength="20" value="<%= inputData.password %>" class="form-control"
     data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="right"
-    data-bs-content="At least 6 characters long, no spaces" required />
+    data-bs-content="At least 8 characters long; no spaces; including letters, numbers and special characters" required />
 </p>
 <p>
   <label for="confirmPassword">Confirm password (<span class="text-danger">*</span>)</label>

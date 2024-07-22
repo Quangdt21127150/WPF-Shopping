@@ -3,15 +3,15 @@
 <form action="<%= submitPath %>?_csrf=<%= locals.csrfToken %>" method="POST">
   <div
     class="modal fade"
-    id="exampleModal<%= i %>"
+    id="categoryModal<%= i %>"
     tabindex="-1"
-    aria-labelledby="exampleModalLabel"
+    aria-labelledby="categoryModalLabel"
     aria-hidden="true"
   >
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5 text-black" id="exampleModalLabel">
+          <h1 class="modal-title fs-5 text-black" id="categoryModalLabel">
             <%= title %>
           </h1>
           <button

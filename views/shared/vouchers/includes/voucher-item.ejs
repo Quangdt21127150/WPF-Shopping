@@ -1,31 +1,72 @@
-<% const type = voucher.value[0]
-const number = voucher.value.match(/\d+/)
+<% function pluralize(noun) {
+    // The noun ends with 's', 'x', 'z', 'sh', or 'ch'
+    if (noun.match(/(s|x|z|sh|ch)$/)) {
+    return noun + "es";
+    }
+
+    // The noun ends with 'y' and is preceded by a consonant
+    if (noun.match(/[^aeiou]y$/)) {
+    return noun.slice(0, -1) + "ies";
+    }
+
+    // The noun ends with 'f' or 'fe'
+    if (noun.match(/(f|fe)$/)) {
+    return noun.replace(/(f|fe)$/, "ves");
+    }
+
+    // The noun ends with a consonant followed by 'o'
+    if (noun.match(/[^aeiou]o$/)) {
+    return noun + "es";
+    }
+
+    // Other cases
+    return noun + "s";
+} 
+
+const type = voucher.value[0]
+const number = parseInt(voucher.value.match(/\d+/))
 let promotion
 if(type === 'd'){
     promotion = 'Discount ' + number + '% off entire bill'
 } else if(type === 'g') {
-    const hyphen = voucher.value.indexOf('-')
-    const product = voucher.value.slice(hyphen + 1)
+    const product = number === 1 ? voucher.value.split('-')[1] : pluralize(voucher.value.split('-')[1])
     promotion = 'Get free ' + number + ' ' + product
 } else {
-    promotion = 'Extra ' + number + 'point'
+    promotion = 'Extra ' + number + ' points'
 } 
 
-//const date = voucher.expiration.split('-') 
+const date = voucher.expiration.toISOString().split('T')[0].split('-') 
 %>
 
-<article class="position-relative d-flex justify-content-center">
-  <img src="/assets/icons/voucher.png" alt="Voucher" class="my-3 img-fluid mx-auto" />
-  <section class="position-absolute text-white fs-4 bg-black w-50 z-1 pl-3">
-    <p><%= voucher.title %></p>
-    <p><%= promotion %></p>
-    <p class="d-flex justify-content-between">
-        <span>Point</span>
-        <span>Expiration</span>
-    </p>
-    <p class="d-flex justify-content-between">
-        <span><%= voucher.point %></span>
-        
-    </p>
-  </section>
+<article class="position-relative mx-auto w-90" style="width: fit-content;">
+    <img src="/assets/icons/voucher.png" alt="Voucher" class="my-3 img-fluid" />
+    <section id="voucher-content" class="position-absolute text-white d-flex flex-column justify-content-between top-50 start-0">
+        <i><%= voucher.title %></i>
+        <i class="text-uppercase"><strong><%= promotion %></strong></i>
+        <i>
+            <article class="d-flex justify-content-between">
+                <article>Point</article>
+                <article>Expiration</article>
+            </article>
+            <article class="d-flex justify-content-between">
+                <article><%= voucher.point %></article>
+                <article><%= `${date[2]}/${date[1]}/${date[0]}` %></article>
+            </article>
+        </i>
+    </section>
+    <img src="<%= voucher.imageUrl %>" alt="Icon" id="icon" class="position-absolute top-50 end-0" />
+    <% if(!locals.isAdmin && isAvailable) { %> 
+        <button class="position-absolute end-0 bottom-0 btn border-0 px-2 exchange-btn" data-bs-toggle="modal" data-bs-target="#YesNoModal<%= i %>"><i class="fw-medium">Exchange</i></button>
+    <% } %>
+    <section class="buttons position-absolute end-0 <%= voucher.isSpecial || !locals.isAdmin ? 'd-none' : 'd-flex' %>">
+        <button class="btn border-0 rounded-0 rounded-end" data-bs-toggle="modal" data-bs-target="#voucherModal<%= i %>"><i class="fa-solid fa-pen-to-square"></i></button>
+        <button class="btn border-0 rounded-0 rounded-end" data-bs-toggle="modal" data-bs-target="#YesNoModal<%= i %>"><i class="fa-solid fa-trash"></i></button>
+    </section>
 </article>
+
+<% if(locals.isAdmin) { %> 
+    <%- include('../../../admin/vouchers/includes/voucher-form', { submitPath: '/admin/vouchers/' + voucher.id, title: 'Update voucher', i: i, voucher: voucher, tomorrow: tomorrow, imageRequired: false }) %>
+    <%- include('../../../admin/popup/yes-no-popup', {submitPath: '/admin/vouchers/delete/' + voucher.id, message: 'delete this voucher?', i: i }) %>
+<% } else { %>
+    <%- include('../../../admin/popup/yes-no-popup', {submitPath: '/vouchers/' + voucher.id, message: 'exchange this voucher?', i: i }) %>
+<% } %>

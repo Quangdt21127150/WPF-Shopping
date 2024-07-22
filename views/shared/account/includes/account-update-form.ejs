@@ -10,15 +10,15 @@
 >
   <div
     class="modal fade"
-    id="exampleModal"
+    id="accountModal"
     tabindex="-1"
-    aria-labelledby="exampleModalLabel"
+    aria-labelledby="accountModalLabel"
     aria-hidden="true"
   >
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5 text-black" id="exampleModalLabel">Update your account</h1>
+          <h1 class="modal-title fs-5 text-black" id="accountModalLabel">Update your account</h1>
           <button
             type="reset"
             class="btn-close"
@@ -29,11 +29,12 @@
         <div class="modal-body">
           <p>
             <label for="username">Username (<span class="text-danger">*</span>)</label>
+            <% const Vietnamese = "àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸ" %>
             <input
               type="text"
               id="username"
               name="username"
-              pattern="^[a-zA-Z]([a-zA-Z0-9 ]*[a-zA-Z0-9])?$"
+              pattern="^[a-zA-Z<%= Vietnamese %>]([a-zA-Z<%= Vietnamese %>0-9 ]*[a-zA-Z<%= Vietnamese %>0-9])?$"
               maxlength="50"
               value="<%= account.username %>"
               class="form-control"
@@ -60,7 +61,7 @@
 
           <section class="image-upload-control">
             <p>
-              <label class="text-black" for="image">Image (<span class="text-danger">*</span>)</label>
+              <label class="text-black" for="image">Avatar (<span class="text-danger">*</span>)</label>
               <input
                 type="file"
                 id="image"
@@ -122,4 +123,4 @@
   </div>
 </form>
 
-<%- include('../../../admin/popup/includes/notification', { message: errorMessage, isError: true }) %>
+<%- include('../../../admin/popup/notification', { message: errorMessage, isError: true }) %>

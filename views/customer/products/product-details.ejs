@@ -1,9 +1,9 @@
-<%- include('../../shared/homepage/head', { pageTitle: product.title }) %>
+<%- include('../../shared/page/head', { pageTitle: product.title }) %>
 <link rel="stylesheet" href="/styles/products.css">
 <script src="/scripts/cart-management.js" defer></script>
 </head>
 <body>
-  <%- include('../../shared/homepage/header') %>
+  <%- include('../../shared/page/header') %>
   <main id="product-details">
     <header>
       <img src="<%= product.imageUrl %>" alt="<%= product.title %>" id="picture">
@@ -21,7 +21,7 @@
     <ul id="related-products" class="products-grid">
       <% for (let i = 0; i < number_product; ++i) { %>
         <li>
-          <%- include('../../shared/homepage/product-item', { product: related_products[i] }) %>
+          <%- include('../../shared/page/product-item', { product: related_products[i] }) %>
         </li>
       <% } %>
     </ul>
@@ -29,12 +29,12 @@
     <section id="carouselRelatedProducts" class="carousel slide">
       <section class="carousel-inner">
         <% for (let i = 0; i < number_product; i += 3) { %>
-          <section class="carousel-item <% if(i == 0) { %> active <% } %>">
+          <section class="carousel-item <%= i === 0 ? 'active' : '' %>">
             <ul class="products-grid">
               <% for (let j = 0; j < 3; ++j) { %>
                 <%  if (i + j < number_product) { %>
                   <li>
-                    <%- include('../../shared/homepage/product-item', { product: related_products[i + j] }) %>
+                    <%- include('../../shared/page/product-item', { product: related_products[i + j] }) %>
                   </li>
                 <% } %>
               <% } %>
@@ -53,4 +53,4 @@
       </button>
     </section>
   </main>
-<%- include('../../shared/homepage/footer') %>
+<%- include('../../shared/page/footer') %>

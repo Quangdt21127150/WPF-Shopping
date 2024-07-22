@@ -7,15 +7,15 @@
 >
   <div
     class="modal fade"
-    id="exampleModal<%= i %>"
+    id="productModal<%= i %>"
     tabindex="-1"
-    aria-labelledby="exampleModalLabel"
+    aria-labelledby="productModalLabel"
     aria-hidden="true"
   >
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5 text-black" id="exampleModalLabel">
+          <h1 class="modal-title fs-5 text-black" id="productModalLabel">
             <%= title %>
           </h1>
           <button
@@ -27,7 +27,9 @@
         </div>
         <div class="modal-body">
           <p>
-            <label for="title">Title (<span class="text-danger">*</span>)</label>
+            <label for="title"
+              >Title (<span class="text-danger">*</span>)</label
+            >
             <input
               type="text"
               id="title"
@@ -51,22 +53,21 @@
 
           <section class="image-upload-control">
             <p>
-              <label for="image">Image (<span class="text-danger">*</span>)</label>
-              <input
-                type="file"
-                accept="image/png,image/jpg"
-                id="image"
-                name="image"
-                class="text-black border-0"
-                <% if(imageRequired) { %> required <% } %> 
-              />
+              <label for="image"
+                >Image (<span class="text-danger">*</span>)</label
+              >
+              <input type="file" accept="image/png,image/jpg" id="image"
+              name="image" class="text-black border-0" <%= imageRequired ?
+              'required' : '' %> />
             </p>
 
             <img src="<%= product.imageUrl %>" alt="Selected image." />
           </section>
 
           <p>
-            <label for="summary">Summary (<span class="text-danger">*</span>)</label>
+            <label for="summary"
+              >Summary (<span class="text-danger">*</span>)</label
+            >
             <input
               type="text"
               id="summary"
@@ -79,7 +80,9 @@
           </p>
 
           <p>
-            <label for="price">Price (<span class="text-danger">*</span>)</label>
+            <label for="price"
+              >Price (<span class="text-danger">*</span>)</label
+            >
             <input
               type="number"
               id="price"
@@ -93,14 +96,18 @@
           </p>
 
           <p>
-            <label for="description">Description (<span class="text-danger">*</span>)</label>
+            <label for="description"
+              >Description (<span class="text-danger">*</span>)</label
+            >
             <textarea
               id="description"
               name="description"
               rows="5"
               class="form-control"
               required
-            ><%= product.description %></textarea>
+            >
+<%= product.description %></textarea
+            >
           </p>
         </div>
         <div class="modal-footer">

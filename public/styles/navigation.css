@@ -21,11 +21,6 @@ main {
   display: none;
 }
 
-#switch-form a:hover,
-#switch-form a:active {
-  color: blue !important;
-}
-
 .nav-items {
   height: 100%;
   display: flex;
@@ -208,7 +203,8 @@ main {
     display: inline;
   }
 
-  .dropdown:hover .dropdown-menu {
+  .dropdown:hover .dropdown-menu,
+  .dropdown:active .dropdown-menu {
     display: block;
     padding: 0;
     border: 0;

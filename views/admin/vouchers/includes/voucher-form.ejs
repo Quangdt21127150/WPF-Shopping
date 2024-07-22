@@ -1,23 +1,22 @@
 <link rel="stylesheet" href="/styles/forms.css" />
-<script src="/scripts/show-toast.js" defer></script>
-<script src="/scripts/switch-radio.js" defer></script>
 
 <form
   action="<%= submitPath %>?_csrf=<%= locals.csrfToken %>"
   method="POST"
   enctype="multipart/form-data"
+  class="voucher-form"
 >
-  <div
+  <section
     class="modal fade"
-    id="exampleModal<%= i %>"
+    id="voucherModal<%= i %>"
     tabindex="-1"
-    aria-labelledby="exampleModalLabel"
+    aria-labelledby="voucherModalLabel"
     aria-hidden="true"
   >
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5 text-black" id="exampleModalLabel">
+    <section class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <section class="modal-content">
+        <section class="modal-header">
+          <h1 class="modal-title fs-5 text-black" id="voucherModalLabel">
             <%= title %>
           </h1>
           <button
@@ -26,12 +25,10 @@
             data-bs-dismiss="modal"
             aria-label="Close"
           ></button>
-        </div>
-        <div class="modal-body">
+        </section>
+        <section class="modal-body">
           <p>
-            <label for="title"
-              >Title (<span class="text-danger">*</span>)</label
-            >
+            <label for="title">Title (<span class="text-danger">*</span>)</label>
             <input
               type="text"
               id="title"
@@ -51,7 +48,7 @@
                 id="image"
                 name="image"
                 class="text-black border-0"
-                <% if(imageRequired) { %> required <% } %> 
+                <%= imageRequired ? 'required' : '' %> 
               />
             </p>
 
@@ -59,43 +56,39 @@
           </section>
 
           <p>
-            <input type="text" id="value" name="value" class="d-none">
-            <article class="fw-medium">Value (<span class="text-danger">*</span>)</article>
+            <input type="text" id="value" name="value" class="d-none" />
+            <article class="fw-medium mb-1">Value (<span class="text-danger">*</span>)</article>
             <article class="d-flex gap-1">
-              <input type="radio" name="radioButton" id="radioButton1" checked>
-              <label role="button" class="fw-normal m-0" for="radioButton1">
+              <input type="radio" name="radioButton" id="discountButton<%= i %>" <%= voucher.value[0] === 'd' || !voucher.value ? 'checked' : '' %> />
+              <label role="button" class="fw-normal m-0" for="discountButton<%= i %>">
                 Discount
               </label>
               <input
-                type="number"
+                type="range"
                 id="discount"
                 name="discount"
-                value="<%= voucher.value ? voucher.value.match(/\d+/) : '' %>"
-                min="1"
-                max="99"
-                class="discount"
-                style="width: 2.5rem"
-                data-bs-container="body" 
-                data-bs-toggle="popover" 
-                data-bs-trigger="hover" 
-                data-bs-placement="top"
-                data-bs-content="Percentage (an integer from 1 to 99)"
+                value="<%= voucher.value[0] === 'd' ? voucher.value.match(/\d+/)[0] : 1 %>"
+                type="range" 
+                min="1" 
+                max="99" 
+                step="1"
+                class="discount form-range ms-1"
+                style="width: 10rem"
                 required
               /> 
-              <article class="discount">
-                % off entire bill
-              </article>
+              <output class="discount ms-1" id="discountValue"><%= voucher.value[0] === 'd' ? voucher.value.match(/\d+/)[0] : 1 %>%</output>
             </article>
             <article class="d-flex gap-1 my-2">
-              <input type="radio" name="radioButton" id="radioButton2">
-              <label role="button" class="fw-normal m-0" for="radioButton2">
+              <input type="radio" name="radioButton" id="getFreeButton<%= i %>" <%= voucher.value[0] === 'g' ? 'checked' : '' %>>
+              <label role="button" class="fw-normal m-0" for="getFreeButton<%= i %>">
                 Get free
               </label>
+              <% const valueParts = voucher.value.split('-') %>
               <input
                 type="number"
                 id="quantity"
                 name="quantity"
-                value="<%= voucher.value ? voucher.value.match(/\d+/) : '' %>"
+                value="<%= voucher.value[0] === 'g' ? valueParts[0].match(/\d+/)[0] : '' %>"
                 min="1"
                 max="999"
                 class="free d-none"
@@ -106,12 +99,11 @@
                 data-bs-placement="top"
                 data-bs-content="Quantity (an integer from 1 to 999)"
               />
-              <% const hyphen = voucher.value.indexOf('-') %>
               <input
                 type="text"
                 id="product"
                 name="product"
-                value="<%= voucher.value.slice(hyphen + 1) %>"
+                value="<%= voucher.value[0] === 'g' ? valueParts[1] : '' %>"
                 class="free d-none"
                 data-bs-container="body" 
                 data-bs-toggle="popover" 
@@ -121,15 +113,15 @@
               />
             </article>
             <article class="d-flex gap-1">
-              <input type="radio" name="radioButton" id="radioButton3">
-              <label role="button" class="fw-normal m-0" for="radioButton3">
+              <input type="radio" name="radioButton" id="extraButton<%= i %>" <%= voucher.value[0] === 'e' ? 'checked' : '' %>>
+              <label role="button" class="fw-normal m-0" for="extraButton<%= i %>">
                 Extra
               </label>
               <input
                 type="number"
                 id="extraPoint"
                 name="extraPoint"
-                value="<%= voucher.value ? voucher.value.match(/\d+/) : '' %>"
+                value="<%= voucher.value[0] === 'e' ? voucher.value.match(/\d+/) : '' %>"
                 min="1"
                 max="99999"
                 class="extra d-none"
@@ -147,9 +139,7 @@
           </p>
 
           <p>
-            <label for="point"
-              >Point (<span class="text-danger">*</span>)</label
-            >
+            <label for="point">Point (<span class="text-danger">*</span>)</label>
             <input
               type="number"
               id="point"
@@ -162,24 +152,19 @@
           </p>
 
           <p>
-            <label for="expiration"
-              >Expiration (<span class="text-danger">*</span>)</label
-            >
-            <% const today = new Date();
-            const tomorrow = new Date(today);
-            tomorrow.setDate(today.getDate() + 1); %>
+            <label for="expiration">Expiration (<span class="text-danger">*</span>)</label>
             <input
               type="date"
               id="expiration"
               name="expiration"
               min="<%= tomorrow.toISOString().split('T')[0] %>"
-              value="<%= voucher.expiration %>"
+              value="<%= voucher.expiration.toISOString().split('T')[0] %>"
               class="form-control"
               required
             />
           </p>
-        </div>
-        <div class="modal-footer">
+        </section>
+        <section class="modal-footer">
           <button
             type="reset"
             class="btn btn-alt text-secondary border-secondary"
@@ -190,8 +175,8 @@
             <i class="fa-solid fa-check"></i>
             Save
           </button>
-        </div>
-      </div>
-    </div>
-  </div>
+        </section>
+      </section>
+    </section>
+  </section>
 </form>

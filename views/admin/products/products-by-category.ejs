@@ -1,14 +1,14 @@
-<%- include('../../shared/homepage/head', { pageTitle: 'All Products' }) %>
+<%- include('../../shared/page/head', { pageTitle: 'All Products' }) %>
 <link rel="stylesheet" href="/styles/products.css">
 <script src="/scripts/image-preview.js" defer></script>
 
 </head>
 <body>
-  <%- include('../../shared/homepage/header') %>
+  <%- include('../../shared/page/header') %>
   <main>
     <h1 class="my-2">Product Management</h1>   
     <p>
-      <button type="button" class="btn btn-solid mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      <button type="button" class="btn btn-solid mt-3" data-bs-toggle="modal" data-bs-target="#productModal">
         <i class="fa-solid fa-circle-plus me-1"></i>
         Add Product
       </button>
@@ -22,13 +22,17 @@
       }, imageRequired: true }) %>
     </p>
 
-    <ul class="products-grid">
-      <% for (let i = start; i < end; ++i) { %>
-        <li>
-          <%- include('../../shared/homepage/product-item', { product: products[i], i: i, category: category }) %>
-        </li>
-      <% } %>
-    </ul>
+    <% if(products.length === 0) { %>
+      <i><h4 class="text-center text-secondary mt-5">No products are available</h4></i>
+    <%} else { %>
+      <ul class="products-grid">
+        <% for (let i = start; i < end; ++i) { %>
+          <li>
+            <%- include('../../shared/page/product-item', { product: products[i], i: i, category: category }) %>
+          </li>
+        <% } %>
+      </ul>
+    <% } %>
 
     <ul class="pagination mb-3">
       <li class="page-item">
@@ -56,4 +60,4 @@
       </li>
     </ul>
   </main>
-<%- include('../../shared/homepage/footer') %>
+<%- include('../../shared/page/footer') %>

@@ -1,6 +1,8 @@
 <%- include('../../shared/homepage/head', { pageTitle: 'Avaiable Vouchers' }) %>
 <link rel="stylesheet" href="/styles/vouchers.css">
 <script src="/scripts/image-preview.js" defer></script>
+<script src="/scripts/show-toast.js" defer></script>
+<script src="/scripts/switch-radio.js" defer></script>
 </head>
 
 <body>
@@ -9,7 +11,7 @@
     <h1 class="my-2">Avaiable Vouchers</h1>
     <section>
       <p>
-        <button type="button" class="btn btn-solid mt-3" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <button type="button" class="btn btn-solid mt-3" data-bs-toggle="modal" data-bs-target="#voucherModal">
           <i class="fa-solid fa-circle-plus me-1"></i>
           Add Voucher
         </button>
@@ -23,13 +25,13 @@
         imageUrl: '',
         value: '',
         point: 10,
-        expiration: tomorrow.toISOString().split('T')[0]
-      }, imageRequired: true }) %>
+        expiration: tomorrow
+      }, tomorrow: tomorrow, imageRequired: true }) %>
     </section>
 
     <ol>
       <% for (const voucher of vouchers) { %>
-        <li><%- include('includes/voucher-item', { voucher: voucher }) %></li>
+        <li><%- include('includes/voucher-item', { voucher: voucher, i: vouchers.indexOf(voucher), tomorrow: tomorrow }) %></li>
       <% } %>
     </ol>
   </main>

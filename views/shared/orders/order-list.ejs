@@ -1,13 +1,13 @@
-<%- include('../../shared/homepage/head', { pageTitle: 'Orders History' }) %>
+<%- include('../../shared/page/head', { pageTitle: 'Orders History' }) %>
 <link rel="stylesheet" href="/styles/orders.css">
 </head>
 
 <body>
-  <%- include('../../shared/homepage/header') %>
+  <%- include('../../shared/page/header') %>
   <main>
     <ol>
       <section class="d-flex justify-content-between">
-        <h1 class="mt-2 mb-4">Orders History</h1>
+        <h1 class="mt-2 mb-4 <%= !locals.isAdmin ? 'customer-title' : '' %>">Orders History</h1>
         <% if(!locals.isAdmin) { %>
         <form
           action="/orders/empty?_csrf=<%= locals.csrfToken %>"
@@ -26,7 +26,7 @@
       <% } %>
     </ol>
     <% if(!locals.isAdmin){ %>
-      <%-include('../../admin/popup/includes/notification', { message: inputData.message, isError: inputData.isError }) %>
+      <%-include('../../admin/popup/notification', { message: inputData.message, isError: inputData.isError }) %>
     <% } %>
   </main>
-<%- include('../../shared/homepage/footer') %>
+<%- include('../../shared/page/footer') %>

@@ -7,6 +7,7 @@ const productHeader = $("#product-details header");
 const productDescription = $("#product-description");
 const productItems = $(".product-item-content");
 const orderItems = $(".order-item");
+const badge = $(".badge");
 const cartItems = $(".cart-item");
 const cartTotal = $("#cart-total p");
 const form = $(".form");
@@ -53,6 +54,11 @@ function setTheme() {
       : "1px solid var(--color-primary-500)",
   });
 
+  badge.css(
+    "backgroundColor",
+    isChecked ? "green" : "var(--color-primary-400)"
+  );
+
   productItems.css({
     backgroundColor: isChecked ? "#E6E6E6" : "var(--color-gray-400)",
     color: isChecked ? "black" : "var(--color-gray-100)",
@@ -65,9 +71,6 @@ function setTheme() {
   orderItems
     .find(".order-item-price, a")
     .css("color", isChecked ? "green" : "var(--color-primary-500)");
-  orderItems
-    .find(".badge")
-    .css("backgroundColor", isChecked ? "green" : "var(--color-primary-400)");
 
   cartItems.css(
     "backgroundColor",
@@ -79,11 +82,11 @@ function setTheme() {
     isChecked ? "white" : "var(--color-gray-700)"
   );
   mobileMenu
-    .find("button, a")
-    .css("color", isChecked ? "green" : "var(--color-primary-100)");
-  mobileMenu
     .find(".badge")
     .css("backgroundColor", isChecked ? "green" : "var(--color-primary-100)");
+  mobileMenu
+    .find("button, a")
+    .css("color", isChecked ? "green" : "var(--color-primary-100)");
 
   if (productHeader) {
     productHeader.css(
@@ -103,7 +106,7 @@ function setTheme() {
   if (form) {
     form.css("backgroundColor", isChecked ? "#E6E6E6" : "black");
     form
-      .find("#switch-form a, hr")
+      .find("hr")
       .css("color", isChecked ? "green" : "var(--color-primary-200)");
   }
 

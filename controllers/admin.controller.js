@@ -195,11 +195,10 @@ async function getAllOrders(req, res, next) {
 
 //Vouchers Manage
 async function createNewVoucher(req, res, next) {
-  const radioValue = req.body.radioButton;
-  console.log(req.body);
   const voucher = new Voucher({
     ...req.body,
     image: req.file.filename,
+    isSpecial: false,
   });
 
   try {
@@ -215,6 +214,7 @@ async function updateVoucher(req, res, next) {
   const voucher = new Voucher({
     _id: req.params.id,
     ...req.body,
+    isSpecial: false,
   });
 
   if (req.file) {

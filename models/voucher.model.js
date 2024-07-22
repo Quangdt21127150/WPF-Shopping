@@ -13,6 +13,7 @@ class Voucher {
     if (voucherData._id) {
       this.id = voucherData._id.toString();
     }
+    this.isSpecial = voucherData.isSpecial;
   }
 
   static async findById(voucherId) {
@@ -49,6 +50,76 @@ class Voucher {
     });
   }
 
+  static async findExpired() {
+    const vouchers = await db
+      .getDb()
+      .collection("vouchers")
+      .find({ expiration: { $lt: new Date() } })
+      .toArray();
+
+    vouchers.sort((a, b) =>
+      a.title.localeCompare(b.title, undefined, { sensitivity: "accent" })
+    );
+
+    return vouchers.map(function (voucherDocument) {
+      return new Voucher(voucherDocument);
+    });
+  }
+
+  static async findSpecial() {
+    const vouchers = await db
+      .getDb()
+      .collection("vouchers")
+      .find({
+        isSpecial: true,
+        expiration: { $gte: new Date() },
+      })
+      .toArray();
+
+    vouchers.sort((a, b) =>
+      a.title.localeCompare(b.title, undefined, { sensitivity: "accent" })
+    );
+
+    return vouchers.map(function (voucherDocument) {
+      return new Voucher(voucherDocument);
+    });
+  }
+
+  static async findAvailable(availableIds) {
+    availableIds.forEach((element) => {
+      element = new mongodb.ObjectId(element);
+    });
+    const vouchers = await db
+      .getDb()
+      .collection("vouchers")
+      .find({ _id: { $nin: availableIds } })
+      .toArray();
+
+    vouchers.sort((a, b) =>
+      a.title.localeCompare(b.title, undefined, { sensitivity: "accent" })
+    );
+
+    return vouchers.map(function (voucherDocument) {
+      return new Voucher(voucherDocument);
+    });
+  }
+
+  static async findOwn(availableIds) {
+    const vouchers = await db
+      .getDb()
+      .collection("vouchers")
+      .find({ _id: { $in: availableIds } })
+      .toArray();
+
+    vouchers.sort((a, b) =>
+      a.title.localeCompare(b.title, undefined, { sensitivity: "accent" })
+    );
+
+    return vouchers.map(function (voucherDocument) {
+      return new Voucher(voucherDocument);
+    });
+  }
+
   updateImageData() {
     this.imagePath = `image-data/images/${this.image}`;
     this.imageUrl = `/assets/images/${this.image}`;
@@ -61,6 +132,7 @@ class Voucher {
       point: this.point,
       expiration: this.expiration,
       image: this.image,
+      isSpecial: this.isSpecial,
     };
 
     if (this.id) {

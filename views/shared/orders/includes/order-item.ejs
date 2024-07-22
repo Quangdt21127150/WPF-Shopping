@@ -23,7 +23,7 @@
     <% if (locals.isAdmin) { %>
     <address>
       <p>
-        <a href="mailto:<%= order.userData.username %>"
+        <a href="mailto:<%= order.userData.email %>"
           ><%= order.userData.username %></a
         >
       </p>
@@ -59,9 +59,9 @@
         PAY
       </button>
     </section>
-    <%- include('../../../admin/popup/includes/yes-no-popup', { submitPath:
+    <%- include('../../../admin/popup/yes-no-popup', { submitPath:
     '/orders/cancel', message: 'cancel this order?', i: 1 }) %> <%-
-    include('../../../admin/popup/includes/yes-no-popup', { submitPath:
-    '/orders/pay', message: 'pay for this order?', i: 2 }) %> <% } %>
+    include('../../../admin/popup/yes-no-popup', { submitPath: '/orders/pay',
+    message: 'pay for this order?', i: 2 }) %> <% } %>
   </section>
 </article>

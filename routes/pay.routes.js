@@ -8,9 +8,11 @@ router.get("/", payController.initSystem);
 
 router.get("/create", payController.createNewPaymentAccount);
 
+router.get("/update", payController.updatePaymentAccount);
+
 router.get("/delete", payController.deletePaymentAccount);
 
-router.get("/update", payController.updatePaymentAccount);
+router.get("/exchange", payController.addVoucher);
 
 router.get("/transfer", payController.transfer);
 
