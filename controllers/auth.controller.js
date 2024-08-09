@@ -40,7 +40,8 @@ async function signup(req, res, next) {
     sessionFlash.flashDataToSession(
       req,
       {
-        errorMessage: "Password confirmation failed",
+        message: "Password confirmation failed",
+        isError: true,
         ...enteredData,
       },
       function () {
@@ -64,7 +65,8 @@ async function signup(req, res, next) {
       sessionFlash.flashDataToSession(
         req,
         {
-          errorMessage: `The username "${enteredData.username}" already exists`,
+          message: `The username "${enteredData.username}" already exists`,
+          isError: true,
           ...enteredData,
         },
         function () {
@@ -106,8 +108,9 @@ async function login(req, res, next) {
   const existsAlready = await user.getWithSameUsername();
 
   const sessionErrorData = {
-    errorMessage:
+    message:
       "Invalid credentials! Please double-check your username and password!",
+    isError: true,
     username: user.username,
     password: user.password,
   };

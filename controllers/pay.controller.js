@@ -58,15 +58,25 @@ async function createNewPaymentAccount(req, res, next) {
     return;
   }
 
-  if (req.query.GoogleOrFacebookUsername !== "") {
-    res.redirect("https://localhost:3000/products?isFade=1");
-  } else {
-    if (req.query.login === "1") {
-      res.redirect("https://localhost:3000/");
-    } else {
-      res.redirect("https://localhost:3000/accounts");
+  sessionFlash.flashDataToSession(
+    req,
+    {
+      message:
+        req.query.GoogleOrFacebookUsername !== ""
+          ? null
+          : req.query.login === "1"
+          ? "Thank you for signing up!"
+          : "Adding a new account was successful.",
+      isError: false,
+    },
+    function () {
+      req.query.GoogleOrFacebookUsername !== ""
+        ? res.redirect("https://localhost:3000/products?isFade=1")
+        : req.query.login === "1"
+        ? res.redirect("https://localhost:3000/")
+        : res.redirect("https://localhost:3000/accounts");
     }
-  }
+  );
 }
 
 async function deletePaymentAccount(req, res, next) {
@@ -101,7 +111,8 @@ async function updatePaymentAccount(req, res, next) {
   sessionFlash.flashDataToSession(
     req,
     {
-      errorMessage: null,
+      message: "Updating the account was successful.",
+      isError: false,
     },
     function () {
       res.redirect("https://localhost:3000/profile");

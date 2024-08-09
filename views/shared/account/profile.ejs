@@ -25,7 +25,7 @@
         Update
       </button>
 
-      <%- include('./includes/account-update-form', { submitPath: '/accounts/' + account.id, account: account, errorMessage: errorMessage }) %>
+      <%- include('./includes/account-update-form', { submitPath: '/accounts/' + account.id, account: account, message: message, isError: isError }) %>
     </header>
   </main>
 <%- include('../../shared/page/footer') %>

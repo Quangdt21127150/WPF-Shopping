@@ -52,7 +52,7 @@
           </div>
         </form>
 
-        <%- include('../../admin/popup/notification', { message: inputData.errorMessage, isError: true }) %>
+        <%- include('../../admin/popup/notification', { message: inputData.message, isError: inputData.isError }) %>
       </p>
     </section>
     <section class="table-responsive">

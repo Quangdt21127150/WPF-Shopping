@@ -54,6 +54,6 @@
         </a>
       </p>
     </form>
-    <%-include('../../admin/popup/notification', { message: inputData.errorMessage, isError: true }) %>
+    <%-include('../../admin/popup/notification', { message: inputData.message, isError: inputData.isError }) %>
   </main>
 <%- include('../../shared/page/footer') %>

@@ -6,6 +6,7 @@ const Voucher = require("../models/voucher.model");
 const sessionFlash = require("../util/session-flash");
 const fs = require("fs");
 const path = require("path");
+const { isError } = require("util");
 
 //Categories Manage
 async function createNewCategory(req, res, next) {
@@ -125,7 +126,8 @@ async function createNewAccount(req, res, next) {
     sessionFlash.flashDataToSession(
       req,
       {
-        errorMessage: "Password confirmation failed",
+        message: "Password confirmation failed",
+        isError: true,
         ...enteredData,
       },
       function () {
@@ -149,7 +151,8 @@ async function createNewAccount(req, res, next) {
       sessionFlash.flashDataToSession(
         req,
         {
-          errorMessage: `The username "${enteredData.username}" already exists`,
+          message: `The username "${enteredData.username}" already exists`,
+          isError: true,
           ...enteredData,
         },
         function () {

@@ -29,6 +29,10 @@
   padding: 0;
 }
 
+#my-point {
+  margin: 0;
+}
+
 @media (min-width: 768px) {
   #voucher-content {
     font-size: x-large;
@@ -66,5 +70,10 @@
   .exchange-btn {
     font-size: x-large;
     transform: translate(-25%, -95%);
+  }
+
+  #my-point {
+    position: absolute;
+    margin-top: var(--space-4);
   }
 }

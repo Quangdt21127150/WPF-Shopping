@@ -40,7 +40,8 @@ async function getAccount(req, res, next) {
 
   if (!sessionData) {
     sessionData = {
-      errorMessage: null,
+      message: null,
+      isError: false,
     };
   }
 
@@ -48,7 +49,8 @@ async function getAccount(req, res, next) {
     const account = await User.findById(req.session.uid);
     res.render("shared/account/profile", {
       account: account,
-      errorMessage: sessionData.errorMessage,
+      message: sessionData.message,
+      isError: sessionData.isError,
     });
   } catch (error) {
     next(error);
@@ -79,7 +81,8 @@ async function updateAccount(req, res, next) {
       sessionFlash.flashDataToSession(
         req,
         {
-          errorMessage: `The username "${enteredData.username}" already exists`,
+          message: `The username "${enteredData.username}" already exists`,
+          isError: true,
         },
         function () {
           res.redirect("/profile");

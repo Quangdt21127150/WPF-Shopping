@@ -8,8 +8,8 @@
 <body>
   <%- include('../../shared/page/header') %>
   <main>
-    <p class="badge fw-bold fs-6 me-auto <%= isAvailable ? '' : 'd-none' %>">Point: <%= point %></p>
-    <nav class="nav nav-pills nav-justified border rounded my-4 mx-auto fw-medium <%= locals.isAdmin ? 'd-none' : '' %>">
+    <article class="d-flex justify-content-end"><p id="my-point" class="badge fw-bold fs-6 <%= isAvailable ? '' : 'd-none' %>">Point: <%= point %></p></article>
+    <nav class="nav nav-pills nav-justified border rounded mt-4 mx-auto fw-medium <%= locals.isAdmin ? 'd-none' : '' %>">
       <a class="nav-link <%= isAvailable ? 'active bg-secondary' : 'text-secondary' %>" aria-current="page" href="/vouchers/available">Available</a>
       <a class="nav-link <%= isAvailable ? 'text-secondary' : 'active bg-secondary' %>" href="/vouchers/own">Own</a>
     </nav>
@@ -44,5 +44,6 @@
       </ol>
     <% } %>
   </main>
+  
   <%- include('../../shared/page/footer') %>
 </body>
