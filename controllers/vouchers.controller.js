@@ -29,14 +29,14 @@ async function autoAddVouchers() {
       date: 14,
       month: 2,
       title: "Happy Valentine's Day",
-      value: "g2-chocolate box",
+      value: "g2/chocolate box",
       image: "heart.png",
     },
     {
       date: 8,
       month: 3,
       title: "Happy Women's Day",
-      value: "g1-hand bag",
+      value: "g1/hand bag",
       image: "women.png",
     },
     {
@@ -50,7 +50,7 @@ async function autoAddVouchers() {
       date: 1,
       month: 6,
       title: "Happy Children's Day",
-      value: "g1-teddy bear",
+      value: "g1/teddy bear",
       image: "children.png",
     },
     {
@@ -71,7 +71,7 @@ async function autoAddVouchers() {
       date: 20,
       month: 11,
       title: "Happy Vietnamese Teacher's Day",
-      value: "g2-rose",
+      value: "g2/rose",
       image: "teacher.png",
     },
     {
@@ -85,7 +85,7 @@ async function autoAddVouchers() {
       date: 24,
       month: 12,
       title: "Merry Christmas",
-      value: "g2-greeting card",
+      value: "g2/greeting card",
       image: "christmas.png",
     },
   ];
@@ -142,11 +142,18 @@ async function getAllVouchers(req, res, next) {
     autoAddVouchers();
     autoDeleteVouchers();
     const vouchers = await Voucher.findAll();
+    const messages = [
+      "Voucher added successfully",
+      "Voucher updated successfully",
+      "Voucher deleted successfully",
+    ];
 
     res.render("shared/vouchers/voucher-list", {
       point: 0,
       vouchers: vouchers,
       isAvailable: false,
+      message: messages[parseInt(req.query.message)] || "",
+      isError: false,
     });
   } catch (error) {
     next(error);
@@ -160,11 +167,17 @@ async function getAvailableVouchers(req, res, next) {
     const user = await User.findById(res.locals.uid);
     const pay_account = await Pay_Account.findByUsername(user.username);
     const vouchers = await Voucher.findAvailable(pay_account.vouchers);
+    const messages = [
+      "Voucher exchanged successfully",
+      "You don't have enough points to exchange this voucher",
+    ];
 
     res.render("shared/vouchers/voucher-list", {
       point: pay_account.point,
       vouchers: vouchers,
       isAvailable: true,
+      message: messages[parseInt(req.query.message)] || "",
+      isError: messages[parseInt(req.query.message)] ? false : true,
     });
   } catch (error) {
     next(error);
@@ -183,6 +196,8 @@ async function getOwnVouchers(req, res, next) {
       point: 0,
       vouchers: vouchers,
       isAvailable: false,
+      message: "",
+      isError: false,
     });
   } catch (error) {
     next(error);

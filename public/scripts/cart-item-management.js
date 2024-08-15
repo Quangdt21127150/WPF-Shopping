@@ -1,13 +1,15 @@
-const cartItemUpdateFormElements = $(".cart-item-management");
+const cartItemElements = $(".cart-item");
 const cartTotalPriceElement = $("#cart-total-price");
 const cartBadgeElements = $(".nav-items .badge");
 const buyProductButton = $("#cart-total button");
 
-async function updateCartItem(form) {
-  const productId = $(form).data("productid");
-  const csrfToken = $(form).data("csrf");
-  const quantity = $(form).find("input").val();
+async function updateCartItem(cartItem) {
+  const productId = $(cartItem).find("form").data("productid");
+  const csrfToken = $(cartItem).find("form").data("csrf");
+  const quantity = $(cartItem).find("input").val();
   let response;
+
+  console.log(productId);
 
   try {
     response = await fetch("/cart/items", {
@@ -35,11 +37,10 @@ async function updateCartItem(form) {
   const updatedCartData = responseData.updatedCartData;
 
   if (updatedCartData.updatedItemPrice === 0) {
-    $(form).closest(".cart-item").remove();
+    $(cartItem).remove();
   } else {
-    $(form)
-      .closest(".cart-item")
-      .find(".cart-item-price")
+    $(cartItem)
+      .find("span")
       .text(updatedCartData.updatedItemPrice.toLocaleString("vi-VN"));
   }
 
@@ -51,7 +52,7 @@ async function updateCartItem(form) {
   cartBadgeElements.text(updatedCartData.newTotalQuantity);
 }
 
-cartItemUpdateFormElements.each(function () {
+cartItemElements.each(function () {
   $(this)
     .find("input")
     .change(() => updateCartItem(this));

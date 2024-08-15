@@ -23,19 +23,19 @@
     return noun + "s";
 } 
 
-const type = voucher.value[0]
-const number = parseInt(voucher.value.match(/\d+/))
-let promotion
+const type = voucher.value[0];
+const number = parseInt(voucher.value.match(/\d+/));
+let promotion;
 if(type === 'd'){
-    promotion = 'Discount ' + number + '% off entire bill'
+    promotion = number + '% discount';
 } else if(type === 'g') {
-    const product = number === 1 ? voucher.value.split('-')[1] : pluralize(voucher.value.split('-')[1])
-    promotion = 'Get free ' + number + ' ' + product
+    const product = number === 1 ? voucher.value.split('/')[1] : pluralize(voucher.value.split('/')[1]);
+    promotion = number + ' bonus ' + product;
 } else {
-    promotion = 'Extra ' + number + ' points'
+    promotion = 'Get ' + number + ' extra points';
 } 
 
-const date = voucher.expiration.toISOString().split('T')[0].split('-') 
+const date = voucher.expiration.toISOString().split('T')[0].split('-');
 %>
 
 <article class="position-relative mx-auto w-90" style="width: fit-content;">

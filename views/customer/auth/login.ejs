@@ -11,16 +11,16 @@
       <a class="nav-link active bg-secondary" aria-current="page" href="#">Login</a>
       <a class="nav-link text-secondary" href="/signup">Signup</a>
     </nav>
-    <form action="/login" method="POST" class="form text-center fadeUp">
+    <form action="/login" method="POST" class="form text-center fadeUp mx-auto p-3 rounded-4">
       <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>">
 
-      <p>
-        <label for="username">Username</label>
+      <p class="mb-2">
+        <label for="username" class="fw-semibold d-block mb-2">Username</label>
         <input type="text" id="username" name="username" value="<%= inputData.username %>" class="form-control"  required />
       </p>
 
-      <p>
-        <label for="password">Password</label>
+      <p class="mb-2">
+        <label for="password" class="fw-semibold d-block mb-2">Password</label>
         <section class="input-group" id="password-frame">
           <input type="password" id="password" name="password" value="<%= inputData.password %>" class="form-control" required>
           <section class="input-group-text">
@@ -29,10 +29,10 @@
         </section>
       </p>
 
-      <hr>
-      <button class="btn btn-solid mb-3">Login</button>
+      <hr class="m-3">
+      <button class="btn btn-solid">Login</button>
 
-      <p class="d-grid px-4">
+      <p class="d-grid my-3 px-4">
         <a
           href="/gg"
           id="btn-google"
@@ -43,7 +43,7 @@
         </a>
       </p>
 
-      <p class="d-grid my-3 px-4">
+      <p class="d-grid mb-3 px-4">
         <a
           href="/fb"
           id="btn-facebook"

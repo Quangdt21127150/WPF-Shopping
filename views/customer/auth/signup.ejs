@@ -1,5 +1,4 @@
 <%- include('../../shared/page/head', { pageTitle: 'Signup' }) %>
-<link rel="stylesheet" href="/styles/forms.css">
 <link rel="stylesheet" href="/styles/auth.css">
 
 </head>
@@ -10,9 +9,9 @@
       <a class="nav-link text-secondary" href="/login">Login</a>
       <a class="nav-link active bg-secondary" aria-current="page" href="#">Signup</a>
     </nav>
-    <form action="/signup?_csrf=<%= locals.csrfToken %>" method="POST" class="form text-center fadeUp">
+    <form action="/signup?_csrf=<%= locals.csrfToken %>" method="POST" class="form text-center fadeUp mx-auto p-3 rounded-4">
       <%- include('../../shared/account/includes/account-add-form', { inputData: inputData }) %>
-      <hr>
+      <hr class="m-3">
       <button class="btn btn-solid">Create Account</button>
     </form>
     <%-include('../../admin/popup/notification', { message: inputData.message, isError: inputData.isError }) %>

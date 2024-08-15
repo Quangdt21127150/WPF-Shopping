@@ -26,9 +26,9 @@
             aria-label="Close"
           ></button>
         </section>
-        <section class="modal-body">
-          <p>
-            <label for="title">Title (<span class="text-danger">*</span>)</label>
+        <section class="modal-body text-black">
+          <p class="mb-2">
+            <label for="title" class="fw-semibold d-block mb-2">Title (<span class="text-danger">*</span>)</label>
             <input
               type="text"
               id="title"
@@ -39,28 +39,28 @@
             />
           </p>
 
-          <section class="image-upload-control">
-            <p>
-              <label for="image">Icon (<span class="text-danger">*</span>)</label>
+          <section class="image-upload-control d-flex align-items-center">
+            <p class="mb-2">
+              <label for="image" class="fw-semibold d-block mb-2">Icon (<span class="text-danger">*</span>)</label>
               <input
                 type="file"
                 accept="image/png,image/jpg"
                 id="image"
                 name="image"
-                class="text-black border-0"
+                class="border-0"
                 <%= imageRequired ? 'required' : '' %> 
               />
             </p>
 
-            <img src="<%= voucher.imageUrl %>" alt="Selected image." />
+            <img src="<%= voucher.imageUrl %>" alt="Selected image." class="bg-secondary-subtle rounded-1" />
           </section>
 
-          <p>
+          <p class="mb-2">
             <input type="text" id="value" name="value" class="d-none" />
-            <article class="fw-medium mb-1">Value (<span class="text-danger">*</span>)</article>
+            <label for="discountButton<%= i %>" class="fw-semibold">Value (<span class="text-danger">*</span>)</label>
             <article class="d-flex gap-1">
               <input type="radio" name="radioButton" id="discountButton<%= i %>" <%= voucher.value[0] === 'd' || !voucher.value ? 'checked' : '' %> />
-              <label role="button" class="fw-normal m-0" for="discountButton<%= i %>">
+              <label role="button" for="discountButton<%= i %>">
                 Discount
               </label>
               <input
@@ -80,10 +80,10 @@
             </article>
             <article class="d-flex gap-1 my-2">
               <input type="radio" name="radioButton" id="getFreeButton<%= i %>" <%= voucher.value[0] === 'g' ? 'checked' : '' %>>
-              <label role="button" class="fw-normal m-0" for="getFreeButton<%= i %>">
+              <label role="button" for="getFreeButton<%= i %>">
                 Get free
               </label>
-              <% const valueParts = voucher.value.split('-') %>
+              <% const valueParts = voucher.value.split('/') %>
               <input
                 type="number"
                 id="quantity"
@@ -114,7 +114,7 @@
             </article>
             <article class="d-flex gap-1">
               <input type="radio" name="radioButton" id="extraButton<%= i %>" <%= voucher.value[0] === 'e' ? 'checked' : '' %>>
-              <label role="button" class="fw-normal m-0" for="extraButton<%= i %>">
+              <label role="button" for="extraButton<%= i %>">
                 Extra
               </label>
               <input
@@ -138,8 +138,8 @@
             </article>
           </p>
 
-          <p>
-            <label for="point">Point (<span class="text-danger">*</span>)</label>
+          <p class="mb-2">
+            <label for="point" class="fw-semibold d-block mb-2">Point (<span class="text-danger">*</span>)</label>
             <input
               type="number"
               id="point"
@@ -151,8 +151,8 @@
             />
           </p>
 
-          <p>
-            <label for="expiration">Expiration (<span class="text-danger">*</span>)</label>
+          <p class="mb-2">
+            <label for="expiration" class="fw-semibold d-block mb-2">Expiration (<span class="text-danger">*</span>)</label>
             <input
               type="date"
               id="expiration"

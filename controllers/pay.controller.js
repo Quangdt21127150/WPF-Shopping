@@ -1,4 +1,5 @@
 const Pay_Account = require("../models/pay.model");
+const Voucher = require("../models/voucher.model");
 const sessionFlash = require("../util/session-flash");
 const mongodb = require("mongodb");
 
@@ -24,7 +25,7 @@ async function initSystem(req, res, next) {
       }
 
       if (GoogleOrFacebookUsername !== "") {
-        res.redirect("https://localhost:3000/products?isFade=1");
+        res.redirect("https://localhost:3000/products?firstTime=1");
       } else {
         res.redirect("https://localhost:3000/");
       }
@@ -71,7 +72,7 @@ async function createNewPaymentAccount(req, res, next) {
     },
     function () {
       req.query.GoogleOrFacebookUsername !== ""
-        ? res.redirect("https://localhost:3000/products?isFade=1")
+        ? res.redirect("https://localhost:3000/products?firstTime=1")
         : req.query.login === "1"
         ? res.redirect("https://localhost:3000/")
         : res.redirect("https://localhost:3000/accounts");
@@ -123,13 +124,20 @@ async function updatePaymentAccount(req, res, next) {
 async function addVoucher(req, res, next) {
   try {
     const customer = await Pay_Account.findByUsername(req.query.username);
+    const voucher = await Voucher.findById(req.query.voucherId);
+    if (customer.point < voucher.point) {
+      return res.redirect(
+        "https://localhost:3000/vouchers/available?message=1"
+      );
+    }
     customer.vouchers.push(new mongodb.ObjectId(req.query.voucherId));
+    customer.point -= voucher.point;
     customer.save(customer.username);
   } catch (error) {
     return next(error);
   }
 
-  res.redirect("https://localhost:3000/vouchers/available");
+  res.redirect("https://localhost:3000/vouchers/available?message=0");
 }
 
 async function transfer(req, res, next) {

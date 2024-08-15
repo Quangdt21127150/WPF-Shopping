@@ -107,7 +107,7 @@ async function login(req, res, next) {
 
   const existsAlready = await user.getWithSameUsername();
 
-  const sessionErrorData = {
+  const sessionData = {
     message:
       "Invalid credentials! Please double-check your username and password!",
     isError: true,
@@ -116,7 +116,7 @@ async function login(req, res, next) {
   };
 
   if (!existsAlready) {
-    sessionFlash.flashDataToSession(req, sessionErrorData, function () {
+    sessionFlash.flashDataToSession(req, sessionData, function () {
       res.redirect("/login");
     });
     return;
@@ -127,18 +127,16 @@ async function login(req, res, next) {
   );
 
   if (!passwordIsCorrect) {
-    sessionFlash.flashDataToSession(req, sessionErrorData, function () {
+    sessionFlash.flashDataToSession(req, sessionData, function () {
       res.redirect("/login");
     });
     return;
   }
 
   authUtil.createUserSession(req, existsAlready, function () {
-    if (existsAlready.isAdmin) {
-      res.redirect("/categories");
-    } else {
-      res.redirect("/products?isFade=1");
-    }
+    existsAlready.isAdmin
+      ? res.redirect("/categories?firstTime=1")
+      : res.redirect("/products?firstTime=1");
   });
 }
 

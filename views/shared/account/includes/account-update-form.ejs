@@ -26,9 +26,9 @@
             aria-label="Close"
           ></button>
         </div>
-        <div class="modal-body">
-          <p>
-            <label for="username">Username (<span class="text-danger">*</span>)</label>
+        <div class="modal-body text-black">
+          <p class="mb-2">
+            <label for="username" class="fw-semibold d-block mb-2">Username (<span class="text-danger">*</span>)</label>
             <% const Vietnamese = "àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸ" %>
             <input
               type="text"
@@ -46,8 +46,8 @@
               required
             />
           </p>
-          <p>
-            <label for="fullname">Fullname (<span class="text-danger">*</span>)</label>
+          <p class="mb-2">
+            <label for="fullname" class="fw-semibold d-block mb-2">Fullname (<span class="text-danger">*</span>)</label>
             <input
               type="text"
               id="fullname"
@@ -59,48 +59,48 @@
             />
           </p>
 
-          <section class="image-upload-control">
-            <p>
-              <label class="text-black" for="image">Avatar (<span class="text-danger">*</span>)</label>
+          <section class="image-upload-control d-flex align-items-center">
+            <p class="mb-2">
+              <label for="image" class="fw-semibold d-block mb-2">Avatar (<span class="text-danger">*</span>)</label>
               <input
                 type="file"
                 id="image"
                 name="image"
                 accept="image/png,image/jpg"
-                class="text-black border-0"
+                class="border-0"
               />
             </p>
-            <img src="<%= account.imageUrl %>" alt="Selected image." />
+            <img src="<%= account.imageUrl %>" alt="Selected image." class="rounded-1" />
           </section>
 
-          <p>
+          <p class="mb-2">
             <input type="text" id="address" value="<%= account.address %>" class="d-none">
-            <label for="street">Address (<span class="text-danger">*</span>)</label>
-            <section class="combobox">             
+            <label for="street" class="fw-semibold d-block mb-2">Address (<span class="text-danger">*</span>)</label>
+            <section class="d-flex flex-column gap-3">             
               <select id="city" name="city" class="form-control" required></select>
               <select id="district" name="district" class="form-control" required></select>
               <select id="ward" name="ward" class="form-control" required></select>
               <input type="text" id="street" name="street" maxlength="50" value="" placeholder="Apartment number + street" class="form-control" required>
             </section>
           </p>
-          <p>
-            <label for="birthday">Birthday (<span class="text-danger">*</span>)</label>
+          <p class="mb-2">
+            <label for="birthday" class="fw-semibold d-block mb-2">Birthday (<span class="text-danger">*</span>)</label>
             <input type="date" id="birthday" name="birthday" max="<%= new Date().toISOString().split('T')[0] %>" value="<%= account.birthday %>" class="form-control" required />
           </p>
-          <p>
-            <label for="gender">Gender</label>
+          <p class="mb-2">
+            <label for="gender" class="fw-semibold d-block mb-2">Gender</label>
             <select id="gender" name="gender" class="form-control" required>
               <option value="<%= account.gender %>" selected><%= account.gender %></option>
             </select>
           </p>
-          <p>
-            <label for="phone">Phone Number</label>
+          <p class="mb-2">
+            <label for="phone" class="fw-semibold d-block mb-2">Phone Number</label>
             <input type="tel" name="phone" id="phone" pattern="(((\+|)84)|0)(3|5|7|8|9)+([0-9]{8})\b" maxlength="10" value="<%= account.phone !== '?' ? account.phone : '' %>" class="form-control" 
               data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="right"
               data-bs-content="Exist in Vietnam" />
           </p>
-          <p>
-            <label for="email">Email</label>
+          <p class="mb-2">
+            <label for="email" class="fw-semibold d-block mb-2">Email</label>
             <input type="email" id="email" name="email" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$" maxlength="30" value="<%= account.email !== '?' ? account.email : '' %>" class="form-control"
               data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="right"
               data-bs-content="Ex: abc@gmail.com" />

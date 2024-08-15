@@ -10,10 +10,10 @@
     <%- include('includes/products-carousel', { title: 'Bestsellers', products: bestsellers, i: 1 }) %>
     <%- include('includes/products-carousel', { title: 'New Products', products: newProducts, i: 2 }) %>
 
-    <section class="<%= isFade ? 'fadeDown' : '' %>">
+    <section class="<%= firstTime ? 'fadeDown' : '' %>">
       <h1 class="my-2 customer-title">All Products</h1>
 
-      <form id="searchForm" action="/products" method="GET">
+      <form id="searchForm" action="/products" method="GET" class="d-flex justify-content-between">
         <input type="hidden" name="_csrf" value="<%= locals.csrfToken %>" />
         <div class="d-flex mt-3">
           <input type="search" name="name" class="form-control rounded-end-0" placeholder="Search..." value="<%= name %>"/>
@@ -42,36 +42,29 @@
           </select>
         </div>
       </form>
-    
-      <section id="products-mobile">
-        <% if(products.length === 0) { %>
-          <i><h4 class="text-center text-secondary mt-5">No product available</h4></i>
-        <%} else { %>
-          <ul class="products-grid">
-            <% for (let i = 0; i < products.length; ++i) { %>
-              <% const category = categories.find(category => category.id === products[i].cateId.toString()); %>
-              <li>
-                <%- include('../../shared/page/product-item', { product: products[i], i: i + '-mobile', category: category }) %>
-              </li>
-            <% } %>
-          </ul>
-        <% } %>
-      </section>
 
-      <section id="products-pc">
-        <% if(products.length === 0) { %>
-          <i><h4 class="text-center text-secondary mt-5">No products are available</h4></i>
-        <%} else { %>
-          <ul class="products-grid">
-            <% for (let i = start; i < end; ++i) { %>
-              <% const category = categories.find(category => category.id === products[i].cateId.toString()); %>
-              <li>
-                <%- include('../../shared/page/product-item', { product: products[i], i: i, category: category }) %>
-              </li>
-            <% } %>
-          </ul>
-        <% } %>
-  
+      
+      <% if(products.length === 0) { %>
+        <i><h4 class="text-center text-secondary mt-5">No products are available</h4></i>
+      <%} else { %>
+        <ul class="gap-3 products-grid products-mobile">
+          <% for (let i = 0; i < products.length; ++i) { %>
+            <% const category = categories.find(category => category.id === products[i].cateId.toString()); %>
+            <li>
+              <%- include('../../shared/page/product-item', { product: products[i], i: i + '-mobile', category: category }) %>
+            </li>
+          <% } %>
+        </ul>
+
+        <ul class="gap-3 products-grid products-pc">
+          <% for (let i = start; i < end; ++i) { %>
+            <% const category = categories.find(category => category.id === products[i].cateId.toString()); %>
+            <li>
+              <%- include('../../shared/page/product-item', { product: products[i], i: i, category: category }) %>
+            </li>
+          <% } %>
+        </ul>
+
         <ul class="pagination mb-3">
           <li class="page-item">
             <a class="btn btn-alt rounded-0 rounded-start-2 page-link" href="/products?page=<%= page <= 1 ? 1 : page - 1 %>&name=<%= name %>&cateID=<%= cateID %>&price=<%= price %>" aria-label="Previous">
@@ -97,7 +90,10 @@
             </a>
           </li>
         </ul>
-      </section>
+      <% } %>
     </section>
+    <% if(firstTime) { %>
+      <%- include('../../admin/popup/notification', { message: "Login successful 🎉", isError: false }) %>
+    <% } %>
   </main>
 <%- include('../../shared/page/footer') %>

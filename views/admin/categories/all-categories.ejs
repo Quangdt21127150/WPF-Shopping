@@ -1,6 +1,5 @@
 <%- include('../../shared/page/head', { pageTitle: 'All Categories' }) %>
 <script src="/scripts/image-preview.js" defer></script>
-
 </head>
 <body>
   <%- include('../../shared/page/header') %>
@@ -67,5 +66,8 @@
         </table>
       <% } %>
     </section>
+    <% if(firstTime) { %>
+      <%- include('../popup/notification', { message: "Login successful 🎉", isError: false }) %>
+    <% } %>
   </main>
 <%- include('../../shared/page/footer') %>

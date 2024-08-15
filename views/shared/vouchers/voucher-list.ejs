@@ -36,12 +36,16 @@
 
     <% if(vouchers.length === 0) { %>
       <i><h4 class="text-center text-secondary mt-5">No vouchers are available</h4></i>
-    <%} else {%>
+    <% } else { %>
       <ol class="<%= locals.isAdmin ? '' : 'fadeUp' %>">
         <% for (const voucher of vouchers) { %>
           <li><%- include('includes/voucher-item', { voucher: voucher, i: vouchers.indexOf(voucher), tomorrow: tomorrow }) %></li>
         <% } %>
       </ol>
+    <% } %>
+
+    <% if(message) { %>
+      <%- include('../../admin/popup/notification', { message: message, isError: isError }) %>
     <% } %>
   </main>
   

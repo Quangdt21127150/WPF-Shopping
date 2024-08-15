@@ -15,8 +15,11 @@
         </li>
       <% } %>
     </ul>
-    <section id="cart-total">
-      <p>Total: <span id="cart-total-price"><%= locals.cart.totalPrice.toLocaleString('vi-VN') %></span> VND</p>
+    <section id="vouchers">
+
+    </section>
+    <section id="cart-total" class="d-flex align-items-center">
+      <p class="fs-4 fw-bold m-0">Total: <span id="cart-total-price"><%= locals.cart.totalPrice.toLocaleString('vi-VN') %></span> VND</p>
 
       <% if (locals.cart.totalPrice > 0) { %>
         <button 

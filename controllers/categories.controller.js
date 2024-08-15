@@ -7,6 +7,7 @@ async function getAllCategories(req, res, next) {
 
     res.render("admin/categories/all-categories", {
       categories: categories,
+      firstTime: req.query.firstTime,
     });
   } catch (error) {
     next(error);

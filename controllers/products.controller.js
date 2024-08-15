@@ -89,7 +89,7 @@ async function getProducts(req, res, next) {
       start: start,
       end: end,
       total_page: total_page,
-      isFade: req.query.isFade,
+      firstTime: req.query.firstTime,
     });
   } catch (error) {
     next(error);

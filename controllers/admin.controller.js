@@ -210,7 +210,7 @@ async function createNewVoucher(req, res, next) {
     return next(error);
   }
 
-  res.redirect("/vouchers");
+  res.redirect("/vouchers?message=0");
 }
 
 async function updateVoucher(req, res, next) {
@@ -230,7 +230,7 @@ async function updateVoucher(req, res, next) {
     return next(error);
   }
 
-  res.redirect("/vouchers");
+  res.redirect("/vouchers?message=1");
 }
 
 async function deleteVoucher(req, res, next) {
@@ -242,7 +242,7 @@ async function deleteVoucher(req, res, next) {
     return next(error);
   }
 
-  res.redirect("/vouchers");
+  res.redirect("/vouchers?message=2");
 }
 
 //Statistic

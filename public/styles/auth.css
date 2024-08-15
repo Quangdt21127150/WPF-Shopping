@@ -1,8 +1,6 @@
 form {
   max-width: 25rem;
-  margin: 0 auto var(--space-8);
-  padding: var(--space-4);
-  border-radius: var(--border-radius-medium);
+  margin-bottom: var(--space-8);
 }
 
 #btn-google {

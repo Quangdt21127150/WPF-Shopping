@@ -6,7 +6,7 @@
   <%- include('../../shared/page/header') %>
   <main>
     <ol>
-      <section class="d-flex justify-content-between">
+      <section class="d-flex justify-content-between heading">
         <h1 class="mt-2 mb-4 <%= !locals.isAdmin ? 'customer-title' : '' %>">Orders History</h1>
         <% if(!locals.isAdmin) { %>
         <form

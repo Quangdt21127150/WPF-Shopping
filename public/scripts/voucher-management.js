@@ -59,12 +59,7 @@ $(function () {
       if (radioButton[0].checked) {
         valueFrame.val("d" + percentageBar.val());
       } else if (radioButton[1].checked) {
-        const quantity = parseInt(quantityFrame.val());
-        let productName;
-        quantity === 1
-          ? (productName = productFrame.val())
-          : (productName = pluralize(productFrame.val()));
-        valueFrame.val("g" + quantity + "-" + productName);
+        valueFrame.val("g" + quantityFrame.val() + "/" + productFrame.val());
       } else {
         valueFrame.val("e" + extraPointFrame.val());
       }
