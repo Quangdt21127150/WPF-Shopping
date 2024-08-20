@@ -45,7 +45,7 @@
 </p>
 <p class="mb-2">
   <label for="birthday" class="fw-semibold d-block mb-2">Birthday (<span class="text-danger">*</span>)</label>
-  <input type="date" id="birthday" name="birthday" max="<%= new Date().toISOString().split('T')[0] %>" value="<%= inputData.birthday %>" class="form-control" required />
+  <input type="date" id="birthday" name="birthday" max="<%= new Date().toISOString().split('T')[0] %>" value="<%= new Date().toISOString().split("T")[0] %>" class="form-control" required />
 </p>
 <p class="mb-2">
   <label for="gender" class="fw-semibold d-block mb-2">Gender</label>
@@ -65,8 +65,3 @@
     data-bs-container="body" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-placement="right"
     data-bs-content="Ex: abc@gmail.com" />
 </p>
-
-        
-
-
-

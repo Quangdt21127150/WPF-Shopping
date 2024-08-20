@@ -69,5 +69,8 @@
     <% if(firstTime) { %>
       <%- include('../popup/notification', { message: "Login successful 🎉", isError: false }) %>
     <% } %>
+    <% if(!firstTime && message) { %>
+      <%- include('../../admin/popup/notification', { message: message, isError: isError }) %>
+    <% } %>
   </main>
 <%- include('../../shared/page/footer') %>

@@ -13,7 +13,7 @@ function getLunarDate(date) {
   return lunarDate;
 }
 
-async function autoAddVouchers() {
+async function autoAddVouchers(pay_account) {
   const today = new Date();
   const specialVouchers = await Voucher.findSpecial();
 
@@ -106,6 +106,10 @@ async function autoAddVouchers() {
         isSpecial: true,
       });
       voucher.save();
+      if (!pay_account.isAdmin) {
+        pay_account.push(new mongodb.ObjectId(voucher.id));
+        pay_account.save(pay_account.username);
+      }
       return;
     }
   }
@@ -125,22 +129,32 @@ async function autoAddVouchers() {
       isSpecial: true,
     });
     voucher.save();
+    if (!pay_account.isAdmin) {
+      pay_account.push(new mongodb.ObjectId(voucher.id));
+      pay_account.save(pay_account.username);
+    }
   }
 }
 
-async function autoDeleteVouchers() {
+async function autoDeleteVouchers(pay_account) {
   const expiredVouchers = await Voucher.findExpired();
   if (expiredVouchers.length > 0) {
     for (const voucher of expiredVouchers) {
       voucher.remove();
+      if (!pay_account.isAdmin) {
+        pay_account.vouchers = pay_account.vouchers.filter(
+          (voucher_id) => voucher_id !== voucher.id
+        );
+        pay_account.save(pay_account.username);
+      }
     }
   }
 }
 
 async function getAllVouchers(req, res, next) {
   try {
-    autoAddVouchers();
-    autoDeleteVouchers();
+    const user = await User.findById(res.locals.uid);
+    const pay_account = await Pay_Account.findByUsername(user.username);
     const vouchers = await Voucher.findAll();
     const messages = [
       "Voucher added successfully",
@@ -148,11 +162,14 @@ async function getAllVouchers(req, res, next) {
       "Voucher deleted successfully",
     ];
 
+    autoAddVouchers(pay_account);
+    autoDeleteVouchers(pay_account);
+
     res.render("shared/vouchers/voucher-list", {
       point: 0,
       vouchers: vouchers,
       isAvailable: false,
-      message: messages[parseInt(req.query.message)] || "",
+      message: messages[parseInt(req.query.message)],
       isError: false,
     });
   } catch (error) {
@@ -162,8 +179,6 @@ async function getAllVouchers(req, res, next) {
 
 async function getAvailableVouchers(req, res, next) {
   try {
-    autoAddVouchers();
-    autoDeleteVouchers();
     const user = await User.findById(res.locals.uid);
     const pay_account = await Pay_Account.findByUsername(user.username);
     const vouchers = await Voucher.findAvailable(pay_account.vouchers);
@@ -172,11 +187,14 @@ async function getAvailableVouchers(req, res, next) {
       "You don't have enough points to exchange this voucher",
     ];
 
+    autoAddVouchers(pay_account);
+    autoDeleteVouchers(pay_account);
+
     res.render("shared/vouchers/voucher-list", {
       point: pay_account.point,
       vouchers: vouchers,
       isAvailable: true,
-      message: messages[parseInt(req.query.message)] || "",
+      message: messages[parseInt(req.query.message)],
       isError: messages[parseInt(req.query.message)] ? false : true,
     });
   } catch (error) {
@@ -186,11 +204,12 @@ async function getAvailableVouchers(req, res, next) {
 
 async function getOwnVouchers(req, res, next) {
   try {
-    autoAddVouchers();
-    autoDeleteVouchers();
     const user = await User.findById(res.locals.uid);
     const pay_account = await Pay_Account.findByUsername(user.username);
     const vouchers = await Voucher.findOwn(pay_account.vouchers);
+
+    autoAddVouchers(pay_account);
+    autoDeleteVouchers(pay_account);
 
     res.render("shared/vouchers/voucher-list", {
       point: 0,

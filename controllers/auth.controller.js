@@ -76,14 +76,23 @@ async function signup(req, res, next) {
       return;
     }
 
-    const firstUser = await User.findAll();
-    if (firstUser.length !== 0) await user.signup(false);
-    else await user.signup(true);
+    const firstUser = await User.findFirstNormal();
+    console.log(firstUser);
+
+    if (firstUser) {
+      await user.signup(false);
+      res.redirect(
+        `https://localhost:5000/?username=${req.body.username}&login=1`
+      );
+    } else {
+      await user.signup(true);
+      res.redirect(
+        `https://localhost:5000/?username=${req.body.username}&isAdmin=1&login=1`
+      );
+    }
   } catch (error) {
     return next(error);
   }
-
-  res.redirect(`https://localhost:5000/?username=${req.body.username}&login=1`);
 }
 
 function getLogin(req, res) {

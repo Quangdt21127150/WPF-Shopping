@@ -17,7 +17,6 @@ async function getAllAccounts(req, res, next) {
       wardID: "",
       districtID: "",
       cityID: "",
-      birthday: new Date().toISOString().split("T")[0],
       gender: "Male",
       phone: "",
       email: "",
@@ -65,7 +64,7 @@ async function updateAccount(req, res, next) {
   };
 
   const newAccount = new User({
-    _id: req.params.id,
+    _id: req.session.uid,
     ...enteredData,
     address: `${enteredData.street}, ${enteredData.ward}, ${enteredData.district}, ${enteredData.city}`,
     GoogleOrFacebookUsername: oldAccount.GoogleOrFacebookUsername,
@@ -101,8 +100,25 @@ async function updateAccount(req, res, next) {
   );
 }
 
+async function deleteOwnAccount(req, res, next) {
+  const user = await User.findById(req.session.uid);
+
+  try {
+    await user.remove();
+  } catch (error) {
+    return next(error);
+  }
+
+  console.log(user);
+
+  res.redirect(
+    `https://localhost:5000/delete?username=${user.username}&isOwn=1`
+  );
+}
+
 module.exports = {
   getAllAccounts: getAllAccounts,
   getAccount: getAccount,
   updateAccount: updateAccount,
+  deleteOwnAccount: deleteOwnAccount,
 };

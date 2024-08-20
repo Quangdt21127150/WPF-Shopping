@@ -4,9 +4,7 @@ const payController = require("../controllers/pay.controller");
 
 const router = express.Router();
 
-router.get("/", payController.initSystem);
-
-router.get("/create", payController.createNewPaymentAccount);
+router.get("/", payController.createNewPaymentAccount);
 
 router.get("/update", payController.updatePaymentAccount);
 

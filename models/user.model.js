@@ -47,6 +47,13 @@ class User {
     return db.getDb().collection("users").find().toArray();
   }
 
+  static findFirstNormal() {
+    return db
+      .getDb()
+      .collection("users")
+      .findOne({ GoogleOrFacebookUsername: "" });
+  }
+
   async getWithSameGoogleOrFacebookUsername() {
     return db
       .getDb()

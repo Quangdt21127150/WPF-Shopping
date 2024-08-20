@@ -4,10 +4,17 @@ const Product = require("../models/product.model");
 async function getAllCategories(req, res, next) {
   try {
     const categories = await Category.findAll();
+    const messages = [
+      "Category added successfully",
+      "Category updated successfully",
+      "Category deleted successfully",
+    ];
 
     res.render("admin/categories/all-categories", {
       categories: categories,
       firstTime: req.query.firstTime,
+      message: messages[parseInt(req.query.message)],
+      isError: false,
     });
   } catch (error) {
     next(error);
@@ -18,6 +25,11 @@ async function getProductsOfCategory(req, res, next) {
   try {
     const category = await Category.findById(req.params.cateID);
     const products = await Product.findByCateId(req.params.cateID);
+    const messages = [
+      "Product added successfully",
+      "Product updated successfully",
+      "Product deleted successfully",
+    ];
 
     let page = parseInt(req.query.page) || 1,
       per_page = 6,
@@ -35,6 +47,8 @@ async function getProductsOfCategory(req, res, next) {
       start: start,
       end: end,
       total_page: total_page,
+      message: messages[parseInt(req.query.message)],
+      isError: false,
     });
   } catch (error) {
     next(error);

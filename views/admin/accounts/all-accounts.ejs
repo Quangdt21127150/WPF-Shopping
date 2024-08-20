@@ -12,7 +12,7 @@
           Add Account
         </button>
 
-        <form action="/admin/accounts?_csrf=<%= locals.csrfToken %>" method="POST">
+        <form action="/admin/accounts?_csrf=<%= locals.csrfToken %>" method="POST" class="account-form">
           <div
             class="modal fade"
             id="addAccountModal"
@@ -33,6 +33,23 @@
                 </div>
                 <div class="modal-body text-black">
                   <%- include('../../shared/account/includes/account-add-form', { inputData: inputData }) %>
+                  <p class="mb-2">
+                    <label for="admin" class="fw-semibold d-block mb-2">Type</label>
+                    <article class="d-flex justify-content-around">
+                      <article class="d-flex gap-1">
+                        <input type="radio" name="type" id="admin" value="true" checked />
+                        <label role="button" for="admin">
+                          Admin
+                        </label>
+                      </article>
+                      <article class="d-flex gap-1">
+                        <input type="radio" name="type" id="customer" value="false" />
+                        <label role="button" for="customer">
+                          Customer
+                        </label>
+                      </article>
+                    </article>
+                  </p>
                 </div>
                 <div class="modal-footer">
                   <button
@@ -42,7 +59,7 @@
                     <i class="fa-solid fa-arrow-rotate-right"></i> 
                     Reset
                   </button>
-                  <button type="submit" class="btn bg-primary border-primary" id="saveButton">
+                  <button type="submit" class="btn bg-primary border-primary">
                     <i class="fa-solid fa-check"></i> 
                     Save
                   </button>

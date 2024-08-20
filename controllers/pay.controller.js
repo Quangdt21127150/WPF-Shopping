@@ -3,51 +3,14 @@ const Voucher = require("../models/voucher.model");
 const sessionFlash = require("../util/session-flash");
 const mongodb = require("mongodb");
 
-async function initSystem(req, res, next) {
-  try {
-    const GoogleOrFacebookUsername = req.query.GoogleOrFacebookUsername || "";
-    const accounts = await Pay_Account.findAll();
-    if (accounts.length === 0) {
-      const account = new Pay_Account({
-        username: req.query.username,
-        surplus: 0,
-        point: 0,
-        vouchers: [],
-        GoogleOrFacebookUsername: GoogleOrFacebookUsername,
-        isAdmin: true,
-      });
-
-      try {
-        await account.add();
-      } catch (error) {
-        next(error);
-        return;
-      }
-
-      if (GoogleOrFacebookUsername !== "") {
-        res.redirect("https://localhost:3000/products?firstTime=1");
-      } else {
-        res.redirect("https://localhost:3000/");
-      }
-      return;
-    }
-
-    res.redirect(
-      `/create?username=${req.query.username}&GoogleOrFacebookUsername=${GoogleOrFacebookUsername}&login=${req.query.login}`
-    );
-  } catch (error) {
-    next(error);
-  }
-}
-
 async function createNewPaymentAccount(req, res, next) {
   const account = new Pay_Account({
     username: req.query.username,
-    surplus: 1000000,
+    surplus: req.query.isAdmin ? 0 : 1000000,
     point: 0,
     vouchers: [],
-    GoogleOrFacebookUsername: req.query.GoogleOrFacebookUsername,
-    isAdmin: false,
+    GoogleOrFacebookUsername: req.query.GoogleOrFacebookUsername || "",
+    isAdmin: "1" === req.query.isAdmin,
   });
 
   const existsAccounts = await account.existsAlready();
@@ -62,16 +25,15 @@ async function createNewPaymentAccount(req, res, next) {
   sessionFlash.flashDataToSession(
     req,
     {
-      message:
-        req.query.GoogleOrFacebookUsername !== ""
-          ? null
-          : req.query.login === "1"
-          ? "Thank you for signing up!"
-          : "Adding a new account was successful.",
+      message: req.query.GoogleOrFacebookUsername
+        ? null
+        : req.query.login === "1"
+        ? "Thank you for signing up!"
+        : "Adding a new account was successful.",
       isError: false,
     },
     function () {
-      req.query.GoogleOrFacebookUsername !== ""
+      req.query.GoogleOrFacebookUsername
         ? res.redirect("https://localhost:3000/products?firstTime=1")
         : req.query.login === "1"
         ? res.redirect("https://localhost:3000/")
@@ -81,6 +43,8 @@ async function createNewPaymentAccount(req, res, next) {
 }
 
 async function deletePaymentAccount(req, res, next) {
+  const isOwn = req.query.isOwn;
+
   try {
     const account = await Pay_Account.findByUsername(req.query.username);
     await account.remove();
@@ -88,7 +52,9 @@ async function deletePaymentAccount(req, res, next) {
     return next(error);
   }
 
-  res.redirect("https://localhost:3000/accounts");
+  isOwn
+    ? res.redirect("https://localhost:3000/logout")
+    : res.redirect("https://localhost:3000/accounts");
 }
 
 async function updatePaymentAccount(req, res, next) {
@@ -191,7 +157,6 @@ async function transfer(req, res, next) {
 }
 
 module.exports = {
-  initSystem: initSystem,
   createNewPaymentAccount: createNewPaymentAccount,
   updatePaymentAccount: updatePaymentAccount,
   deletePaymentAccount: deletePaymentAccount,

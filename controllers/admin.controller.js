@@ -21,16 +21,7 @@ async function createNewCategory(req, res, next) {
     return;
   }
 
-  res.redirect("/categories");
-}
-
-async function getUpdateCategory(req, res, next) {
-  try {
-    const category = await Category.findById(req.params.id);
-    res.render("admin/categories/update-category", { category: category });
-  } catch (error) {
-    next(error);
-  }
+  res.redirect("/categories?message=0");
 }
 
 async function updateCategory(req, res, next) {
@@ -46,7 +37,7 @@ async function updateCategory(req, res, next) {
     return;
   }
 
-  res.redirect("/categories");
+  res.redirect("/categories?message=1");
 }
 
 async function deleteCategory(req, res, next) {
@@ -62,7 +53,7 @@ async function deleteCategory(req, res, next) {
     return next(error);
   }
 
-  res.redirect("/categories");
+  res.redirect("/categories?message=2");
 }
 
 //Products Manage
@@ -76,7 +67,7 @@ async function createNewProduct(req, res, next) {
 
     await product.save();
 
-    res.redirect(`/categories/${product.cateId}`);
+    res.redirect(`/categories/${product.cateId}?message=0`);
   } catch (error) {
     return next(error);
   }
@@ -95,7 +86,7 @@ async function updateProduct(req, res, next) {
     }
     await product.save();
 
-    res.redirect(`/categories/${product.cateId}`);
+    res.redirect(`/categories/${product.cateId}?message=1`);
   } catch (error) {
     return next(error);
   }
@@ -107,7 +98,7 @@ async function deleteProduct(req, res, next) {
     const filePath = path.join(__dirname, product.image);
     await product.remove();
 
-    res.redirect(`/categories/${product.cateId}`);
+    res.redirect(`/categories/${product.cateId}?message=2`);
   } catch (error) {
     return next(error);
   }
@@ -162,14 +153,14 @@ async function createNewAccount(req, res, next) {
       return;
     }
 
-    await user.signup(false);
+    await user.signup("true" === enteredData.type);
+
+    res.redirect(
+      `https://localhost:5000/?username=${enteredData.username}&login=2`
+    );
   } catch (error) {
     return next(error);
   }
-
-  res.redirect(
-    `https://localhost:5000/?username=${enteredData.username}&login=2`
-  );
 }
 
 async function deleteAccount(req, res, next) {
@@ -369,7 +360,6 @@ async function postQuantity10Year(req, res, next) {
 
 module.exports = {
   createNewCategory: createNewCategory,
-  getUpdateCategory: getUpdateCategory,
   updateCategory: updateCategory,
   deleteCategory: deleteCategory,
 

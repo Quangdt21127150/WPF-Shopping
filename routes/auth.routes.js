@@ -145,6 +145,6 @@ router.get(
 
 router.get("/auth/success", authController.successLogin);
 
-router.post("/logout", authController.logout);
+router.get("/logout", authController.logout);
 
 module.exports = router;

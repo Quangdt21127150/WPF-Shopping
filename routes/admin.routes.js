@@ -8,8 +8,6 @@ const router = express.Router();
 // admin/categories
 router.post("/categories", adminController.createNewCategory);
 
-router.get("/categories/:id", adminController.getUpdateCategory);
-
 router.post("/categories/:id", adminController.updateCategory);
 
 router.post("/categories/delete/:id", adminController.deleteCategory);

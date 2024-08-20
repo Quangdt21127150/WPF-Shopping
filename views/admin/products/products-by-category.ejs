@@ -67,5 +67,9 @@
         </li>
       </ul>
     <% } %>
+
+    <% if(message) { %>
+      <%- include('../../admin/popup/notification', { message: message, isError: isError }) %>
+    <% } %>
   </main>
 <%- include('../../shared/page/footer') %>

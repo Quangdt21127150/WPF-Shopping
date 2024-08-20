@@ -10,9 +10,11 @@ router.get("/accounts", accountsController.getAllAccounts);
 router.get("/profile", accountsController.getAccount);
 
 router.post(
-  "/accounts/:id",
+  "/accounts",
   imageUploadMiddleware,
   accountsController.updateAccount
 );
+
+router.post("/accounts/delete", accountsController.deleteOwnAccount);
 
 module.exports = router;

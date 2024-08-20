@@ -45,17 +45,16 @@ $(function () {
   const address = $("#address").val();
 
   function initializeData() {
-    if (address) {
-      const [currentStreet, currentWard, currentDistrict, currentCity] =
-        address !== "?"
-          ? address.split(", ")
-          : ["", "Ward / Town", "District", "City / Province"];
+    const [currentStreet, currentWard, currentDistrict, currentCity] =
+      address && address !== "?"
+        ? address.split(", ")
+        : ["", "Ward / Town", "District", "City / Province"];
 
-      cities.empty().append(new Option(currentCity, currentCity));
-      districts.empty().append(new Option(currentDistrict, currentDistrict));
-      wards.empty().append(new Option(currentWard, currentWard));
-      street.val(currentStreet);
-    }
+    cities.empty().append(new Option(currentCity, currentCity));
+    districts.empty().append(new Option(currentDistrict, currentDistrict));
+    wards.empty().append(new Option(currentWard, currentWard));
+    street.val(currentStreet);
+
     renderData(cities, districts, wards);
   }
 
