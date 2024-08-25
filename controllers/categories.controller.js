@@ -14,7 +14,6 @@ async function getAllCategories(req, res, next) {
       categories: categories,
       firstTime: req.query.firstTime,
       message: messages[parseInt(req.query.message)],
-      isError: false,
     });
   } catch (error) {
     next(error);
@@ -48,7 +47,6 @@ async function getProductsOfCategory(req, res, next) {
       end: end,
       total_page: total_page,
       message: messages[parseInt(req.query.message)],
-      isError: false,
     });
   } catch (error) {
     next(error);

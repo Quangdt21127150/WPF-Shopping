@@ -1,7 +1,8 @@
 const cartItemElements = $(".cart-item");
 const cartTotalPriceElement = $("#cart-total-price");
+const cartPointsElement = $("#cart-points");
 const cartBadgeElements = $(".nav-items .badge");
-const buyProductButton = $("#cart-total button");
+const notEmpty = $(".not-empty");
 
 async function updateCartItem(cartItem) {
   const productId = $(cartItem).find("form").data("productid");
@@ -47,7 +48,12 @@ async function updateCartItem(cartItem) {
   cartTotalPriceElement.text(
     updatedCartData.newTotalPrice.toLocaleString("vi-VN")
   );
-  buyProductButton.toggle(updatedCartData.newTotalPrice !== 0);
+
+  cartPointsElement.text(
+    updatedCartData.newTotalPrice.toLocaleString("vi-VN") / 1000
+  );
+
+  notEmpty.toggle(updatedCartData.newTotalPrice !== 0);
 
   cartBadgeElements.text(updatedCartData.newTotalQuantity);
 }

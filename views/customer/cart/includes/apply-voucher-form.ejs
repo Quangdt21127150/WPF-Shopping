@@ -1,0 +1,88 @@
+<link rel="stylesheet" href="/styles/forms.css" />
+
+<% function pluralize(noun) {
+    // The noun ends with 's', 'x', 'z', 'sh', or 'ch'
+    if (noun.match(/(s|x|z|sh|ch)$/)) {
+    return noun + "es";
+    }
+
+    // The noun ends with 'y' and is preceded by a consonant
+    if (noun.match(/[^aeiou]y$/)) {
+    return noun.slice(0, -1) + "ies";
+    }
+
+    // The noun ends with 'f' or 'fe'
+    if (noun.match(/(f|fe)$/)) {
+    return noun.replace(/(f|fe)$/, "ves");
+    }
+
+    // The noun ends with a consonant followed by 'o'
+    if (noun.match(/[^aeiou]o$/)) {
+    return noun + "es";
+    }
+
+    // Other cases
+    return noun + "s";
+} 
+
+function voucherValue(voucher) {
+    const type = voucher.value[0];
+    const number = parseInt(voucher.value.match(/\d+/));
+    let promotion;
+    if(type === 'd'){
+        promotion = number + '% discount';
+    } else if(type === 'g') {
+        const product = number === 1 ? voucher.value.split('/')[1] : pluralize(voucher.value.split('/')[1]);
+        promotion = number + ' bonus ' + product;
+    } else {
+        promotion = 'Get ' + number + ' extra points';
+    } 
+    return promotion;
+}
+%>
+
+<div
+  class="modal fade"
+  id="applyModal"
+  tabindex="-1"
+  aria-labelledby="applyModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5 text-black" id="applyModalLabel">
+          Select your voucher
+        </h1>
+        <button
+          type="reset"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body text-black">
+        <% if(vouchers.length === 0) { %>
+            <i><p class="text-center text-secondary">You don't have any voucher</p></i>
+        <% } else { %>
+            <% for(const voucher of vouchers) { %>
+                <input type="checkbox" />
+                <p><%= voucherValue(voucher) %></p>
+            <% } %>
+        <% } %>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="reset"
+          class="btn btn-alt text-secondary border-secondary"
+        >
+          <i class="fa-solid fa-arrow-rotate-right"></i> Reset
+        </button>
+        <button class="btn bg-primary border-primary">
+          <i class="fa-solid fa-check"></i>
+          Save
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -3,9 +3,8 @@
   background-color: var(--color-gray-700);
 }
 
-#cart-total {
+.cart-total {
   flex-direction: column;
-  justify-content: center;
 }
 
 @media (min-width: 769px) {
@@ -14,7 +13,7 @@
     justify-content: space-between;
   }
 
-  #cart-total {
+  .cart-total {
     flex-direction: row;
     justify-content: space-between;
   }

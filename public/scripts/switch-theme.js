@@ -9,7 +9,7 @@ const productItems = $(".product-item-content");
 const orderItems = $(".order-item");
 const badge = $(".badge");
 const cartItems = $(".cart-item");
-const cartTotal = $("#cart-total p");
+const cartTotal = $(".cart-total p");
 const form = $(".form");
 const mobileMenu = $("#mobile-menu");
 

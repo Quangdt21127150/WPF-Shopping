@@ -1,7 +1,13 @@
 const Product = require("../models/product.model");
+const User = require("../models/user.model");
+const Pay_Account = require("../models/pay.model");
+const Voucher = require("../models/voucher.model");
 const sessionFlash = require("../util/session-flash");
 
 async function getCart(req, res) {
+  const user = await User.findById(res.locals.uid);
+  const pay_account = await Pay_Account.findByUsername(user.username);
+  const vouchers = await Voucher.findOwn(pay_account.vouchers);
   let sessionData = sessionFlash.getSessionData(req);
 
   if (!sessionData) {
@@ -13,6 +19,7 @@ async function getCart(req, res) {
 
   res.render("customer/cart/cart", {
     inputData: sessionData,
+    vouchers: vouchers,
   });
 }
 
