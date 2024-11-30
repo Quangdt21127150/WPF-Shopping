@@ -165,6 +165,8 @@ async function getAllVouchers(req, res, next) {
     autoAddVouchers(pay_account);
     autoDeleteVouchers(pay_account);
 
+    vouchers.sort((a, b) => a.point - b.point);
+
     res.render("shared/vouchers/voucher-list", {
       point: 0,
       vouchers: vouchers,
@@ -190,12 +192,14 @@ async function getAvailableVouchers(req, res, next) {
     autoAddVouchers(pay_account);
     autoDeleteVouchers(pay_account);
 
+    vouchers.sort((a, b) => a.point - b.point);
+
     res.render("shared/vouchers/voucher-list", {
       point: pay_account.point,
       vouchers: vouchers,
       isAvailable: true,
       message: messages[parseInt(req.query.message)],
-      isError: messages[parseInt(req.query.message)] ? false : true,
+      isError: parseInt(req.query.message) ? true : false,
     });
   } catch (error) {
     next(error);
@@ -210,6 +214,8 @@ async function getOwnVouchers(req, res, next) {
 
     autoAddVouchers(pay_account);
     autoDeleteVouchers(pay_account);
+
+    vouchers.sort((a, b) => a.point - b.point);
 
     res.render("shared/vouchers/voucher-list", {
       point: 0,

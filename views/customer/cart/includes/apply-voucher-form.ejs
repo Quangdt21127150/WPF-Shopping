@@ -1,45 +1,30 @@
 <link rel="stylesheet" href="/styles/forms.css" />
+<script src="/scripts/apply-voucher.js" defer></script>
 
 <% function pluralize(noun) {
-    // The noun ends with 's', 'x', 'z', 'sh', or 'ch'
-    if (noun.match(/(s|x|z|sh|ch)$/)) {
+  // The noun ends with 's', 'x', 'z', 'sh', or 'ch'
+  if (noun.match(/(s|x|z|sh|ch)$/)) {
     return noun + "es";
-    }
+  }
 
-    // The noun ends with 'y' and is preceded by a consonant
-    if (noun.match(/[^aeiou]y$/)) {
+  // The noun ends with 'y' and is preceded by a consonant
+  if (noun.match(/[^aeiou]y$/)) {
     return noun.slice(0, -1) + "ies";
-    }
+  }
 
-    // The noun ends with 'f' or 'fe'
-    if (noun.match(/(f|fe)$/)) {
+  // The noun ends with 'f' or 'fe'
+  if (noun.match(/(f|fe)$/)) {
     return noun.replace(/(f|fe)$/, "ves");
-    }
+  }
 
-    // The noun ends with a consonant followed by 'o'
-    if (noun.match(/[^aeiou]o$/)) {
+  // The noun ends with a consonant followed by 'o'
+  if (noun.match(/[^aeiou]o$/)) {
     return noun + "es";
-    }
+  }
 
-    // Other cases
-    return noun + "s";
-} 
-
-function voucherValue(voucher) {
-    const type = voucher.value[0];
-    const number = parseInt(voucher.value.match(/\d+/));
-    let promotion;
-    if(type === 'd'){
-        promotion = number + '% discount';
-    } else if(type === 'g') {
-        const product = number === 1 ? voucher.value.split('/')[1] : pluralize(voucher.value.split('/')[1]);
-        promotion = number + ' bonus ' + product;
-    } else {
-        promotion = 'Get ' + number + ' extra points';
-    } 
-    return promotion;
-}
-%>
+  // Other cases
+  return noun + "s";
+} %>
 
 <div
   class="modal fade"
@@ -62,13 +47,39 @@ function voucherValue(voucher) {
         ></button>
       </div>
       <div class="modal-body text-black">
-        <% if(vouchers.length === 0) { %>
-            <i><p class="text-center text-secondary">You don't have any voucher</p></i>
+        <i><p class="text-danger">Select maximum 1 voucher per type. Total orders over 200,000 VND to apply get bonus gifts and extra points vouchers.</p></i>
+        <% if(discountVouchers.length + getVouchers.length + extraVouchers.length === 0) { %>
+          <i><span class="text-center text-secondary">You don't have any voucher</span></i>
         <% } else { %>
-            <% for(const voucher of vouchers) { %>
-                <input type="checkbox" />
-                <p><%= voucherValue(voucher) %></p>
+          <h4 class="<%= !discountVouchers.length ? 'd-none' : '' %>">Discount voucher</h4>
+          <% for(const voucher of discountVouchers) { %>
+            <% const number = parseInt(voucher.value.match(/\d+/)) %>
+            <p class="m-0">
+              <input role="button" type="checkbox" id="D<%= discountVouchers.indexOf(voucher) %>" class="discount" />
+              <label role="button" for="D<%= discountVouchers.indexOf(voucher) %>" class="fw-medium"><span class="text-success"><%= voucher.title %>: </span><%= number %>% discount</label>
+            </p>
+          <% } %>
+
+          <% if(locals.cart.totalPrice > 200000) { %>
+            <h4 class="<%= !getVouchers.length ? 'd-none' : '' %>">Get bonus voucher</h4>
+            <% for(const voucher of getVouchers) { %>
+              <% const number = parseInt(voucher.value.match(/\d+/)) %>
+              <% const product = number === 1 ? voucher.value.split('/')[1] : pluralize(voucher.value.split('/')[1]) %>
+              <p class="m-0">
+                <input role="button" type="checkbox" id="G<%= getVouchers.indexOf(voucher) %>" class="product" />
+                <label role="button" for="G<%= getVouchers.indexOf(voucher) %>" class="fw-medium"><span class="text-success"><%= voucher.title %>: </span><%= number %> bonus <%= product %></label>
+              </p>
             <% } %>
+
+            <h4 class="<%= !extraVouchers.length ? 'd-none' : '' %>">Get extra point voucher</h4>
+            <% for(const voucher of extraVouchers) { %>
+              <% const number = parseInt(voucher.value.match(/\d+/)) %>
+              <p class="m-0">
+                <input role="button" type="checkbox" id="E<%= extraVouchers.indexOf(voucher) %>" class="point" />
+                <label role="button" for="E<%= extraVouchers.indexOf(voucher) %>" class="fw-medium"><span class="text-success"><%= voucher.title %>: </span>Get <%= number %> extra points</label>
+              </p>
+            <% } %>
+          <% } %>
         <% } %>
       </div>
       <div class="modal-footer">

@@ -8,6 +8,15 @@ async function getCart(req, res) {
   const user = await User.findById(res.locals.uid);
   const pay_account = await Pay_Account.findByUsername(user.username);
   const vouchers = await Voucher.findOwn(pay_account.vouchers);
+  const discountVouchers = vouchers.filter((voucher) =>
+    voucher.value.startsWith("d")
+  );
+  const getVouchers = vouchers.filter((voucher) =>
+    voucher.value.startsWith("g")
+  );
+  const extraVouchers = vouchers.filter((voucher) =>
+    voucher.value.startsWith("e")
+  );
   let sessionData = sessionFlash.getSessionData(req);
 
   if (!sessionData) {
@@ -19,7 +28,9 @@ async function getCart(req, res) {
 
   res.render("customer/cart/cart", {
     inputData: sessionData,
-    vouchers: vouchers,
+    discountVouchers: discountVouchers,
+    getVouchers: getVouchers,
+    extraVouchers: extraVouchers,
   });
 }
 
